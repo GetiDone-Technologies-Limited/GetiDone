@@ -1,0 +1,28 @@
+import { Controller, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
+import { UserService } from './user.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CurrentUser } from '../auth/current-user.decorator';
+
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Get('freelancers')
+  listFreelancers() {
+    return this.userService.listFreelancers();
+  }
+
+  @Get(':id')
+  getProfile(@Param('id') id: string) {
+    return this.userService.getProfile(id);
+  }
+
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  updateProfile(
+    @CurrentUser() user: { id: string },
+    @Body() body: { name?: string; skillIds?: string[] },
+  ) {
+    return this.userService.updateProfile(user.id, body);
+  }
+}

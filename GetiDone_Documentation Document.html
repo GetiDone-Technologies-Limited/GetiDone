@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetiDone Technologies - Complete Documentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #0f172a;
+        }
+        
+        /* ========== COVER PAGE ========== */
+        .cover-page {
+            width: 210mm;
+            height: 297mm;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            page-break-after: always;
+        }
+        
+        .cover-page::before {
+            content: "";
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .cover-page::after {
+            content: "";
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+            animation: pulse 6s ease-in-out infinite reverse;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .geometric-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            background-image: 
+                linear-gradient(30deg, #10b981 12%, transparent 12.5%, transparent 87%, #10b981 87.5%, #10b981),
+                linear-gradient(150deg, #10b981 12%, transparent 12.5%, transparent 87%, #10b981 87.5%, #10b981);
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+        }
+        
+        .circuit-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(90deg, transparent 98%, #10b981 98%, #10b981 100%, transparent 100%),
+                linear-gradient(0deg, transparent 98%, #10b981 98%, #10b981 100%, transparent 100%);
+            background-size: 50px 50px;
+        }
+        
+        .cover-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px;
+            max-width: 90%;
+        }
+        
+        .logo-container {
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: breathe 3s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+        
+        .main-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -4px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 80px rgba(16, 185, 129, 0.6);
+        }
+        
+        .main-logo .highlight {
+            color: #10b981;
+            position: relative;
+        }
+        
+        .main-logo .arrow {
+            display: inline-block;
+            color: #10b981;
+            font-size: 4.5rem;
+            margin-left: 15px;
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.9));
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            50% { transform: translateY(-15px) translateX(8px) rotate(5deg); }
+        }
+        
+        .company-info-cover {
+            color: #64748b;
+            font-size: 1rem;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .document-badge {
+            margin-top: 60px;
+            padding: 30px 50px;
+            border: 2px solid rgba(16, 185, 129, 0.4);
+            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .document-badge::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .document-badge h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .document-badge .subtitle {
+            color: #10b981;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 500;
+        }
+        
+        .cover-divider {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            margin: 30px auto;
+        }
+        
+        .cover-meta {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+        
+        .confidential-stamp {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            border-radius: 30px;
+            color: #ef4444;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transform: rotate(-5deg);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        
+        .corner {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .corner-tl { top: 50px; left: 50px; border-right: none; border-bottom: none; }
+        .corner-tr { top: 50px; right: 50px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 50px; left: 50px; border-right: none; border-top: none; }
+        .corner-br { bottom: 50px; right: 50px; border-left: none; border-top: none; }
+        
+        .version-pill {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            padding: 12px 25px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 30px;
+            color: #10b981;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* ========== TABLE OF CONTENTS PAGE ========== */
+        .toc-page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            padding: 60px 70px;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        .toc-header {
+            margin-bottom: 50px;
+            padding-bottom: 25px;
+            border-bottom: 4px solid #10b981;
+        }
+        
+        .toc-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            color: #0f172a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .toc-header h2::before {
+            content: "";
+            width: 8px;
+            height: 35px;
+            background: #10b981;
+            border-radius: 4px;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .toc-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .toc-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #0f172a;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .toc-section ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .toc-section li {
+            color: #475569;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .toc-section li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        /* ========== CONTENT PAGES ========== */
+        .content-page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 50px 70px;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        .page-header {
+            position: absolute;
+            top: 25px;
+            left: 70px;
+            right: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .header-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .header-logo .highlight {
+            color: #10b981;
+        }
+        
+        .header-logo .mini-arrow {
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+        
+        .page-number {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .content-body {
+            margin-top: 70px;
+        }
+        
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #0f172a;
+            font-size: 1.9rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            padding-bottom: 18px;
+            border-bottom: 4px solid #10b981;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        h1::before {
+            content: "";
+            width: 8px;
+            height: 35px;
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            border-radius: 4px;
+        }
+        
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #1e293b;
+            font-size: 1.4rem;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h2::before {
+            content: "▸";
+            color: #10b981;
+            font-size: 1.3rem;
+        }
+        
+        h3 {
+            color: #334155;
+            font-size: 1.15rem;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            padding-left: 18px;
+            border-left: 3px solid #10b981;
+        }
+        
+        h4 {
+            color: #475569;
+            font-size: 1.05rem;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 14px;
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 18px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            color: #475569;
+            line-height: 1.7;
+        }
+        
+        /* ========== STYLED COMPONENTS ========== */
+        .hero-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 14px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .hero-box::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+        }
+        
+        .hero-box h3 {
+            color: #10b981;
+            border-left: none;
+            padding-left: 0;
+            margin-top: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+        }
+        
+        .hero-box p, .hero-box li {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-left: 5px solid #10b981;
+            padding: 22px;
+            margin: 22px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+        }
+        
+        .highlight-box strong {
+            color: #059669;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .critical-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 22px;
+            margin: 22px 0;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+        
+        .critical-box::before {
+            content: "⚠";
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.4rem;
+            opacity: 0.3;
+        }
+        
+        .info-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 22px;
+            margin: 22px 0;
+            border-radius: 12px;
+        }
+        
+        .dark-box {
+            background: #1e293b;
+            color: white;
+            padding: 22px;
+            margin: 22px 0;
+            border-radius: 12px;
+        }
+        
+        .dark-box h4 {
+            color: #10b981;
+            margin-top: 0;
+        }
+        
+        .dark-box p, .dark-box li {
+            color: #cbd5e1;
+        }
+        
+        .quote-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #065f46;
+            font-style: italic;
+            position: relative;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.12);
+        }
+        
+        .quote-box::before {
+            content: """;
+            font-size: 5rem;
+            color: #10b981;
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            opacity: 0.15;
+            font-family: Georgia, serif;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-banner::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+        }
+        
+        .welcome-banner h1 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: white;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .welcome-banner h1::before {
+            display: none;
+        }
+        
+        .welcome-banner p {
+            opacity: 0.9;
+            font-size: 1rem;
+            color: #cbd5e1;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 22px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            font-size: 0.95rem;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin: 22px 0;
+        }
+        
+        .tier-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 22px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tier-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #10b981;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .tier-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .tier-card h4 {
+            color: #0f172a;
+            margin-top: 0;
+            font-size: 1.05rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+        
+        .week-box {
+            background: #0f172a;
+            color: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin: 18px 0;
+        }
+        
+        .week-box h4 {
+            color: #10b981;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            margin-top: 0;
+        }
+        
+        .week-box ul {
+            margin-left: 20px;
+        }
+        
+        .week-box li {
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 22px 0;
+        }
+        
+        .kpi-card {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .kpi-card strong {
+            color: #10b981;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .check-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .check-list li {
+            padding-left: 32px;
+            position: relative;
+        }
+        
+        .check-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            width: 24px;
+            height: 24px;
+            background: #f0fdf4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            top: 0;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border: 2px solid #10b981;
+            padding: 22px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-card h4 {
+            color: #059669;
+            margin-top: 0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 12px 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .final-note {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 16px;
+            margin-top: 35px;
+            text-align: center;
+        }
+        
+        .final-note h2 {
+            color: white;
+            justify-content: center;
+            margin-top: 0;
+        }
+        
+        .final-note h2::before {
+            display: none;
+        }
+        
+        .emoji-list {
+            list-style: none;
+            margin-left: 0;
+            display: inline-block;
+            text-align: left;
+        }
+        
+        .emoji-list li {
+            padding-left: 35px;
+            position: relative;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #10b981 50%, transparent 100%);
+            margin: 40px 0;
+            border: none;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: "◆";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #10b981;
+            background: white;
+            padding: 0 12px;
+            font-size: 1rem;
+        }
+        
+        .glossary-term {
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        /* ========== BACK PAGE ========== */
+        .back-page {
+            width: 210mm;
+            height: 297mm;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            page-break-before: always;
+        }
+        
+        .back-page::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 60%);
+        }
+        
+        .back-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .back-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+        }
+        
+        .back-logo .highlight {
+            color: #10b981;
+        }
+        
+        .back-logo .arrow {
+            color: #10b981;
+            font-size: 3rem;
+            margin-left: 10px;
+        }
+        
+        .back-tagline {
+            font-size: 1.6rem;
+            color: #94a3b8;
+            font-weight: 300;
+            max-width: 500px;
+            line-height: 1.5;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+        
+        .contact-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 35px 50px;
+            border-radius: 20px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-section h3 {
+            color: #10b981;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            border-left: none;
+            padding-left: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .contact-icon {
+            color: #10b981;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .back-footer {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #475569;
+            font-size: 0.85rem;
+        }
+        
+        .copyright {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            color: #64748b;
+        }
+        
+        .qr-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .qr-placeholder {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #10b981;
+            font-size: 0.75rem;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .cover-page, .back-page, .hero-box, .welcome-banner, .final-note {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+/* ================= A4 CONTROL ================= */
+@page {
+    size: A4;
+    margin: 0;
+}
+
+.content-page,
+.cover-page,
+.toc-page,
+.back-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+}
+
+/* ================= SCALE SYSTEM ================= */
+.scale-fit {
+    transform: scale(0.92);
+    transform-origin: top left;
+    width: 108%;
+}
+
+/* ================= SPACING FIX ================= */
+.content-body {
+    margin-top: 55px !important;
+}
+
+.page-header {
+    top: 15px !important;
+}
+
+/* Typography tightening */
+h1 {
+    font-size: 1.6rem !important;
+}
+
+h2 {
+    font-size: 1.2rem !important;
+}
+
+p {
+    font-size: 0.92rem !important;
+}
+
+/* Prevent breaking */
+.hero-box,
+.highlight-box,
+.tier-card,
+.kpi-card {
+    page-break-inside: avoid !important;
+}
+
+/* Print fix */
+@media print {
+    body {
+        zoom: 0.95;
+        background: white;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- ========== COVER PAGE ========== -->
+    <div class="cover-page">
+        <div class="geometric-pattern"></div>
+        <div class="circuit-lines"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="version-pill">v1.0 | 2026</div>
+        
+        <div class="cover-content">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="main-logo">
+                    Geti<span class="highlight">Done</span><span class="arrow">→</span>
+                </div>
+                <div class="company-info-cover">Technologies Ltd.</div>
+            </div>
+            
+            <div class="cover-divider"></div>
+            
+            <div class="document-badge">
+                <h1>Complete Platform Documentation</h1>
+                <div class="subtitle">Product Strategy & Team Onboarding</div>
+            </div>
+        </div>
+        
+        <div class="cover-meta">
+            <div class="confidential-stamp">Confidential & Proprietary</div>
+            <p style="color: #94a3b8; margin-bottom: 8px;">14 Ibru Layout, Agishion Extension</p>
+            <p style="color: #94a3b8; margin-bottom: 8px;">Ughelli, Delta State, Nigeria</p>
+            <p style="color: #10b981; font-weight: 600; font-size: 1.1rem;">(+234) 810-1811-993</p>
+        </div>
+    </div>
+
+    <!-- ========== TABLE OF CONTENTS ========== -->
+    <div class="toc-page">
+        <div class="toc-header">
+            <h2>Contents</h2>
+        </div>
+        
+        <div class="toc-grid">
+            <div class="toc-section">
+                <h3>Part I: Platform Documentation</h3>
+                <ul>
+                    <li>Executive Summary</li>
+                    <li>Vision & Mission</li>
+                    <li>Core Value Proposition</li>
+                    <li>Target Audience & Markets</li>
+                    <li>Platform Architecture</li>
+                    <li>Done Score™ System</li>
+                    <li>Monetization Model</li>
+                    <li>Freelancer & Client Experience</li>
+                    <li>Trust & Compliance</li>
+                    <li>AI Integration</li>
+                    <li>Revenue Simulation</li>
+                </ul>
+            </div>
+            <div class="toc-section">
+                <h3>Part II: Team Onboarding</h3>
+                <ul>
+                    <li>Welcome Message</li>
+                    <li>Who We Are</li>
+                    <li>Product & Process</li>
+                    <li>Data Analyst Role</li>
+                    <li>Key Responsibilities</li>
+                    <li>KPIs & Expectations</li>
+                    <li>Onboarding Tasklist</li>
+                    <li>Resources & Glossary</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; color: #64748b; font-size: 0.9rem;">
+            <p>GetiDone Technologies Ltd. • www.getidone.com</p>
+        </div>
+    </div>
+
+    <!-- ========== PART I: PLATFORM DOCUMENTATION ========== -->
+    
+    <!-- Page 1: Executive Summary -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">01</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Executive Summary</h1>
+            
+            <p><strong>GetiDone.com</strong> is a merit-based, AI-powered professional and freelance platform designed to connect clients with proven tech and design talent globally. The platform prioritizes execution, trust, fairness, and premium experience, eliminating pay-to-win ranking systems while enabling structured advantages for committed users on both sides of the marketplace.</p>
+            
+            <div class="highlight-box">
+                <strong>Platform Integration</strong>
+                GetiDone combines the strengths of a freelance marketplace, a professional network, and intelligent AI systems to create a trusted environment where work history, behavior, and performance define opportunity.
+            </div>
+            
+            <p><strong>Target launch markets:</strong> <span class="tag">USA</span> <span class="tag">China</span> <span class="tag">India</span> <span class="tag">Nigeria</span></p>
+            <p>With a long-term vision of global expansion.</p>
+            
+            <div class="divider"></div>
+            
+            <h1>Vision & Mission</h1>
+            
+            <h2>Vision</h2>
+            <div class="quote-box">
+                To become the world's most trusted digital execution network where professional reputation is built on verified results and client confidence is guaranteed.
+            </div>
+            
+            <h2>Mission</h2>
+            <p>To empower professionals to earn opportunity through performance, while enabling clients to hire with confidence, clarity, and priority access to proven talent through transparent, data-driven systems.</p>
+        </div>
+    </div>
+
+    <!-- Page 2: Core Value & Audience -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">02</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Core Value Proposition</h1>
+            
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Merit-Based Ranking</h4>
+                    <p>No bidding wars. Performance determines success.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Verified Identity</h4>
+                    <p>KYC-first approach with verified work history.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>AI-Powered</h4>
+                    <p>Intelligent matching and reputation scoring.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Professional Network</h4>
+                    <p>Social-professional networking for career growth.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Premium Experience</h4>
+                    <p>Serious clients deserve serious talent.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Fair Monetization</h4>
+                    <p>Revenue without distorting ranking integrity.</p>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                If you can deliver quality work, GetiDone will put you in front of the right clients — and if you are a serious client, GetiDone will connect you with proven professionals without stress.
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Target Audience</h1>
+            
+            <h2>Primary Markets (in order)</h2>
+            <ol>
+                <li><strong>United States</strong></li>
+                <li><strong>China</strong></li>
+                <li><strong>India</strong></li>
+                <li><strong>Nigeria</strong></li>
+            </ol>
+            
+            <h2>User Types</h2>
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Freelancers</h4>
+                    <p>Tech, Design, Product, AI, Blockchain, Web, and more.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Clients</h4>
+                    <p>Startups, SMEs, Enterprises seeking proven talent.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Agencies & Teams</h4>
+                    <p>Collaborative units looking for structured workflows.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Architecture & Done Score -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">03</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Platform Architecture</h1>
+            <p>GetiDone operates on a <strong>three-layer system</strong>:</p>
+            
+            <div class="hero-box">
+                <h3>Three-Layer Architecture</h3>
+                <ol>
+                    <li><strong>Merit & Trust Layer</strong> – Determines ranking and credibility</li>
+                    <li><strong>Visibility Layer</strong> – Controls exposure via subscription</li>
+                    <li><strong>Priority Experience Layer</strong> – Enhances workflow for premium users (both clients and freelancers)</li>
+                </ol>
+                <p style="margin-top: 15px; color: #10b981; font-weight: 600;">Ranking, visibility, and priority experience are intentionally separated to preserve fairness while rewarding commitment.</p>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Merit-Based Ranking System (Done Score™)</h1>
+            
+            <p>The <strong>Done Score™</strong> is GetiDone's proprietary, AI-driven performance metric used to rank professionals across the platform.</p>
+            
+            <h2>Core Ranking Inputs (AI-Weighted)</h2>
+            <ul class="check-list">
+                <li>Customer/Client Reviews (sentiment, depth, and consistency)</li>
+                <li>Verified job completion rate</li>
+                <li>Project complexity vs delivery quality</li>
+                <li>Delivery timeliness</li>
+                <li>Communication responsiveness</li>
+                <li>Professional conduct & dispute history</li>
+                <li>Identity, compliance, and trust score (KYC-based)</li>
+            </ul>
+            
+            <div class="critical-box">
+                <strong>Important Rule</strong>
+                Done Score™ <strong>cannot</strong> be influenced by payment, subscription, or commission level.
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: Monetization & Experience -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">04</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Visibility & Monetization Model</h1>
+            
+            <h2>Core Principles</h2>
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Ranking is Earned</h4>
+                    <p>Based purely on performance metrics.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Visibility is Unlocked</h4>
+                    <p>Through subscription tiers.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Priority Experience</h4>
+                    <p>Optimized for premium users.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Commission Sustains</h4>
+                    <p>Ecosystem funding without bias.</p>
+                </div>
+            </div>
+            
+            <h2>Visibility Tiers</h2>
+            
+            <h3>Free Tier</h3>
+            <ul>
+                <li>Limited profile visibility</li>
+                <li>Appears only in high-fit matches</li>
+                <li>Standard competition for jobs</li>
+            </ul>
+            
+            <h3>Pro Visibility (Subscription)</h3>
+            <ul>
+                <li>Increased exposure within rank tier</li>
+                <li>Full AI matching access</li>
+                <li>Consistent presence in search and recommendations</li>
+            </ul>
+            
+            <h3>Elite Visibility</h3>
+            <ul>
+                <li>Priority rotation within top performers</li>
+                <li>Advanced analytics</li>
+                <li>Stronger brand positioning</li>
+            </ul>
+            
+            <div class="divider"></div>
+            
+            <h1>Premium Freelancer Advantage</h1>
+            <p>Paid (Pro/Elite) freelancers gain access to <strong>Direct Job Allocation</strong> — jobs assigned without open competition based strictly on performance, niche, and reliability.</p>
+            
+            <div class="info-box">
+                <strong>Qualification:</strong> Only freelancers with strong Done Score™ and consistent positive history qualify for direct job allocation.
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 5: Client Experience & Trust -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">05</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Premium Client Experience</h1>
+            <p>Paid clients gain access to a curated hiring experience:</p>
+            
+            <ul class="check-list">
+                <li>Access to certified, high-performing freelancers only</li>
+                <li>No need to review multiple proposals</li>
+                <li>No confusion in selecting candidates</li>
+                <li>AI-assisted best-fit selection</li>
+            </ul>
+            
+            <div class="quote-box">
+                Clients experience a "done-for-you" hiring system with confidence and speed.
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Client Trust & Behavior Scoring</h1>
+            <p>Clients are also evaluated to maintain platform balance.</p>
+            
+            <h2>Client Score Factors</h2>
+            <ul>
+                <li>Payment reliability</li>
+                <li>Communication behavior</li>
+                <li>Dispute frequency</li>
+                <li>Professional conduct</li>
+            </ul>
+            
+            <h2>Client Levels</h2>
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Standard Client</h4>
+                    <p>Basic verified access.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Verified Client</h4>
+                    <p>Enhanced trust indicators.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Premium Client</h4>
+                    <p>Priority matching access.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Trusted Client</h4>
+                    <p>Top-tier benefits and guarantees.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 6: Rewards & Revenue -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">06</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Advanced Reward System</h1>
+            
+            <h2>High-Value Client Rewards</h2>
+            <p>Clients reaching spending thresholds receive non-cumulative project credits:</p>
+            
+            <div class="metric-card" style="max-width: 400px; margin: 20px auto;">
+                <h4>Example Reward Structure</h4>
+                <div class="metric-value">Spend $5,000</div>
+                <p>Earn 3–5% project credit (non-cash, platform-bound)</p>
+            </div>
+            
+            <h2>Freelancer Performance Rewards</h2>
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Performance Boost Windows</h4>
+                    <p>Temporary visibility boosts for high performers.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Commission Rebates</h4>
+                    <p>Partial refunds on high-quality jobs.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Direct Job Priority</h4>
+                    <p>Increased allocation eligibility.</p>
+                </div>
+                <div class="tier-card">
+                    <h4>Trust Badges</h4>
+                    <p>Public reliability indicators.</p>
+                </div>
+            </div>
+            
+            <div class="critical-box">
+                <strong>Key Principle</strong>
+                Rewards increase earning potential without reducing platform sustainability.
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Revenue Simulation (MVP Baseline)</h1>
+            
+            <div class="kpi-grid">
+                <div class="metric-card">
+                    <h4>Average Project Value</h4>
+                    <div class="metric-value">$500</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Monthly Jobs</h4>
+                    <div class="metric-value">2,000</div>
+                </div>
+                <div class="metric-card">
+                    <h4>GMV</h4>
+                    <div class="metric-value">$1M</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Commission Revenue</h4>
+                    <div class="metric-value">$120K</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PART II: TEAM ONBOARDING ========== -->
+    
+    <!-- Page 7: Welcome -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">07</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <div class="welcome-banner">
+                <h1>Welcome to GetiDone Technologies</h1>
+                <p>We're excited to have you join us as part of the founding team. This document is designed to give you clarity on your role, responsibilities, expectations, and how you will contribute to building GetiDone into a high-performance global platform.</p>
+            </div>
+            
+            <h1>Who We Are</h1>
+            
+            <h2>Our Mission</h2>
+            <p>At GetiDone, our mission is to build a <strong>performance-driven freelance ecosystem</strong> where trust, accountability, and measurable delivery define success.</p>
+            
+            <div class="highlight-box">
+                <strong>We are creating a platform where:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Freelancers are rewarded based on real performance</li>
+                    <li>Clients can hire with confidence</li>
+                    <li>Data drives every major decision</li>
+                </ul>
+            </div>
+            
+            <h2>The Team</h2>
+            <p>You are part of the <strong>core founding technical team</strong>, working alongside:</p>
+            <ul>
+                <li>Backend Engineers</li>
+                <li>Frontend Developers</li>
+                <li>Product Leadership</li>
+                <li>Future AI/ML Engineers</li>
+            </ul>
+            <p><em>This is a high-trust, high-impact environment where every contribution directly shapes the product.</em></p>
+        </div>
+    </div>
+
+    <!-- Page 8: Product Process -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">08</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Product & Process</h1>
+            
+            <h2>Project Process</h2>
+            <p>Our development approach is structured around:</p>
+            <ul>
+                <li>MVP-first execution</li>
+                <li>Iterative development cycles</li>
+                <li>Data-informed decision making</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <strong>As a Data Analyst, you are responsible for ensuring that:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>All critical data points are captured from day one</li>
+                    <li>Product decisions are backed by real insights</li>
+                    <li>System performance is measurable and improvable</li>
+                </ul>
+            </div>
+            
+            <h2>Weekly Meetings</h2>
+            <p>We will operate a weekly sync structure:</p>
+            <ul>
+                <li>Progress updates</li>
+                <li>Data insights review</li>
+                <li>Product performance discussions</li>
+                <li>Strategic adjustments</li>
+            </ul>
+            <p><strong>You will be expected to present:</strong> Key metrics, Observations, Actionable recommendations</p>
+            
+            <div class="divider"></div>
+            
+            <h1>How You Will Work With Us</h1>
+            
+            <div class="week-box">
+                <h4>Pre-Deployment (MVP Phase)</h4>
+                <ul>
+                    <li>Define required data structures</li>
+                    <li>Ensure analytics-ready architecture</li>
+                    <li>Work closely with backend engineers</li>
+                </ul>
+            </div>
+
+            <div class="week-box">
+                <h4>Post-Deployment (Live Platform)</h4>
+                <ul>
+                    <li>Build dashboards</li>
+                    <li>Monitor real-time metrics</li>
+                    <li>Generate weekly insights</li>
+                    <li>Recommend improvements</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 9: Data Analyst Role -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">09</div>
+        </div>
+        
+        <div class="content-body scale-fit">
+            <h1>Data Analyst Role & Responsibilities</h1>
+            
+            <h2>Core Function</h2>
+            <p>You are responsible for transforming system data into <strong>actionable intelligence</strong> that drives:</p>
+            <ul>
+                <li>Product decisions</li>
+                <li>Revenue growth</li>
+                <li>Platform trust</li>
+                <li>AI development</li>
+            </ul>
+            
+            <h2>Key Responsibilities</h2>
+            
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <strong>1. Marketplace Intelligence</strong>
+                    Track supply/demand, conversion funnels, drop-offs, high-performing niches
+                </div>
+                <div class="kpi-card" style="border: 2px solid #f59e0b; background: #fffbeb;">
+                    <strong>2. Done Score™ Optimization (Critical)</strong>
+                    Analyze scoring metrics, detect bias/manipulation, recommend improvements
+                </div>
+                <div class="kpi-card">
+                    <strong>3. Revenue & Monetization</strong>
+                    Track commission, subscriptions, ARPU, LTV analysis
+                </div>
+                <div class="kpi-card">
+                    <strong>4. Trust, Risk & Fraud</strong>
+                    Detect fake reviews, fraud patterns, monitor disputes
+                </div>
+                <div class="kpi-card">
+                    <strong>5. Growth Analytics</strong>
+                    Track acquisition, referrals, measure CAC
+                </div>
+                <div class="kpi-card">
+                    <strong>6. AI Data Support</strong>
+                    Prepare datasets for AI systems, validate outputs
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 10: KPIs & Onboarding -->
+    <div class="content-page">
+        <div class="page-header">
+            <div class="header-logo">Geti<span class="highlight">Done</span><span class="mini-arrow">→</span></div>
+            <div class="page-number">10</div>
+        </div>
+        
+        <div class="content-body">
+            <h1>Key Performance Indicators (KPIs)</h1>
+            <p>You will be evaluated based on:</p>
+            
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h4>Marketplace</h4>
+                    <ul style="margin-left: 15px; font-size: 0.95rem;">
+                        <li>Job → Contract Conversion Rate</li>
+                        <li>Proposal Success Rate</li>
+                    </ul>
+                </div>
+                <div class="tier-card">
+                    <h4>Trust</h4>
+                    <ul style="margin-left: 15px; font-size: 0.95rem;">
+                        <li>Dispute Rate</li>
+                        <li>Fraud Detection Accuracy</li>
+                    </ul>
+                </div>
+                <div class="tier-card">
+                    <h4>Revenue</h4>
+                    <ul style="margin-left: 15px; font-size: 0.95rem;">
+                        <li>Revenue Growth</li>
+                        <li>Subscription Conversion Rate</li>
+                    </ul>
+                </div>
+                <div class="tier-card">
+                    <h4>Product</h4>
+                    <ul style="margin-left: 15px; font-size: 0.95rem;">
+                        <li>Done Score Accuracy</li>
+                        <li>User Retention</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Onboarding Tasklist</h1>
+            
+            <div class="week-box">
+                <h4>Week 1</h4>
+                <ul>
+                    <li>Understand platform architecture</li>
+                    <li>Review database structure</li>
+                    <li>Define key metrics and KPIs</li>
+                    <li>Align with backend team on data tracking</li>
+                </ul>
+            </div>
+
+            <div class="week-box">
+                <h4>Week 2</h4>
+                <ul>
+                    <li>Design initial dashboards</li>
+                    <li>Validate Done Score™ logic</li>
+                    <li>Deliver first insight report</li>
+                    <li>Identify early optimization opportunities</li>
+                </ul>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h1>Resources & Glossary</h1>
+            
+            <h3>Mailing Lists</h3>
+            <ul>
+                <li>Core team communication (to be provided)</li>
+                <li>Product & engineering updates</li>
+            </ul>
+            
+            <h3>Glossary of Terms</h3>
+            <ul>
+                <li><span class="glossary-term">Done Score™:</span> Performance-based ranking system</li>
+                <li><span class="glossary-term">Escrow:</span> Payment held until job completion</li>
+                <li><span class="glossary-term">KYC:</span> Identity verification system</li>
+                <li><span class="glossary-term">ARPU:</span> Average revenue per user</li>
+                <li><span class="glossary-term">LTV:</span> Lifetime value of a user</li>
+            </ul>
+            
+            <div class="final-note">
+                <h2>Final Note</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 20px;"><strong>This is not a passive role.</strong></p>
+                <p>You are expected to:</p>
+                <ul class="emoji-list">
+                    <li>✓ Challenge assumptions</li>
+                    <li>✓ Provide insights</li>
+                    <li>✓ Drive decisions with data</li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 1.1rem;"><strong>Your contribution will directly influence:</strong></p>
+                <p style="font-size: 1.3rem; margin-top: 15px;">👉 Product success &nbsp;&nbsp;👉 Platform trust &nbsp;&nbsp;👉 Revenue growth</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== BACK PAGE ========== -->
+    <div class="back-page">
+        <div class="geometric-pattern"></div>
+        <div class="circuit-lines"></div>
+        
+        <div class="back-content">
+            <div class="back-logo">
+                Geti<span class="highlight">Done</span><span class="arrow">→</span>
+            </div>
+            
+            <div class="back-tagline">
+                Where work gets done,<br>
+                trust is built,<br>
+                and opportunity is earned.
+            </div>
+            
+            <div class="qr-section">
+                <div class="qr-placeholder">QR</div>
+                <p style="color: #64748b; font-size: 0.8rem;">Scan for digital version</p>
+            </div>
+            
+            <div class="contact-section">
+                <h3>Connect With Us</h3>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <span class="contact-icon">🌐</span>
+                        <span>www.getidone.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">✉</span>
+                        <span>hello@getidone.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <span>(+234) 810-1811-993</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <span>14 Ibru Layout, Agishion Extension, Ughelli, Delta State, Nigeria</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="back-footer">
+            <div class="copyright">
+                © 2026 GetiDone Technologies Ltd. All rights reserved.<br>
+                <span style="color: #10b981; font-size: 0.8rem; margin-top: 8px; display: inline-block;">Confidential & Proprietary Documentation • Version 1.0</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
