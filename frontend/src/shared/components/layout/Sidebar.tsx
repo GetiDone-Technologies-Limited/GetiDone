@@ -48,11 +48,15 @@ export function Sidebar() {
     <aside className="flex h-full w-[260px] flex-col bg-[#0A0D0C] text-slate-300">
       {/* Logo & Post Job */}
       <div className="p-6 pb-2">
-        <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-white mb-8">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white text-sm font-black">
-            G
-          </span>
-          Geti<span className="text-primary">Done</span>
+        <Link href="/" className="block mb-8">
+          <Image 
+            src="/logo.png" 
+            alt="GetiDone Logo" 
+            width={200} 
+            height={50} 
+            className="h-10 w-auto object-contain brightness-0 invert" 
+            priority
+          />
         </Link>
 
         {user?.role === 'CLIENT' && (

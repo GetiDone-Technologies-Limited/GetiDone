@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthStore } from '@/store/auth.store';
+import Link from 'next/link';
 import { 
   FolderOpen, ClipboardCheck, Clock, Wallet, 
   MoreVertical, Plus, UserPlus, CreditCard, FileSignature, Headset 
@@ -148,15 +149,15 @@ export default function ClientDashboardPage() {
 
           <div className="divide-y divide-slate-100">
             {projects.map(p => (
-              <div key={p.id} className="p-6 flex items-center hover:bg-slate-50/50 transition-colors">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${p.iconBg}`}>
+              <Link href="/projects/seed-project-1" key={p.id} className="p-6 flex flex-wrap sm:flex-nowrap items-center hover:bg-slate-50/50 transition-colors w-full">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${p.iconBg} mb-4 sm:mb-0`}>
                   <FolderOpen className={`w-5 h-5 ${p.iconColor}`} />
                 </div>
-                <div className="ml-4 flex-1 min-w-0">
+                <div className="ml-0 sm:ml-4 flex-1 min-w-0 w-full sm:w-auto mb-4 sm:mb-0">
                   <h3 className="text-sm font-bold text-slate-900 truncate">{p.title}</h3>
                   <p className="text-xs text-slate-500 mt-1">With {p.freelancer}</p>
                 </div>
-                <div className="w-24 px-4 hidden sm:block">
+                <div className="w-full sm:w-24 px-0 sm:px-4 mb-4 sm:mb-0">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
                     ${p.status === 'In Progress' ? 'bg-green-50 text-green-700' : 
                       p.status === 'In Review' ? 'bg-purple-50 text-purple-700' : 
@@ -165,7 +166,7 @@ export default function ClientDashboardPage() {
                     {p.status}
                   </span>
                 </div>
-                <div className="w-32 px-4 hidden md:flex items-center gap-3">
+                <div className="w-full sm:w-32 px-0 sm:px-4 hidden md:flex items-center gap-3">
                   <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                     <div 
                       className={`h-full rounded-full ${p.status === 'In Progress' ? 'bg-green-500' : p.status === 'In Review' ? 'bg-purple-500' : 'bg-slate-400'}`} 
@@ -174,18 +175,15 @@ export default function ClientDashboardPage() {
                   </div>
                   <span className="text-xs font-semibold text-slate-700">{p.progress}%</span>
                 </div>
-                <div className="w-24 px-4 text-right hidden lg:block">
+                <div className="w-1/2 sm:w-24 px-0 sm:px-4 text-left sm:text-right">
                   <p className="text-sm font-bold text-slate-900">${p.budget.toLocaleString()}</p>
                   <p className="text-[10px] text-slate-400">Budget</p>
                 </div>
-                <div className="w-28 px-4 text-right hidden xl:block">
+                <div className="w-1/2 sm:w-28 px-0 sm:px-4 text-right">
                   <p className="text-sm font-semibold text-slate-700">{p.due}</p>
                   <p className="text-[10px] text-slate-400">Due Date</p>
                 </div>
-                <button className="ml-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100">
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

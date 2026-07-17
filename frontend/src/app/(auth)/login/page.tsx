@@ -16,11 +16,15 @@ export default function LoginPage() {
 
         {/* Header */}
         <div className="relative z-10">
-          <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-white mb-16">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white text-sm font-black">
-              G
-            </span>
-            Geti<span className="text-primary">Done</span>
+          <Link href="/" className="block mb-16">
+            <Image 
+              src="/logo.png" 
+              alt="GetiDone Logo" 
+              width={200} 
+              height={50} 
+              className="h-12 w-auto object-contain brightness-0 invert" 
+              priority
+            />
           </Link>
 
           <h1 className="text-5xl font-bold text-white leading-tight mb-6 tracking-tight">
@@ -92,11 +96,21 @@ export default function LoginPage() {
           </div>
 
           <p className="text-slate-500 text-xs mb-4">Trusted by forward-thinking companies</p>
-          <div className="flex gap-6 items-center opacity-50 grayscale mb-12">
-            <span className="text-white font-bold text-sm">Paystack</span>
-            <span className="text-white font-bold text-sm">Flutterwave</span>
-            <span className="text-white font-bold text-sm">HubSpot</span>
-            <span className="text-white font-bold text-sm">Interswitch</span>
+          <div className="flex gap-6 items-center mb-12">
+            <span className="text-[#00C3F7] font-bold text-lg tracking-tight flex items-center gap-1">
+              <div className="w-4 h-4 bg-[#00C3F7] rounded-sm"></div>
+              paystack
+            </span>
+            <span className="text-[#F5A623] font-black text-sm tracking-wide">
+              FLUTTERWAVE
+            </span>
+            <span className="text-[#FF7A59] font-bold text-lg flex items-center gap-1">
+              <div className="w-4 h-4 rounded-full border-2 border-[#FF7A59]"></div>
+              HubSpot
+            </span>
+            <span className="text-white font-bold text-md tracking-tighter">
+              Interswitch<span className="text-blue-500">_</span>
+            </span>
           </div>
 
           <div className="pt-6 border-t border-white/10">
