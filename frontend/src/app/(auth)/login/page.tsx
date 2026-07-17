@@ -22,7 +22,7 @@ export default function LoginPage() {
               alt="GetiDone Logo" 
               width={600} 
               height={160} 
-              className="h-32 w-auto object-contain brightness-0 invert" 
+              className="h-32 w-auto object-contain"
               priority
             />
           </Link>

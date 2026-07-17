@@ -53,7 +53,7 @@ export function Sidebar() {
               alt="GetiDone Logo" 
               width={400} 
               height={100} 
-              className="w-full h-auto max-h-24 object-contain brightness-0 invert transition-all" 
+              className="w-full h-auto max-h-24 object-contain transition-all" 
               priority
             />
           ) : (

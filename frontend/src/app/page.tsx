@@ -27,7 +27,7 @@ export default function LandingPage() {
         <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-white/5 transition-all text-on-surface">
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="GetiDone" width={160} height={40} className="h-10 w-auto brightness-0 invert" />
+              <Image src="/logo.png" alt="GetiDone" width={160} height={40} className="h-10 w-auto" />
             </Link>
             <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-300">
               <Link href="#find-talent" className="hover:text-white transition-colors">Find Talent</Link>
@@ -74,7 +74,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-16">
               <div className="col-span-2">
-                <Image src="/logo.png" alt="GetiDone" width={140} height={36} className="h-9 w-auto brightness-0 invert mb-6" />
+                <Image src="/logo.png" alt="GetiDone" width={140} height={36} className="h-9 w-auto mb-6" />
                 <p className="text-sm text-on-surface-variant max-w-xs">
                   Get Work Done. The Smart Way. An AI-powered ecosystem for world-class teams.
                 </p>
