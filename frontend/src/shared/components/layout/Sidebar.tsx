@@ -51,9 +51,9 @@ export function Sidebar() {
             <Image 
               src="/logo.png" 
               alt="GetiDone Logo" 
-              width={240} 
-              height={60} 
-              className="h-16 w-auto object-contain brightness-0 invert transition-all" 
+              width={400} 
+              height={100} 
+              className="w-full h-auto max-h-24 object-contain brightness-0 invert transition-all" 
               priority
             />
           ) : (

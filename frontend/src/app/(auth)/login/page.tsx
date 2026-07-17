@@ -20,9 +20,9 @@ export default function LoginPage() {
             <Image 
               src="/logo.png" 
               alt="GetiDone Logo" 
-              width={300} 
-              height={80} 
-              className="h-16 w-auto object-contain brightness-0 invert" 
+              width={600} 
+              height={160} 
+              className="h-32 w-auto object-contain brightness-0 invert" 
               priority
             />
           </Link>
@@ -95,22 +95,33 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <p className="text-slate-500 text-xs mb-4">Trusted by forward-thinking companies</p>
-          <div className="flex gap-6 items-center mb-12">
-            <span className="text-[#00C3F7] font-bold text-lg tracking-tight flex items-center gap-1">
-              <div className="w-4 h-4 bg-[#00C3F7] rounded-sm"></div>
-              paystack
-            </span>
-            <span className="text-[#F5A623] font-black text-sm tracking-wide">
-              FLUTTERWAVE
-            </span>
-            <span className="text-[#FF7A59] font-bold text-lg flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full border-2 border-[#FF7A59]"></div>
-              HubSpot
-            </span>
-            <span className="text-white font-bold text-md tracking-tighter">
-              Interswitch<span className="text-blue-500">_</span>
-            </span>
+          <p className="text-slate-500 text-xs font-bold mb-6 uppercase tracking-wider">Trusted by forward-thinking companies and individuals</p>
+          <div className="flex flex-wrap gap-8 items-center mb-16">
+            <div className="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/paystack/00C3F7" alt="Paystack" className="h-6 w-auto" />
+              <span className="text-[#00C3F7] font-bold text-lg tracking-tight">paystack</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/flutterwave/F5A623" alt="Flutterwave" className="h-6 w-auto" />
+              <span className="text-[#F5A623] font-black text-sm tracking-wide">FLUTTERWAVE</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/hubspot/FF7A59" alt="HubSpot" className="h-6 w-auto" />
+              <span className="text-[#FF7A59] font-bold text-lg">HubSpot</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-blue-500 font-black text-xl italic tracking-tighter">Moniepoint</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-white font-bold text-lg tracking-tighter">Interswitch<span className="text-blue-500">_</span></span>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/amazonaws/FF9900" alt="AWS" className="h-6 w-auto" />
+            </div>
+            <div className="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/googlecloud/4285F4" alt="Google Cloud" className="h-6 w-auto" />
+              <span className="text-[#4285F4] font-bold text-lg">Google Cloud</span>
+            </div>
           </div>
 
           <div className="pt-6 border-t border-white/10">
