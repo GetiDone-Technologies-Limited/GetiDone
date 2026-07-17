@@ -14,7 +14,7 @@ export default function ProjectWorkspacePage({ params }: { params: Promise<{ id:
   const resolvedParams = use(params);
   
   return (
-    <div className="flex flex-col xl:flex-row gap-8 w-full max-w-[1600px] mx-auto">
+    <div className="flex flex-col xl:flex-row gap-8 w-full">
       {/* LEFT COLUMN - MAIN WORKSPACE */}
       <div className="flex-1 flex flex-col gap-6 min-w-0">
         
