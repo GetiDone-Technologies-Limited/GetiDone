@@ -8,7 +8,7 @@ import { Avatar } from '../ui/Avatar';
 import Image from 'next/image';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
-  FileText, BarChart2, Users2, Settings, Plus, Eye 
+  FileText, BarChart2, Users2, Settings, Plus, Eye, CheckCircle2 
 } from 'lucide-react';
 
 interface SidebarLink {
