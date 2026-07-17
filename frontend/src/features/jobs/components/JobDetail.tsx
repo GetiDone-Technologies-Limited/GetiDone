@@ -46,7 +46,7 @@ export function JobDetail({ jobId, onApply }: JobDetailProps) {
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
         <div className="rounded-xl bg-slate-50 p-4">
           <p className="text-xs text-slate-500">Budget</p>
-          <p className="mt-0.5 text-xl font-bold text-violet-700">{formatCurrency(job.budget)}</p>
+          <p className="mt-0.5 text-xl font-bold text-primary-700">{formatCurrency(job.budget)}</p>
         </div>
         {job.deadline && (
           <div className="rounded-xl bg-slate-50 p-4">
@@ -89,3 +89,4 @@ export function JobDetail({ jobId, onApply }: JobDetailProps) {
     </div>
   );
 }
+

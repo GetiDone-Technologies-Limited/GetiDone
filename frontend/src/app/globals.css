@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-space-grotesk);
+
+  /* Thematic Design System Tokens */
+  --color-surface: var(--surface);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary: var(--on-primary);
+  
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  :root, .light {
+    /* LIGHT MODE (Lemon Green Backgrounds) */
+    --surface: #f4fdf4;
+    --surface-container: #ffffff;
+    --surface-container-low: #ebf7eb;
+    --surface-container-high: #e2f0e2;
+    --on-surface: #0a1f14;
+    --on-surface-variant: #2f4f3f;
+    
+    --primary: #22c55e;
+    --primary-container: #16a34a;
+    --on-primary: #ffffff;
+    
+    --outline: #cce3cc;
+    --outline-variant: #dff0df;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .dark {
+    /* DARK MODE (Dark Forest Green) */
+    --surface: #091a14;
+    --surface-container: #0d261e;
+    --surface-container-low: #08140f;
+    --surface-container-high: #13362a;
+    --on-surface: #ffffff;
+    --on-surface-variant: #a7c4b6;
+    
+    --primary: #22c55e;
+    --primary-container: #16a34a;
+    --on-primary: #040d0a;
+    
+    --outline: #1c4031;
+    --outline-variant: #132e22;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--on-surface);
+    font-family: var(--font-sans), sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), sans-serif;
+  }
 }

@@ -32,3 +32,18 @@ export interface MatchFilters {
   minScore?: number;
   limit?: number;
 }
+
+export interface JobMatch {
+  job: {
+    id: string;
+    title: string;
+    description: string;
+    budget: string | number;
+    status: string;
+    createdAt: string;
+    skills: { id: string; name: string }[];
+  };
+  matchPercentage: number;
+  matchedSkills: string[];
+  aiReason: string;
+}

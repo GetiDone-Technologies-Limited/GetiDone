@@ -53,3 +53,4 @@ export function JobList({ filters }: JobListProps) {
     </div>
   );
 }
+

@@ -22,7 +22,7 @@ export default function JobsBrowsePage() {
           </div>
           <Link
             href="/jobs/new"
-            className="inline-flex items-center rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-all self-start"
+            className="inline-flex items-center rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 transition-all self-start"
           >
             + Post a job
           </Link>
@@ -42,3 +42,4 @@ export default function JobsBrowsePage() {
     </div>
   );
 }
+

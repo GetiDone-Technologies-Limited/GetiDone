@@ -68,7 +68,7 @@ export function EditProfileForm() {
           placeholder="Tell clients or freelancers about yourself…"
           value={form.bio}
           onChange={set('bio')}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 focus:outline-none transition-all"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none transition-all"
         />
       </div>
 
@@ -81,3 +81,4 @@ export function EditProfileForm() {
     </form>
   );
 }
+

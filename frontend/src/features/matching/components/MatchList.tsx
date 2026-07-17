@@ -25,3 +25,4 @@ export function MatchList({ search, onHire }: MatchListProps) {
     </div>
   );
 }
+

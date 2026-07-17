@@ -43,10 +43,23 @@ export function useReleaseEscrow() {
   });
 }
 
+export function useVerifyPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ projectId, reference }: { projectId: string; reference: string }) => 
+      paymentApi.verifyPayment(projectId, reference),
+    onSuccess: (_, { projectId }) => {
+      queryClient.invalidateQueries({ queryKey: ['escrow', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['payments', projectId] });
+    },
+  });
+}
+
 export function usePayment(projectId?: string) {
   const payments = usePayments(projectId);
   const escrow = useEscrow(projectId ?? '');
   const createPayment = useCreatePayment();
+  const verifyPayment = useVerifyPayment();
   const releaseEscrow = useReleaseEscrow();
-  return { payments, escrow, createPayment, releaseEscrow };
+  return { payments, escrow, createPayment, verifyPayment, releaseEscrow };
 }

@@ -14,4 +14,9 @@ export class MatchingController {
   getDoneScore(@Param('userId') userId: string) {
     return this.matchingService.getDoneScore(userId);
   }
+
+  @Get('jobs-for-freelancer/:freelancerId')
+  recommendJobsForFreelancer(@Param('freelancerId') freelancerId: string) {
+    return this.matchingService.recommendJobsForFreelancer(freelancerId);
+  }
 }

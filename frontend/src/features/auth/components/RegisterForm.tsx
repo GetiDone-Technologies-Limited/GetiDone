@@ -75,7 +75,7 @@ export function RegisterForm() {
               onClick={() => setForm((p) => ({ ...p, role }))}
               className={`rounded-xl border-2 p-3 text-sm font-medium transition-all ${
                 form.role === role
-                  ? 'border-violet-500 bg-violet-50 text-violet-700'
+                  ? 'border-primary-500 bg-primary-50 text-primary-700'
                   : 'border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
             >
@@ -91,3 +91,4 @@ export function RegisterForm() {
     </form>
   );
 }
+

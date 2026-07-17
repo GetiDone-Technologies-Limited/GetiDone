@@ -34,7 +34,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'transition-all duration-150 focus:outline-none focus:ring-2',
               error
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-300'
-                : 'border-slate-300 focus:border-violet-500 focus:ring-violet-200',
+                : 'border-slate-300 focus:border-primary-500 focus:ring-primary-200',
               leftIcon ? 'pl-9' : '',
               rightIcon ? 'pr-9' : '',
               className,
@@ -55,3 +55,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
+

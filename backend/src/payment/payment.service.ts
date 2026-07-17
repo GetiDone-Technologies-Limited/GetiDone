@@ -5,12 +5,26 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PaymentService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getEscrow(projectId: string, userId: string) {
+    const project = await this.prisma.project.findUnique({ where: { id: projectId } });
+    if (!project) throw new NotFoundException(`Project ${projectId} not found`);
+    if (project.clientId !== userId && project.freelancerId !== userId) {
+      throw new ForbiddenException('Not your project');
+    }
+
+    return {
+      projectId: project.id,
+      amount: project.budget,
+      status: project.escrowStatus, // UNFUNDED, FUNDED, RELEASED, REFUNDED
+      payoutAmount: project.payoutAmount,
+    };
+  }
+
   /**
    * Fund escrow: client initiates payment for a project.
-   * In MVP, Paystack is mocked — a real reference is stored but no real charge happens.
-   * TODO (Week 5): Replace mock with real Paystack initialize + webhook verification.
+   * Returns a mock checkout URL for Stripe, Paystack, or Flutterwave.
    */
-  async fundEscrow(projectId: string, clientId: string) {
+  async fundEscrow(projectId: string, clientId: string, gateway: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
     if (!project) throw new NotFoundException(`Project ${projectId} not found`);
     if (project.clientId !== clientId) throw new ForbiddenException('Not your project');
@@ -18,7 +32,32 @@ export class PaymentService {
       throw new BadRequestException('Escrow already funded');
     }
 
-    const mockReference = `PAY-MOCK-${Date.now()}`;
+    const mockReference = `${gateway.toUpperCase()}-MOCK-${Date.now()}`;
+    let authorization_url = '';
+
+    if (gateway.toLowerCase() === 'stripe') {
+      authorization_url = `https://checkout.stripe.com/pay/${mockReference}`;
+    } else if (gateway.toLowerCase() === 'flutterwave') {
+      authorization_url = `https://flutterwave.com/pay/${mockReference}`;
+    } else {
+      authorization_url = `https://checkout.paystack.com/${mockReference}`;
+    }
+
+    // Return the reference and url to the frontend without setting the DB to FUNDED yet.
+    // The frontend will redirect, then call verifyPayment.
+    return { authorization_url, mockReference, gateway };
+  }
+
+  /**
+   * Verify Payment: simulated webhook/callback success verification.
+   */
+  async verifyPayment(projectId: string, reference: string, clientId: string) {
+    const project = await this.prisma.project.findUnique({ where: { id: projectId } });
+    if (!project) throw new NotFoundException(`Project ${projectId} not found`);
+    if (project.clientId !== clientId) throw new ForbiddenException('Not your project');
+    if (project.escrowStatus !== 'UNFUNDED') {
+      return { status: 'already_funded', project };
+    }
 
     const [payment, updatedProject] = await this.prisma.$transaction([
       this.prisma.payment.create({
@@ -27,7 +66,7 @@ export class PaymentService {
           amount: project.budget,
           type: 'ESCROW_FUND',
           status: 'SUCCESSFUL',
-          reference: mockReference,
+          reference,
         },
       }),
       this.prisma.project.update({
@@ -36,7 +75,7 @@ export class PaymentService {
       }),
     ]);
 
-    return { payment, project: updatedProject, mockReference };
+    return { payment, project: updatedProject };
   }
 
   /**

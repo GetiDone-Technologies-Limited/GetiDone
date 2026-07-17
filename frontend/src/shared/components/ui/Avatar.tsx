@@ -18,7 +18,7 @@ const sizeClasses = {
 };
 
 const bgColors = [
-  'bg-violet-500',
+  'bg-primary-500',
   'bg-blue-500',
   'bg-emerald-500',
   'bg-amber-500',
@@ -57,3 +57,4 @@ export function Avatar({ src, name = '', size = 'md', className = '', alt }: Ava
     </span>
   );
 }
+

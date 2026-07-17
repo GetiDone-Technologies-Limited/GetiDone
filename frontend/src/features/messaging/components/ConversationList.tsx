@@ -29,7 +29,7 @@ export function ConversationList({ selectedId, onSelect }: ConversationListProps
             <button
               onClick={() => onSelect(conv.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                isSelected ? 'bg-violet-50' : 'hover:bg-slate-50'
+                isSelected ? 'bg-primary-50' : 'hover:bg-slate-50'
               }`}
             >
               <Avatar src={other?.avatarUrl} name={other?.name ?? ''} size="md" />
@@ -49,7 +49,7 @@ export function ConversationList({ selectedId, onSelect }: ConversationListProps
                 )}
               </div>
               {conv.unreadCount > 0 && (
-                <span className="flex-shrink-0 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-violet-600 px-1.5 text-xs font-bold text-white">
+                <span className="flex-shrink-0 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-600 px-1.5 text-xs font-bold text-white">
                   {conv.unreadCount}
                 </span>
               )}
@@ -60,3 +60,4 @@ export function ConversationList({ selectedId, onSelect }: ConversationListProps
     </ul>
   );
 }
+

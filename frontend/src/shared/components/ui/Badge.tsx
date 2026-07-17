@@ -14,7 +14,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   warning: 'bg-amber-100 text-amber-700',
   danger: 'bg-red-100 text-red-700',
   info: 'bg-blue-100 text-blue-700',
-  violet: 'bg-violet-100 text-violet-700',
+  violet: 'bg-primary-100 text-primary-700',
 };
 
 export function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
@@ -46,3 +46,4 @@ export function statusToBadgeVariant(status: string): BadgeVariant {
   };
   return map[status] ?? 'default';
 }
+

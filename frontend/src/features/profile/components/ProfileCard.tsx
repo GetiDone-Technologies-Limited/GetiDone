@@ -35,9 +35,9 @@ export function ProfileCard({ userId }: ProfileCardProps) {
           {profile.bio && <p className="mt-3 text-sm text-slate-700 leading-relaxed">{profile.bio}</p>}
 
           <div className="mt-4 flex items-center gap-4 text-sm">
-            <div className="rounded-lg bg-violet-50 px-3 py-2">
+            <div className="rounded-lg bg-primary-50 px-3 py-2">
               <p className="text-xs text-slate-500">DoneScore™</p>
-              <p className="text-xl font-bold text-violet-700">{profile.doneScore}</p>
+              <p className="text-xl font-bold text-primary-700">{profile.doneScore}</p>
             </div>
             {profile.hourlyRate && (
               <div className="rounded-lg bg-slate-50 px-3 py-2">
@@ -59,3 +59,4 @@ export function ProfileCard({ userId }: ProfileCardProps) {
     </div>
   );
 }
+

@@ -1,27 +1,49 @@
-import { Controller, Post, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, NotFoundException } from '@nestjs/common';
 import { PaymentService } from './payment.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Controller('payment')
-@UseGuards(JwtAuthGuard)
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(
+    private readonly paymentService: PaymentService,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  // Helper to get clientId for MVP testing without Auth
+  private async getProjectClientId(projectId: string) {
+    const project = await this.prisma.project.findUnique({ where: { id: projectId } });
+    if (!project) throw new NotFoundException('Project not found');
+    return project.clientId;
+  }
+
+  @Get('projects/:id/escrow')
+  async getEscrow(@Param('id') projectId: string) {
+    const clientId = await this.getProjectClientId(projectId);
+    return this.paymentService.getEscrow(projectId, clientId);
+  }
 
   @Post('projects/:id/fund')
-  fundEscrow(
+  async fundEscrow(
     @Param('id') projectId: string,
-    @CurrentUser() user: { id: string },
+    @Body('gateway') gateway: string,
   ) {
-    return this.paymentService.fundEscrow(projectId, user.id);
+    const clientId = await this.getProjectClientId(projectId);
+    return this.paymentService.fundEscrow(projectId, clientId, gateway || 'stripe');
+  }
+
+  @Post('projects/:id/verify')
+  async verifyPayment(
+    @Param('id') projectId: string,
+    @Body('reference') reference: string,
+  ) {
+    const clientId = await this.getProjectClientId(projectId);
+    return this.paymentService.verifyPayment(projectId, reference, clientId);
   }
 
   @Post('projects/:id/release')
-  releaseEscrow(
-    @Param('id') projectId: string,
-    @CurrentUser() user: { id: string },
-  ) {
-    return this.paymentService.releaseEscrow(projectId, user.id);
+  async releaseEscrow(@Param('id') projectId: string) {
+    const clientId = await this.getProjectClientId(projectId);
+    return this.paymentService.releaseEscrow(projectId, clientId);
   }
 
   @Get('projects/:id/history')

@@ -15,8 +15,8 @@ export function LoginForm() {
     e.preventDefault();
     try {
       const result = await login(form);
-      if (result.user.role === 'CLIENT') router.push('/dashboard/client');
-      else if (result.user.role === 'FREELANCER') router.push('/dashboard/freelancer');
+      if (result.user.role === 'CLIENT') router.push('/client');
+      else if (result.user.role === 'FREELANCER') router.push('/freelancer');
       else router.push('/');
     } catch {
       // error shown via loginError
@@ -59,3 +59,4 @@ export function LoginForm() {
     </form>
   );
 }
+

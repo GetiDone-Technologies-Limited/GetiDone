@@ -72,7 +72,7 @@ export function ReviewForm({ projectId, revieweeId, onSuccess }: ReviewFormProps
               onClick={() => setCategory(c)}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
                 category === c
-                  ? 'bg-violet-600 text-white'
+                  ? 'bg-primary-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -92,7 +92,7 @@ export function ReviewForm({ projectId, revieweeId, onSuccess }: ReviewFormProps
           placeholder="Share your experience…"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 focus:outline-none transition-all"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none transition-all"
         />
       </div>
 
@@ -100,3 +100,4 @@ export function ReviewForm({ projectId, revieweeId, onSuccess }: ReviewFormProps
     </form>
   );
 }
+

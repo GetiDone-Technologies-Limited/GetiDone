@@ -23,13 +23,13 @@ export function FreelancerCard({ freelancer, score, onHire }: FreelancerCardProp
   const stars = Array.from({ length: 5 }, (_, i) => i < Math.round(freelancer.avgRating));
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-violet-200">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-200">
       <div className="flex items-start gap-4">
         <Avatar src={user.avatarUrl} name={user.name} size="lg" />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <Link href={`/profile?id=${freelancer.userId}`} className="font-semibold text-slate-900 hover:text-violet-700">
+              <Link href={`/profile?id=${freelancer.userId}`} className="font-semibold text-slate-900 hover:text-primary-700">
                 {user.name}
               </Link>
               <div className="flex items-center gap-1 mt-0.5">
@@ -73,3 +73,4 @@ export function FreelancerCard({ freelancer, score, onHire }: FreelancerCardProp
     </div>
   );
 }
+

@@ -86,11 +86,11 @@ export function Sidebar() {
                   href={link.href}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-violet-50 text-violet-700'
+                      ? 'bg-primary-50 text-primary-700'
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <span className={isActive ? 'text-violet-600' : 'text-slate-400'}>{link.icon}</span>
+                  <span className={isActive ? 'text-primary-600' : 'text-slate-400'}>{link.icon}</span>
                   {link.label}
                 </Link>
               </li>
@@ -102,12 +102,13 @@ export function Sidebar() {
       {/* DoneScore */}
       {user && (
         <div className="border-t border-slate-100 p-4">
-          <div className="rounded-lg bg-violet-50 p-3">
+          <div className="rounded-lg bg-primary-50 p-3">
             <p className="text-xs text-slate-500 mb-1">DoneScore™</p>
-            <p className="text-2xl font-bold text-violet-700">{user.doneScore}</p>
+            <p className="text-2xl font-bold text-primary-700">{user.doneScore}</p>
           </div>
         </div>
       )}
     </aside>
   );
 }
+

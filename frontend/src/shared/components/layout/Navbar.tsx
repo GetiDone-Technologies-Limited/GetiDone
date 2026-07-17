@@ -20,8 +20,8 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-violet-700">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white text-sm font-black">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary-700">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white text-sm font-black">
             G
           </span>
           GetiDone
@@ -35,7 +35,7 @@ export function Navbar() {
               href={link.href}
               className={`text-sm font-medium transition-colors ${
                 pathname.startsWith(link.href)
-                  ? 'text-violet-700'
+                  ? 'text-primary-700'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -70,3 +70,4 @@ export function Navbar() {
     </header>
   );
 }
+

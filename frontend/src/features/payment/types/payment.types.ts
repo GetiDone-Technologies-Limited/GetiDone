@@ -25,6 +25,7 @@ export interface CreatePaymentRequest {
   projectId: string;
   amount: number;
   currency?: string;
+  gateway: 'stripe' | 'paystack' | 'flutterwave';
 }
 
 export interface ReleaseEscrowRequest {

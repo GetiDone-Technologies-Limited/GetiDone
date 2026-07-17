@@ -12,11 +12,11 @@ export function JobCard({ job }: JobCardProps) {
   return (
     <Link
       href={`/jobs/${job.id}`}
-      className="group block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-violet-300 hover:shadow-md"
+      className="group block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-primary-300 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-slate-900 group-hover:text-violet-700 transition-colors truncate">
+          <h3 className="font-semibold text-slate-900 group-hover:text-primary-700 transition-colors truncate">
             {job.title}
           </h3>
           {job.client && (
@@ -46,7 +46,7 @@ export function JobCard({ job }: JobCardProps) {
       )}
 
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-base font-bold text-violet-700">{formatCurrency(job.budget)}</span>
+        <span className="text-base font-bold text-primary-700">{formatCurrency(job.budget)}</span>
         <div className="flex items-center gap-3 text-xs text-slate-400">
           {job._count?.applications !== undefined && (
             <span>{job._count.applications} applicant{job._count.applications !== 1 ? 's' : ''}</span>
@@ -57,3 +57,4 @@ export function JobCard({ job }: JobCardProps) {
     </Link>
   );
 }
+

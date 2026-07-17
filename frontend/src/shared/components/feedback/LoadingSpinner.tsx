@@ -3,7 +3,7 @@ export function LoadingSpinner({ size = 'md', label = 'Loading…' }: { size?: '
   return (
     <div className="flex flex-col items-center justify-center gap-2" role="status" aria-label={label}>
       <svg
-        className={`animate-spin text-violet-600 ${sizeMap[size]}`}
+        className={`animate-spin text-primary-600 ${sizeMap[size]}`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -15,3 +15,4 @@ export function LoadingSpinner({ size = 'md', label = 'Loading…' }: { size?: '
     </div>
   );
 }
+

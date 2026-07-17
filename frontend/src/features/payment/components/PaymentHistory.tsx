@@ -41,3 +41,4 @@ export function PaymentHistory({ projectId }: PaymentHistoryProps) {
     </div>
   );
 }
+
