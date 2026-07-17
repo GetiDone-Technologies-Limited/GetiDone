@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { use, useState } from 'react';
 import Link from 'next/link';
 import { 
   ChevronLeft, ShoppingCart, Calendar, Clock, Briefcase, FileText, 
@@ -9,9 +9,11 @@ import {
 } from 'lucide-react';
 import { Avatar } from '@/shared/components/ui/Avatar';
 import { Badge } from '@/shared/components/ui/Badge';
+import { MilestonesTab, FilesTab, MessagesTab, PaymentsTab, ActivityTab, TimelineTab } from './TabComponents';
 
 export default function ProjectWorkspacePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
+  const [activeTab, setActiveTab] = useState('Overview');
   
   return (
     <div className="flex flex-col xl:flex-row gap-8 w-full">
@@ -20,7 +22,7 @@ export default function ProjectWorkspacePage({ params }: { params: Promise<{ id:
         
         {/* Breadcrumb */}
         <div className="flex items-center text-sm font-semibold text-slate-500 mb-2">
-          <Link href="/client" className="hover:text-primary transition-colors flex items-center">
+          <Link href="/projects" className="hover:text-primary transition-colors flex items-center">
             <ChevronLeft className="w-4 h-4 mr-1" />
             My Projects
           </Link>
@@ -147,22 +149,29 @@ export default function ProjectWorkspacePage({ params }: { params: Promise<{ id:
 
         {/* Navigation Tabs */}
         <div className="flex gap-10 border-b border-slate-200 px-6 mt-4">
-          <button className="pb-4 text-[15px] font-bold text-[#00b259] border-b-[3px] border-[#00b259]">Overview</button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors">Milestones</button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors">Files</button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-2">
-            Messages <span className="w-5 h-5 rounded-full bg-[#00b259] text-[11px] text-white flex items-center justify-center font-bold">4</span>
-          </button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors">Payments</button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors">Activity</button>
-          <button className="pb-4 text-[15px] font-semibold text-slate-500 hover:text-slate-800 transition-colors">Timeline</button>
+          {['Overview', 'Milestones', 'Files', 'Messages', 'Payments', 'Activity', 'Timeline'].map((tab) => (
+            <button 
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-4 text-[15px] transition-colors flex items-center gap-2 ${
+                activeTab === tab 
+                  ? 'font-bold text-[#00b259] border-b-[3px] border-[#00b259]' 
+                  : 'font-semibold text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {tab} {tab === 'Messages' && <span className="w-5 h-5 rounded-full bg-[#00b259] text-[11px] text-white flex items-center justify-center font-bold">4</span>}
+            </button>
+          ))}
         </div>
 
-        {/* Main Content Grid inside Overview */}
-        <div className="grid lg:grid-cols-3 gap-6 mt-2">
-          {/* Assigned Freelancer */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-7 shadow-sm flex flex-col">
-            <h3 className="text-base font-bold text-slate-900 mb-6">Assigned Freelancer</h3>
+        {/* Tab Content */}
+        {activeTab === 'Overview' && (
+          <>
+            {/* Main Content Grid inside Overview */}
+            <div className="grid lg:grid-cols-3 gap-6 mt-2">
+              {/* Assigned Freelancer */}
+              <div className="bg-white rounded-3xl border border-slate-200 p-7 shadow-sm flex flex-col">
+                <h3 className="text-base font-bold text-slate-900 mb-6">Assigned Freelancer</h3>
             <div className="flex gap-4 items-center mb-6">
               <Avatar src="https://i.pravatar.cc/150?u=daniel" name="Daniel Benson" size="lg" className="w-16 h-16 border-2 border-white shadow-md" />
               <div>
@@ -401,6 +410,16 @@ export default function ProjectWorkspacePage({ params }: { params: Promise<{ id:
             </button>
           </div>
         </div>
+        </>
+        )}
+        
+        {activeTab === 'Milestones' && <MilestonesTab />}
+        {activeTab === 'Files' && <FilesTab />}
+        {activeTab === 'Messages' && <MessagesTab />}
+        {activeTab === 'Payments' && <PaymentsTab />}
+        {activeTab === 'Activity' && <ActivityTab />}
+        {activeTab === 'Timeline' && <TimelineTab />}
+
       </div>
     </div>
   );
