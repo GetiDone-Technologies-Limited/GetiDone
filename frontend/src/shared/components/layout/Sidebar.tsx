@@ -36,7 +36,7 @@ const links: SidebarLink[] = [
 export function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuthStore();
-  const { sidebarOpen } = useUIStore();
+  const { sidebarOpen, toggleSidebar } = useUIStore();
 
   const visibleLinks = links.filter(
     (l) => !l.roles || (user?.role && l.roles.includes(user.role)),
