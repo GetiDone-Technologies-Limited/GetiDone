@@ -42,54 +42,62 @@ export function Sidebar() {
     (l) => !l.roles || (user?.role && l.roles.includes(user.role)),
   );
 
-  if (!sidebarOpen) return null;
-
   return (
-    <aside className="flex h-full w-[260px] flex-col bg-[#0A0D0C] text-slate-300">
+    <aside className={`flex h-full flex-col bg-[#0A0D0C] text-slate-300 transition-all duration-300 ${sidebarOpen ? 'w-[260px]' : 'w-20'}`}>
       {/* Logo & Post Job */}
-      <div className="p-6 pb-2">
+      <div className={`p-6 pb-2 ${!sidebarOpen && 'px-2 flex flex-col items-center'}`}>
         <Link href="/" className="block mb-8">
-          <Image 
-            src="/logo.png" 
-            alt="GetiDone Logo" 
-            width={200} 
-            height={50} 
-            className="h-10 w-auto object-contain brightness-0 invert" 
-            priority
-          />
+          {sidebarOpen ? (
+            <Image 
+              src="/logo.png" 
+              alt="GetiDone Logo" 
+              width={240} 
+              height={60} 
+              className="h-16 w-auto object-contain brightness-0 invert transition-all" 
+              priority
+            />
+          ) : (
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white text-xl font-black">
+              G
+            </span>
+          )}
         </Link>
 
         {user?.role === 'CLIENT' && (
-          <Link href="/jobs/new" className="flex items-center justify-center gap-2 w-full rounded-xl bg-primary hover:bg-primary-600 text-white py-3 px-4 font-semibold transition-colors">
+          <Link href="/jobs/new" className={`flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-600 text-white py-3 font-semibold transition-colors ${sidebarOpen ? 'w-full px-4' : 'w-12 h-12 rounded-full p-0'}`}>
             <Plus className="w-5 h-5" />
-            Post a New Job
+            {sidebarOpen && <span>Post a New Job</span>}
           </Link>
         )}
       </div>
 
       {/* Links */}
-      <nav className="flex-1 overflow-y-auto px-4 py-4 custom-scrollbar">
-        <ul className="space-y-1">
+      <nav className="flex-1 overflow-y-auto px-4 py-4 custom-scrollbar overflow-x-hidden">
+        <ul className="space-y-2">
           {visibleLinks.map((link) => {
             const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
             return (
               <li key={link.href + link.label}>
                 <Link
                   href={link.href}
-                  className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+                  className={`flex items-center rounded-xl py-3 text-sm font-medium transition-all ${
                     isActive
                       ? 'bg-primary/10 text-primary'
                       : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-                  }`}
+                  } ${sidebarOpen ? 'px-4 justify-between' : 'justify-center px-0'}`}
+                  title={!sidebarOpen ? link.label : undefined}
                 >
                   <div className="flex items-center gap-3">
                     {link.icon}
-                    {link.label}
+                    {sidebarOpen && <span className="truncate whitespace-nowrap">{link.label}</span>}
                   </div>
-                  {link.badge && (
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                  {link.badge && sidebarOpen && (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shrink-0">
                       {link.badge}
                     </span>
+                  )}
+                  {link.badge && !sidebarOpen && (
+                    <div className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-primary shrink-0" />
                   )}
                 </Link>
               </li>
@@ -99,51 +107,59 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 space-y-4">
+      <div className={`p-4 space-y-4 ${!sidebarOpen && 'px-2 flex flex-col items-center'}`}>
         {/* Balance Card */}
-        <div className="rounded-2xl border border-white/10 p-4 relative overflow-hidden">
-          <div className="relative z-10 flex items-center justify-between mb-1">
-            <p className="text-xs font-medium text-slate-400">Available Balance</p>
-            <Eye className="w-4 h-4 text-slate-500" />
+        {sidebarOpen && (
+          <div className="rounded-2xl border border-white/10 p-4 relative overflow-hidden">
+            <div className="relative z-10 flex items-center justify-between mb-1">
+              <p className="text-xs font-medium text-slate-400">Available Balance</p>
+              <Eye className="w-4 h-4 text-slate-500" />
+            </div>
+            <p className="relative z-10 text-2xl font-bold text-white mb-4">$2,450.00</p>
+            <button className="relative z-10 w-full py-2 text-sm font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors">
+              Add Funds
+            </button>
           </div>
-          <p className="relative z-10 text-2xl font-bold text-white mb-4">$2,450.00</p>
-          <button className="relative z-10 w-full py-2 text-sm font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors">
-            Add Funds
-          </button>
-        </div>
+        )}
 
         {/* User Profile */}
-        <div className="flex items-center justify-between bg-white/5 rounded-2xl p-3">
+        <div className={`flex items-center justify-between bg-white/5 rounded-2xl ${sidebarOpen ? 'p-3' : 'p-2 justify-center'}`}>
           <div className="flex items-center gap-3">
             <Avatar src={user?.avatarUrl} name={user?.name ?? 'User'} size="sm" />
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-white">{user?.name || 'John Maxwell'}</p>
-              <p className="flex items-center text-xs text-slate-400">
-                {user?.role === 'CLIENT' ? 'Client' : 'Freelancer'}
-                <CheckCircle2 className="w-3 h-3 text-primary ml-1" />
-              </p>
-            </div>
+            {sidebarOpen && (
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-white">{user?.name || 'John Maxwell'}</p>
+                <p className="flex items-center text-xs text-slate-400">
+                  {user?.role === 'CLIENT' ? 'Client' : 'Freelancer'}
+                  <CheckCircle2 className="w-3 h-3 text-primary ml-1 shrink-0" />
+                </p>
+              </div>
+            )}
           </div>
-          <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          {sidebarOpen && (
+            <svg className="w-4 h-4 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          )}
         </div>
 
         {/* Copyright */}
-        <div className="pt-2 text-center">
-          <p className="text-[10px] text-slate-500 leading-relaxed">
-            &copy; {new Date().getFullYear()} GetiDone Technologies.<br />
-            A product of{' '}
-            <a 
-              href="https://wa.me/2348101811993" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary-400 transition-colors font-medium hover:underline"
-            >
-              Benniechat TechWealth Solutions
-            </a>
-          </p>
-        </div>
+        {sidebarOpen && (
+          <div className="pt-2 text-center">
+            <p className="text-[10px] text-slate-500 leading-relaxed">
+              &copy; {new Date().getFullYear()} GetiDone Technologies.<br />
+              A product of{' '}
+              <a 
+                href="https://wa.me/2348101811993" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary-400 transition-colors font-medium hover:underline"
+              >
+                Benniechat TechWealth Solutions
+              </a>
+            </p>
+          </div>
+        )}
       </div>
     </aside>
   );

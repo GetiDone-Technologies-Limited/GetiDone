@@ -20,9 +20,9 @@ export default function LoginPage() {
             <Image 
               src="/logo.png" 
               alt="GetiDone Logo" 
-              width={200} 
-              height={50} 
-              className="h-12 w-auto object-contain brightness-0 invert" 
+              width={300} 
+              height={80} 
+              className="h-16 w-auto object-contain brightness-0 invert" 
               priority
             />
           </Link>
