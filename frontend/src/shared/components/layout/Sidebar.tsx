@@ -124,6 +124,22 @@ export function Sidebar() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
+
+        {/* Copyright */}
+        <div className="pt-2 text-center">
+          <p className="text-[10px] text-slate-500 leading-relaxed">
+            &copy; {new Date().getFullYear()} GetiDone Technologies.<br />
+            A product of{' '}
+            <a 
+              href="https://wa.me/2348101811993" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary-400 transition-colors font-medium hover:underline"
+            >
+              Benniechat TechWealth Solutions
+            </a>
+          </p>
+        </div>
       </div>
     </aside>
   );

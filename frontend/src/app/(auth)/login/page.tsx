@@ -92,11 +92,28 @@ export default function LoginPage() {
           </div>
 
           <p className="text-slate-500 text-xs mb-4">Trusted by forward-thinking companies</p>
-          <div className="flex gap-6 items-center opacity-50 grayscale">
+          <div className="flex gap-6 items-center opacity-50 grayscale mb-12">
             <span className="text-white font-bold text-sm">Paystack</span>
             <span className="text-white font-bold text-sm">Flutterwave</span>
             <span className="text-white font-bold text-sm">HubSpot</span>
             <span className="text-white font-bold text-sm">Interswitch</span>
+          </div>
+
+          <div className="pt-6 border-t border-white/10">
+            <p className="text-xs text-slate-500 flex flex-col gap-1">
+              <span>&copy; {new Date().getFullYear()} GetiDone Technologies. All rights reserved.</span>
+              <span>
+                A product of{' '}
+                <a 
+                  href="https://wa.me/2348101811993" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary-400 transition-colors font-medium hover:underline"
+                >
+                  Benniechat TechWealth Solutions
+                </a>
+              </span>
+            </p>
           </div>
         </div>
       </div>
