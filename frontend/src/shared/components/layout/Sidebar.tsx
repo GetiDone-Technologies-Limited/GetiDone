@@ -8,7 +8,7 @@ import { Avatar } from '../ui/Avatar';
 import Image from 'next/image';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
-  FileText, BarChart2, Users2, Settings, Plus, Eye, CheckCircle2 
+  FileText, BarChart2, Users2, Settings, Plus, Eye, CheckCircle2, ChevronLeft
 } from 'lucide-react';
 
 interface SidebarLink {
@@ -43,7 +43,14 @@ export function Sidebar() {
   );
 
   return (
-    <aside className={`flex h-full flex-col bg-[#0A0D0C] text-slate-300 transition-all duration-300 ${sidebarOpen ? 'w-[260px]' : 'w-20'}`}>
+    <aside className={`relative flex h-full flex-col bg-[#0A0D0C] text-slate-300 transition-all duration-300 ${sidebarOpen ? 'w-[260px]' : 'w-20 shrink-0'}`}>
+      {/* Collapse Toggle Button */}
+      <button 
+        onClick={toggleSidebar}
+        className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-white border border-slate-700 shadow-md hover:bg-primary hover:border-primary transition-colors"
+      >
+        <ChevronLeft className={`h-4 w-4 transition-transform duration-300 ${!sidebarOpen ? 'rotate-180' : ''}`} />
+      </button>
       {/* Logo & Post Job */}
       <div className={`p-6 pb-2 ${!sidebarOpen && 'px-2 flex flex-col items-center'}`}>
         <Link href="/" className="block mb-8">
