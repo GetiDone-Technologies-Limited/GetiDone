@@ -8,19 +8,26 @@ import { useAuthStore } from '@/store/auth.store';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    // Check if already hydrated
+    if (useAuthStore.persist.hasHydrated()) {
+      setIsHydrated(true);
+    } else {
+      // Wait for hydration
+      const unsub = useAuthStore.persist.onFinishHydration(() => setIsHydrated(true));
+      return () => unsub();
+    }
   }, []);
 
   useEffect(() => {
-    if (isMounted && !isAuthenticated) {
+    if (isHydrated && !isAuthenticated) {
       router.replace('/login');
     }
-  }, [isMounted, isAuthenticated, router]);
+  }, [isHydrated, isAuthenticated, router]);
 
-  if (!isMounted) return null; // Wait for hydration
+  if (!isHydrated) return null; // Wait for hydration
   if (!isAuthenticated) return null; // Avoid rendering until redirect happens
 
   return <DashboardShell>{children}</DashboardShell>;
