@@ -5,6 +5,19 @@ import { Settings as SettingsIcon, Bell, Lock, CreditCard, User, Globe, Shield, 
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'account' | 'security' | 'notifications' | 'billing' | 'preferences'>('account');
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedTab, setSavedTab] = useState<string | null>(null);
+
+  const handleSave = (tabId: string) => {
+    setIsSaving(true);
+    // Simulate API delay
+    setTimeout(() => {
+      setIsSaving(false);
+      setSavedTab(tabId);
+      // Clear the "Saved!" message after 2.5 seconds
+      setTimeout(() => setSavedTab(null), 2500);
+    }, 800);
+  };
 
   const tabs = [
     { id: 'account', label: 'Account Details', icon: User },
@@ -80,8 +93,15 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">
-                  <button className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
-                    Save Changes
+                  <button 
+                    onClick={() => handleSave('account')}
+                    disabled={isSaving}
+                    className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+                  >
+                    {isSaving && activeTab === 'account' ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : null}
+                    {savedTab === 'account' ? 'Saved!' : 'Save Changes'}
                   </button>
                 </div>
               </div>
@@ -123,8 +143,15 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">
-                  <button className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
-                    Update Security
+                  <button 
+                    onClick={() => handleSave('security')}
+                    disabled={isSaving}
+                    className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+                  >
+                    {isSaving && activeTab === 'security' ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : null}
+                    {savedTab === 'security' ? 'Updated!' : 'Update Security'}
                   </button>
                 </div>
               </div>
@@ -158,8 +185,15 @@ export default function SettingsPage() {
                 ))}
 
                 <div className="pt-6 mt-6 flex justify-end">
-                  <button className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
-                    Save Preferences
+                  <button 
+                    onClick={() => handleSave('notifications')}
+                    disabled={isSaving}
+                    className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+                  >
+                    {isSaving && activeTab === 'notifications' ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : null}
+                    {savedTab === 'notifications' ? 'Saved!' : 'Save Preferences'}
                   </button>
                 </div>
               </div>
@@ -210,8 +244,15 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">
-                  <button className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
-                    Update Billing
+                  <button 
+                    onClick={() => handleSave('billing')}
+                    disabled={isSaving}
+                    className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+                  >
+                    {isSaving && activeTab === 'billing' ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : null}
+                    {savedTab === 'billing' ? 'Updated!' : 'Update Billing'}
                   </button>
                 </div>
               </div>
@@ -266,8 +307,15 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">
-                  <button className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
-                    Save Preferences
+                  <button 
+                    onClick={() => handleSave('preferences')}
+                    disabled={isSaving}
+                    className="px-6 py-3 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors disabled:opacity-70 flex items-center gap-2"
+                  >
+                    {isSaving && activeTab === 'preferences' ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : null}
+                    {savedTab === 'preferences' ? 'Saved!' : 'Save Preferences'}
                   </button>
                 </div>
               </div>
