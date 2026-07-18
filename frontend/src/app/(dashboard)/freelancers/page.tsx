@@ -1,6 +1,12 @@
+'use client';
+
 import { Users, Search, Filter } from 'lucide-react';
+import { useFreelancers } from '@/features/matching/hooks/useFreelancers';
+import { FreelancerCard } from '@/features/matching/components/FreelancerCard';
 
 export default function FreelancersPage() {
+  const { data: freelancers, isLoading } = useFreelancers();
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="flex justify-between items-end">
@@ -27,15 +33,33 @@ export default function FreelancersPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-16 text-center flex flex-col items-center justify-center">
-        <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-6">
-          <Users className="w-10 h-10 text-[#00b259]" />
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="h-80 bg-white rounded-3xl border border-slate-100 shadow-sm animate-pulse"></div>
+          ))}
         </div>
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Discover Top Talent</h3>
-        <p className="text-slate-500 max-w-md">
-          Use the search bar above or let our Smart AI Matching system automatically suggest the perfect candidates for your open roles.
-        </p>
-      </div>
+      ) : freelancers && freelancers.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {freelancers.map((freelancer) => (
+            <FreelancerCard 
+              key={freelancer.id} 
+              freelancer={freelancer} 
+              score={Math.random() > 0.5 ? 0.85 + Math.random() * 0.14 : undefined} // Mocking score for demo
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-16 text-center flex flex-col items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-6">
+            <Users className="w-10 h-10 text-[#00b259]" />
+          </div>
+          <h3 className="text-2xl font-bold text-slate-900 mb-2">No Talent Found</h3>
+          <p className="text-slate-500 max-w-md">
+            We couldn't find any freelancers matching your criteria.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

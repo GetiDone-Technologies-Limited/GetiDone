@@ -1,6 +1,15 @@
-import { CreditCard, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
+'use client';
+
+import { CreditCard, ArrowUpRight, Clock, Download } from 'lucide-react';
+import { useGlobalPaymentHistory } from '@/features/payment/hooks/useGlobalPaymentHistory';
 
 export default function PaymentsPage() {
+  const { data: payments, isLoading } = useGlobalPaymentHistory();
+
+  // Derived mock stats for top cards
+  const totalSpent = payments?.filter(p => p.status === 'COMPLETED').reduce((acc, curr) => acc + curr.amount, 0) || 0;
+  const inEscrow = payments?.filter(p => p.status === 'PENDING').reduce((acc, curr) => acc + curr.amount, 0) || 0;
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div>
@@ -25,7 +34,7 @@ export default function PaymentsPage() {
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-500 mb-1">In Escrow</p>
-            <p className="text-3xl font-black text-slate-900">$4,800.00</p>
+            <p className="text-3xl font-black text-slate-900">${inEscrow.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
           </div>
         </div>
 
@@ -36,7 +45,7 @@ export default function PaymentsPage() {
           </div>
           <div className="relative z-10">
             <p className="text-sm font-semibold text-slate-400 mb-1">Total Spent</p>
-            <p className="text-3xl font-black text-white">$12,050.00</p>
+            <p className="text-3xl font-black text-white">${totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
           </div>
         </div>
       </div>
@@ -44,15 +53,54 @@ export default function PaymentsPage() {
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-xl font-bold text-slate-900">Recent Transactions</h2>
-          <button className="text-sm font-semibold text-[#00b259] hover:text-[#009b4d]">Download CSV</button>
+          <button className="text-sm font-semibold text-[#00b259] hover:text-[#009b4d] flex items-center gap-1.5 bg-[#00b259]/10 px-3 py-1.5 rounded-lg transition-colors">
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
         </div>
-        <div className="p-12 text-center flex flex-col items-center justify-center">
-          <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-4">
-            <ArrowDownRight className="w-8 h-8 text-slate-400" />
+
+        {isLoading ? (
+          <div className="p-12 space-y-4">
+             {[1, 2, 3].map(i => <div key={i} className="h-12 bg-slate-50 rounded-xl animate-pulse"></div>)}
           </div>
-          <h3 className="text-lg font-bold text-slate-900 mb-1">No recent transactions</h3>
-          <p className="text-slate-500 text-sm">Your payment history will appear here once you start funding projects.</p>
-        </div>
+        ) : payments && payments.length > 0 ? (
+          <table className="w-full text-left">
+            <thead className="bg-slate-50 border-b border-slate-100">
+              <tr>
+                <th className="py-4 px-6 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Reference</th>
+                <th className="py-4 px-6 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Type</th>
+                <th className="py-4 px-6 text-[12px] font-bold text-slate-500 uppercase tracking-wider">Date</th>
+                <th className="py-4 px-6 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-right">Amount</th>
+                <th className="py-4 px-6 text-[12px] font-bold text-slate-500 uppercase tracking-wider text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {payments.map(payment => (
+                <tr key={payment.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="py-4 px-6 text-sm font-bold text-slate-900">{payment.reference}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-600">{payment.type}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-500">{new Date(payment.createdAt).toLocaleDateString()}</td>
+                  <td className="py-4 px-6 text-sm font-black text-slate-900 text-right">${payment.amount.toLocaleString()}</td>
+                  <td className="py-4 px-6 text-right">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
+                      ${payment.status === 'COMPLETED' ? 'bg-green-100 text-green-700' : 
+                        payment.status === 'PENDING' ? 'bg-orange-100 text-orange-700' : 
+                        'bg-red-100 text-red-700'}`}>
+                      {payment.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="p-12 text-center flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-4 border border-slate-100 shadow-sm">
+              <CreditCard className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-1">No recent transactions</h3>
+            <p className="text-slate-500 text-sm">Your payment history will appear here once you start funding projects.</p>
+          </div>
+        )}
       </div>
     </div>
   );

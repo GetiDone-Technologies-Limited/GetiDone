@@ -230,9 +230,20 @@ export default function SettingsPage() {
                   <label className="text-sm font-bold text-slate-700 block mb-2">Language</label>
                   <select className="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#00b259] focus:ring-1 focus:ring-[#00b259] transition-all bg-slate-50 appearance-none font-medium text-slate-900">
                     <option>English (US)</option>
-                    <option>Spanish</option>
-                    <option>French</option>
-                    <option>German</option>
+                    <option>English (UK)</option>
+                    <option>Spanish (Español)</option>
+                    <option>French (Français)</option>
+                    <option>German (Deutsch)</option>
+                    <option>Chinese (Mandarin)</option>
+                    <option>Arabic (العربية)</option>
+                    <option>Hindi (हिन्दी)</option>
+                    <option>Portuguese (Português)</option>
+                    <option>Russian (Русский)</option>
+                    <option>Japanese (日本語)</option>
+                    <option>Korean (한국어)</option>
+                    <option>Italian (Italiano)</option>
+                    <option>Dutch (Nederlands)</option>
+                    <option>Turkish (Türkçe)</option>
                   </select>
                 </div>
 
@@ -242,6 +253,14 @@ export default function SettingsPage() {
                     <option>USD ($) - US Dollar</option>
                     <option>EUR (€) - Euro</option>
                     <option>GBP (£) - British Pound</option>
+                    <option>NGN (₦) - Nigerian Naira</option>
+                    <option>CAD ($) - Canadian Dollar</option>
+                    <option>AUD ($) - Australian Dollar</option>
+                    <option>JPY (¥) - Japanese Yen</option>
+                    <option>INR (₹) - Indian Rupee</option>
+                    <option>CNY (¥) - Chinese Yuan</option>
+                    <option>ZAR (R) - South African Rand</option>
+                    <option>AED (د.إ) - UAE Dirham</option>
                   </select>
                   <p className="text-xs text-slate-500 font-medium mt-2">All project budgets and payments will be displayed in this currency.</p>
                 </div>
