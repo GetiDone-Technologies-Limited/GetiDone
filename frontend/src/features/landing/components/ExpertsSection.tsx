@@ -109,7 +109,7 @@ export function ExpertsSection() {
                 </div>
 
                 <p className="text-sm text-on-surface-variant mb-6 flex-grow">
-                  "{expert.bio}"
+                  &quot;{expert.bio}&quot;
                 </p>
 
                 <div className="mb-6">

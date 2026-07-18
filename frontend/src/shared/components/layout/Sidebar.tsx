@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { useUIStore } from '@/store/ui.store';
+import { useMessagingStore } from '@/store/messaging.store';
 import { Avatar } from '../ui/Avatar';
 import Image from 'next/image';
+import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
   FileText, BarChart2, Users2, Settings, Plus, Eye, EyeOff, CheckCircle2, ChevronLeft
@@ -24,7 +26,7 @@ const links: SidebarLink[] = [
   { href: '/client', label: 'Dashboard', icon: <Home className="w-5 h-5" />, roles: ['CLIENT'] },
   { href: '/freelancer', label: 'Dashboard', icon: <Home className="w-5 h-5" />, roles: ['FREELANCER'] },
   { href: '/projects', label: 'My Projects', icon: <Folder className="w-5 h-5" /> },
-  { href: '/messages', label: 'Messages', icon: <MessageSquare className="w-5 h-5" />, badge: 8 },
+  { href: '/messages', label: 'Messages', icon: <MessageSquare className="w-5 h-5" /> },
   { href: '/payments', label: 'Payments', icon: <CreditCard className="w-5 h-5" /> },
   { href: '/freelancers', label: 'Freelancers', icon: <Users className="w-5 h-5" /> },
   { href: '/saved', label: 'Saved Talents', icon: <Star className="w-5 h-5" /> },
@@ -38,12 +40,21 @@ export function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { conversations } = useMessagingStore();
 
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
+  const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
 
-  const visibleLinks = links.filter(
-    (l) => !l.roles || (user?.role && l.roles.includes(user.role)),
-  );
+  const unreadMessagesCount = conversations.reduce((acc, conv) => acc + conv.unreadCount, 0);
+
+  const visibleLinks = links
+    .filter((l) => !l.roles || (user?.role && l.roles.includes(user.role)))
+    .map((l) => {
+      if (l.label === 'Messages' && unreadMessagesCount > 0) {
+        return { ...l, badge: unreadMessagesCount };
+      }
+      return l;
+    });
 
   return (
     <aside className={`relative flex h-full flex-col bg-[#0A0D0C] text-slate-300 transition-all duration-300 ${sidebarOpen ? 'w-[260px]' : 'w-20 shrink-0'}`}>
@@ -132,7 +143,10 @@ export function Sidebar() {
               <p className="relative z-10 text-2xl font-bold text-white mb-4">
                 {isBalanceHidden ? '****' : '$2,450.00'}
               </p>
-              <button className="relative z-10 w-full py-2 text-sm font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors">
+              <button 
+                onClick={() => setIsAddFundsOpen(true)}
+                className="relative z-10 w-full py-2 text-sm font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
+              >
                 Add Funds
               </button>
             </div>
@@ -178,6 +192,8 @@ export function Sidebar() {
           )}
         </div>
       </div>
+
+      <AddFundsModal isOpen={isAddFundsOpen} onClose={() => setIsAddFundsOpen(false)} />
     </aside>
   );
 }

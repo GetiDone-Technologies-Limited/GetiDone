@@ -1,4 +1,7 @@
-import { FileText, CheckCircle2, MessageSquare, Download, Clock, Image as ImageIcon, File, Calendar, MoreHorizontal, ArrowRight, Activity, DollarSign, Send, Paperclip } from 'lucide-react';
+'use client';
+
+import { useState, useRef } from 'react';
+import { FileText, CheckCircle2, MessageSquare, Download, Clock, Image as ImageIcon, File, Calendar, MoreHorizontal, ArrowRight, Activity, DollarSign, Send, Paperclip, Plus } from 'lucide-react';
 import { Badge } from '@/shared/components/ui/Badge';
 import { Avatar } from '@/shared/components/ui/Avatar';
 
@@ -131,6 +134,20 @@ export function FilesTab() {
 }
 
 export function MessagesTab() {
+  const [text, setText] = useState('');
+  const [attachment, setAttachment] = useState<globalThis.File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAttachmentClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setAttachment(e.target.files[0]);
+    }
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm mt-2 flex flex-col h-[600px] overflow-hidden">
       {/* Chat Header */}
@@ -161,7 +178,7 @@ export function MessagesTab() {
           <Avatar src="https://i.pravatar.cc/150?u=daniel" name="Daniel Benson" size="sm" className="w-8 h-8 shrink-0 mt-1" />
           <div className="flex flex-col items-start max-w-[70%]">
             <div className="bg-slate-100 text-slate-800 px-5 py-3.5 rounded-2xl rounded-tl-sm text-[14px] leading-relaxed">
-              Hi there! I've accepted the contract and am ready to get started. I'll begin by working on the wireframes for the homepage as discussed.
+              Hi there! I&apos;ve accepted the contract and am ready to get started. I&apos;ll begin by working on the wireframes for the homepage as discussed.
             </div>
             <span className="text-[11px] font-semibold text-slate-400 mt-1.5 ml-1">10:45 AM</span>
           </div>
@@ -185,7 +202,7 @@ export function MessagesTab() {
           <Avatar src="https://i.pravatar.cc/150?u=daniel" name="Daniel Benson" size="sm" className="w-8 h-8 shrink-0 mt-1" />
           <div className="flex flex-col items-start max-w-[70%]">
             <div className="bg-slate-100 text-slate-800 px-5 py-3.5 rounded-2xl rounded-tl-sm text-[14px] leading-relaxed">
-              I've just uploaded the initial wireframes for your review. Check out the Files tab! Let me know your thoughts before I proceed to the high-fidelity designs.
+              I&apos;ve just uploaded the initial wireframes for your review. Check out the Files tab! Let me know your thoughts before I proceed to the high-fidelity designs.
             </div>
             <span className="text-[11px] font-semibold text-slate-400 mt-1.5 ml-1">9:15 AM</span>
           </div>
@@ -193,17 +210,27 @@ export function MessagesTab() {
       </div>
 
       {/* Chat Input */}
-      <div className="p-5 border-t border-slate-100 bg-white shrink-0">
+      <div className="p-5 border-t border-slate-100 bg-white shrink-0 flex flex-col">
+        {attachment && (
+          <div className="mb-3 self-start flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+            <Paperclip className="w-4 h-4 text-slate-500" />
+            <span className="text-sm font-medium text-slate-700">{attachment.name}</span>
+            <button type="button" onClick={() => setAttachment(null)} className="ml-2 text-slate-400 hover:text-red-500 font-bold">×</button>
+          </div>
+        )}
         <div className="flex items-center gap-3">
-          <button className="p-3 text-slate-400 hover:text-primary hover:bg-green-50 rounded-xl transition-colors">
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+          <button type="button" onClick={handleAttachmentClick} className="p-3 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-xl transition-colors">
             <Paperclip className="w-5 h-5" />
           </button>
           <input 
             type="text" 
             placeholder="Type your message here..." 
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-[14px] focus:outline-none focus:border-[#00b259] focus:ring-1 focus:ring-[#00b259] transition-all"
           />
-          <button className="p-3.5 bg-[#00b259] hover:bg-[#009b4d] text-white rounded-xl transition-colors shadow-sm">
+          <button type="button" onClick={() => { setText(''); setAttachment(null); }} disabled={!text.trim() && !attachment} className="p-3.5 bg-[#00b259] hover:bg-[#009b4d] text-white rounded-xl transition-colors shadow-sm disabled:opacity-50">
             <Send className="w-5 h-5" />
           </button>
         </div>

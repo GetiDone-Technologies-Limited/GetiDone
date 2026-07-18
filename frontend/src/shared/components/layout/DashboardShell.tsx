@@ -2,6 +2,10 @@ import { Sidebar } from './Sidebar';
 import { useUIStore } from '@/store/ui.store';
 import { Search, Bell, MessageSquare, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { NotificationDropdown } from './NotificationDropdown';
+import { MessageDropdown } from './MessageDropdown';
+import { DashboardNavControls } from './DashboardNavControls';
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -19,12 +23,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
           <div className="flex items-center flex-1">
             <button
               onClick={toggleSidebar}
-              className="mr-4 rounded-lg p-2 text-slate-500 hover:bg-slate-100 transition-colors"
+              className="mr-2 rounded-lg p-2 text-slate-500 hover:bg-slate-100 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
+            
+            <DashboardNavControls />
             
             {/* Search */}
             <div className="relative w-full max-w-md hidden md:block">
@@ -46,18 +52,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
           <div className="flex items-center gap-4">
             {/* Icons */}
-            <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
-              <MessageSquare className="h-5 w-5" />
-              <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white border-2 border-white">
-                8
-              </span>
-            </button>
-            <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white border-2 border-white">
-                3
-              </span>
-            </button>
+            <MessageDropdown />
+            <NotificationDropdown />
 
             <div className="h-8 w-px bg-slate-200 mx-2"></div>
 

@@ -12,6 +12,7 @@ import { WhyChooseSection } from '@/features/landing/components/WhyChooseSection
 import { SuccessStoriesSection } from '@/features/landing/components/SuccessStoriesSection';
 import { StatisticsSection } from '@/features/landing/components/StatisticsSection';
 import { CTASection } from '@/features/landing/components/CTASection';
+import { LandingAuthButtons } from '@/features/landing/components/LandingAuthButtons';
 
 export const metadata: Metadata = {
   title: 'GetiDone — Enterprise AI Work Execution',
@@ -38,12 +39,7 @@ export default function LandingPage() {
               <Link href="#resources" className="hover:text-white transition-colors">Resources</Link>
             </nav>
             <div className="flex items-center gap-6">
-              <Link href="/login" className="text-sm font-semibold text-white hover:text-primary transition-colors">
-                Log in
-              </Link>
-              <Link href="/register" className="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary hover:brightness-110 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)]">
-                Sign Up
-              </Link>
+              <LandingAuthButtons />
             </div>
           </div>
         </header>
