@@ -2,6 +2,7 @@
 
 import { Users, Mail, MoreHorizontal, UserPlus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { InviteMemberModal } from '@/features/team/components/InviteMemberModal';
 
 export default function TeamPage() {
   const [members, setMembers] = useState([
@@ -9,6 +10,19 @@ export default function TeamPage() {
     { id: '2', name: 'Sarah Jenkins', email: 'sarah@getidone.com', role: 'Admin', status: 'Active' },
     { id: '3', name: 'Michael Chen', email: 'michael@getidone.com', role: 'Editor', status: 'Pending' },
   ]);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+  const handleInvite = (memberData: any) => {
+    const newMember = {
+      id: `usr_${Math.floor(Math.random() * 1000)}`,
+      name: memberData.name || 'Invited User',
+      email: memberData.email,
+      role: memberData.role,
+      status: 'Pending',
+    };
+    setMembers([newMember, ...members]);
+    setIsInviteModalOpen(false);
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -17,7 +31,10 @@ export default function TeamPage() {
           <h1 className="text-3xl font-extrabold text-slate-900">Team Members</h1>
           <p className="text-slate-500 mt-2 font-medium">Manage your organization's members and their permissions.</p>
         </div>
-        <button className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
+        <button 
+          onClick={() => setIsInviteModalOpen(true)}
+          className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2"
+        >
           <UserPlus className="w-5 h-5" /> Invite Member
         </button>
       </div>
@@ -62,6 +79,12 @@ export default function TeamPage() {
           </tbody>
         </table>
       </div>
+
+      <InviteMemberModal 
+        open={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        onInvite={handleInvite}
+      />
     </div>
   );
 }
