@@ -2,6 +2,8 @@ import type { FreelancerProfile } from '../types/matching.types';
 import { Avatar } from '@/shared/components/ui/Avatar';
 import { ShieldCheck, MapPin, Briefcase, Star, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
+import { PublicProfileModal } from '@/features/profile/components/PublicProfileModal';
 
 interface FreelancerCardProps {
   freelancer: FreelancerProfile;
@@ -19,9 +21,11 @@ function StarIcon({ filled }: { filled: boolean }) {
 export function FreelancerCard({ freelancer, score, onHire, reasoning }: FreelancerCardProps) {
   const { user } = freelancer;
   const stars = Array.from({ length: 5 }, (_, i) => i < Math.round(freelancer.avgRating));
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
-    <div className="group bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#00b259]/30 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+    <>
+      <div className="group bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#00b259]/30 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
       {score !== undefined && (
         <div className="absolute top-0 right-0 bg-gradient-to-bl from-[#00b259]/10 to-transparent p-4 rounded-bl-3xl border-l border-b border-[#00b259]/10 z-10">
           <div className="flex flex-col items-center">
@@ -31,11 +35,11 @@ export function FreelancerCard({ freelancer, score, onHire, reasoning }: Freelan
         </div>
       )}
 
-      <div className="flex flex-col items-center text-center mb-5 relative z-10">
-         <Avatar src={user.avatarUrl} name={user.name} size="xl" className="w-20 h-20 shadow-sm border border-slate-100 mb-3" />
-         <Link href={`/profile?id=${freelancer.userId}`} className="text-lg font-black text-slate-900 hover:text-[#00b259] transition-colors">
+      <div className="flex flex-col items-center text-center mb-5 relative z-10 cursor-pointer" onClick={() => setIsProfileOpen(true)}>
+         <Avatar src={user.avatarUrl} name={user.name} gender={user.gender} size="xl" className="w-20 h-20 shadow-sm border border-slate-100 mb-3" />
+         <h3 className="text-lg font-black text-slate-900 hover:text-[#00b259] transition-colors">
             {user.name}
-         </Link>
+         </h3>
          <div className="flex items-center gap-1.5 mt-1 text-sm font-semibold text-slate-500">
            {freelancer.availability ? (
              <span className="flex items-center gap-1.5 text-[#00b259]"><span className="w-1.5 h-1.5 rounded-full bg-[#00b259]"></span> Available now</span>
@@ -98,6 +102,12 @@ export function FreelancerCard({ freelancer, score, onHire, reasoning }: Freelan
           Invite to Job
         </button>
       </div>
-    </div>
+      </div>
+      <PublicProfileModal 
+        userId={freelancer.userId}
+        open={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+      />
+    </>
   );
 }
