@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import Link from 'next/link';
+import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   FolderOpen, ClipboardCheck, Clock, Wallet, 
   MoreVertical, Plus, UserPlus, CreditCard, FileSignature, Headset 
@@ -54,9 +56,12 @@ const projects = [
 export default function ClientDashboardPage() {
   const { user } = useAuthStore();
   const firstName = user?.name ? user.name.split(' ')[0] : 'John';
+  const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
 
   return (
     <div className="flex flex-col xl:flex-row gap-8">
+      {/* Modals */}
+      <AddFundsModal isOpen={isAddFundsOpen} onClose={() => setIsAddFundsOpen(false)} />
       {/* Main Content Area */}
       <div className="flex-1 space-y-8">
         {/* Header */}
@@ -136,7 +141,7 @@ export default function ClientDashboardPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
           <div className="p-6 border-b border-slate-100 flex items-center justify-between">
             <h2 className="text-lg font-bold text-slate-900">My Projects</h2>
-            <button className="text-sm font-semibold text-primary hover:text-primary-600">View All Projects →</button>
+            <Link href="/projects" className="text-sm font-semibold text-primary hover:text-primary-600">View All Projects →</Link>
           </div>
           
           <div className="border-b border-slate-100 px-6 flex gap-6 text-sm font-medium">
@@ -281,30 +286,30 @@ export default function ClientDashboardPage() {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-colors text-slate-600 hover:text-primary group">
+            <Link href="/jobs/new" className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-colors text-slate-600 hover:text-primary group">
               <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-primary/10">
                 <Plus className="w-5 h-5 text-green-600" />
               </div>
               <span className="text-xs font-semibold text-center">Post a New Job</span>
-            </button>
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-purple-500/30 hover:bg-purple-50 transition-colors text-slate-600 hover:text-purple-600 group">
+            </Link>
+            <Link href="/freelancers" className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-purple-500/30 hover:bg-purple-50 transition-colors text-slate-600 hover:text-purple-600 group">
               <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center group-hover:bg-purple-100">
                 <UserPlus className="w-5 h-5 text-purple-600" />
               </div>
               <span className="text-xs font-semibold text-center">Invite Freelancer</span>
-            </button>
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-blue-500/30 hover:bg-blue-50 transition-colors text-slate-600 hover:text-blue-600 group">
+            </Link>
+            <button onClick={() => setIsAddFundsOpen(true)} className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-blue-500/30 hover:bg-blue-50 transition-colors text-slate-600 hover:text-blue-600 group">
               <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100">
                 <Wallet className="w-5 h-5 text-blue-600" />
               </div>
               <span className="text-xs font-semibold text-center">Add Funds</span>
             </button>
-            <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-orange-500/30 hover:bg-orange-50 transition-colors text-slate-600 hover:text-orange-600 group">
+            <Link href="/contracts" className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-orange-500/30 hover:bg-orange-50 transition-colors text-slate-600 hover:text-orange-600 group">
               <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center group-hover:bg-orange-100">
                 <FileSignature className="w-5 h-5 text-orange-500" />
               </div>
               <span className="text-xs font-semibold text-center">Create a Contract</span>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -312,7 +317,7 @@ export default function ClientDashboardPage() {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-slate-900">Recent Activity</h2>
-            <button className="text-sm font-semibold text-primary hover:text-primary-600">View All</button>
+            <Link href="/reports" className="text-sm font-semibold text-primary hover:text-primary-600">View All</Link>
           </div>
           
           <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[19px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-slate-100">

@@ -55,16 +55,6 @@ export function DashboardShell({ children }: DashboardShellProps) {
             <MessageDropdown />
             <NotificationDropdown />
 
-            <div className="h-8 w-px bg-slate-200 mx-2"></div>
-
-            {/* Org Selector */}
-            <button className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50 transition-colors">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-slate-100">
-                <span className="text-xs font-bold text-slate-700">GC</span>
-              </div>
-              <span className="text-sm font-semibold text-slate-700 hidden sm:block">GetiDone Corp</span>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
-            </button>
           </div>
         </header>
 
