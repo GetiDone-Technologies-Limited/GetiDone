@@ -67,7 +67,9 @@ This Agreement shall be governed by and construed in accordance with the laws of
 **IN WITNESS WHEREOF**, the parties hereto have caused this Agreement to be executed as of the Effective Date.
 
 **CLIENT:** ${clientName}
-**CONTRACTOR:** ${freelancer || '[Freelancer Name]'}`;
+**CONTRACTOR:** ${freelancer || '[Freelancer Name]'}
+
+**WITNESS (PLATFORM):** GetiDone Corp`;
       
       setGeneratedText(mockContract);
       setStep('review');
