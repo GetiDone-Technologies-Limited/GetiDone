@@ -87,9 +87,9 @@ export default function ProjectsPage() {
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">My Projects</h1>
           <p className="text-sm text-slate-500 font-medium mt-1">Manage all your active and past projects in one place.</p>
         </div>
-        <button className="px-5 py-3 text-[14px] font-bold text-white bg-[#00b259] hover:bg-[#009b4d] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-[#00b259]/20 shrink-0">
+        <Link href="/jobs/new" className="px-5 py-3 text-[14px] font-bold text-white bg-[#00b259] hover:bg-[#009b4d] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-[#00b259]/20 shrink-0">
           <Plus className="w-5 h-5" /> Post a New Job
-        </button>
+        </Link>
       </div>
 
       {/* Controls Bar */}
