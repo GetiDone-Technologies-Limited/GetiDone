@@ -1,6 +1,7 @@
 'use client';
 
 import { Users, Search, Filter } from 'lucide-react';
+import Link from 'next/link';
 import { useFreelancers } from '@/features/matching/hooks/useFreelancers';
 import { FreelancerCard } from '@/features/matching/components/FreelancerCard';
 
@@ -14,9 +15,9 @@ export default function FreelancersPage() {
           <h1 className="text-3xl font-extrabold text-slate-900">Find Freelancers</h1>
           <p className="text-slate-500 mt-2 font-medium">Browse our top-tier network of verified professionals.</p>
         </div>
-        <button className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors">
+        <Link href="/jobs/new" className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors inline-block">
           Post a Job Instead
-        </button>
+        </Link>
       </div>
 
       <div className="flex gap-4">

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Navbar } from '@/shared/components/layout/Navbar';
 import { ProfileCard } from '@/features/profile/components/ProfileCard';
 import { EditProfileForm } from '@/features/profile/components/EditProfileForm';
 import { ReviewList } from '@/features/reviews/components/ReviewList';
@@ -16,8 +15,7 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navbar />
+    <div className="pb-10">
       
       {/* Cover Photo */}
       <div className="h-64 w-full bg-slate-800 relative">
