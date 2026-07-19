@@ -10,6 +10,7 @@ export function useReviews(userId: string) {
     queryFn: () => reviewsApi.getReviews(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 }
 
@@ -19,6 +20,7 @@ export function useProjectReviews(projectId: string) {
     queryFn: () => reviewsApi.getProjectReviews(projectId),
     enabled: Boolean(projectId),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 }
 
@@ -28,6 +30,7 @@ export function useReviewStats(userId: string) {
     queryFn: () => reviewsApi.getReviewStats(userId),
     enabled: Boolean(userId),
     staleTime: 10 * 60 * 1000,
+    retry: false,
   });
 }
 

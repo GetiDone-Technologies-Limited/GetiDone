@@ -9,6 +9,7 @@ export function useProfile(userId?: string) {
     queryKey: ['profile', userId ?? 'me'],
     queryFn: () => (userId ? profileApi.getProfile(userId) : profileApi.getMyProfile()),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 }
 
