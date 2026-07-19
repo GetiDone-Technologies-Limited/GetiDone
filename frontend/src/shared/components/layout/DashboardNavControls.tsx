@@ -7,7 +7,7 @@ export function DashboardNavControls() {
   const router = useRouter();
 
   return (
-    <div className="flex items-center gap-1 mr-4 hidden sm:flex">
+    <div className="flex items-center gap-1 mr-4">
       <button 
         onClick={() => router.back()}
         className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
