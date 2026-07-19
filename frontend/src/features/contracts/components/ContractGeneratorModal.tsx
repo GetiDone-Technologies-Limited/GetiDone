@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Input } from '@/shared/components/ui/Input';
 import { Button } from '@/shared/components/ui/Button';
+import { useAuthStore } from '@/store/auth.store';
 import { FileSignature, Sparkles, RefreshCcw, Send } from 'lucide-react';
 
 interface ContractGeneratorModalProps {
@@ -15,6 +16,7 @@ interface ContractGeneratorModalProps {
 type Step = 'input' | 'generating' | 'review';
 
 export function ContractGeneratorModal({ open, onClose, onSave }: ContractGeneratorModalProps) {
+  const { user } = useAuthStore();
   const [step, setStep] = useState<Step>('input');
   
   // Input State
@@ -34,9 +36,10 @@ export function ContractGeneratorModal({ open, onClose, onSave }: ContractGenera
     
     // Simulate initial AI Generation
     setTimeout(() => {
+      const clientName = user?.name || '[Client Name]';
       const mockContract = `## MASTER INDEPENDENT CONTRACTOR AGREEMENT
 
-This Master Independent Contractor Agreement (the "Agreement") is entered into as of ${new Date().toLocaleDateString()} (the "Effective Date") by and between **GetiDone Corp** (the "Client") and **${freelancer || '[Freelancer Name]'}** (the "Contractor").
+This Master Independent Contractor Agreement (the "Agreement") is entered into as of ${new Date().toLocaleDateString()} (the "Effective Date") by and between **${clientName}** (the "Client") and **${freelancer || '[Freelancer Name]'}** (the "Contractor").
 
 ### 1. ENGAGEMENT OF SERVICES
 The Client hereby engages the Contractor, and the Contractor accepts such engagement, to provide the following professional services (the "Services") in connection with the project titled **${project || '[Project Name]'}**:
@@ -63,7 +66,7 @@ This Agreement shall be governed by and construed in accordance with the laws of
 
 **IN WITNESS WHEREOF**, the parties hereto have caused this Agreement to be executed as of the Effective Date.
 
-**CLIENT:** GetiDone Corp
+**CLIENT:** ${clientName}
 **CONTRACTOR:** ${freelancer || '[Freelancer Name]'}`;
       
       setGeneratedText(mockContract);
