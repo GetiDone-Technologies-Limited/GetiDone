@@ -2,6 +2,7 @@
 
 import { FileSignature, Plus, Download, Eye, FileText } from 'lucide-react';
 import { useState } from 'react';
+import { ContractGeneratorModal } from '@/features/contracts/components/ContractGeneratorModal';
 
 export default function ContractsPage() {
   const [contracts, setContracts] = useState([
@@ -9,24 +10,20 @@ export default function ContractsPage() {
     { id: 'cnt_2', title: 'UI/UX Design Retainer', freelancer: 'Daniel Benson', project: 'Marketing Website', amount: 2000, status: 'Pending Signature', date: '2026-07-17' },
     { id: 'cnt_3', title: 'Smart Contract Audit', freelancer: 'Alex Chen', project: 'DeFi Protocol', amount: 8000, status: 'Draft', date: '2026-07-18' },
   ]);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleGenerateContract = () => {
-    setIsGenerating(true);
-    // Simulate generation delay
-    setTimeout(() => {
-      const newContract = {
-        id: `cnt_${Math.floor(Math.random() * 1000)}`,
-        title: 'New Freelancer Agreement',
-        freelancer: 'Pending Assignment...',
-        project: 'TBD',
-        amount: 0,
-        status: 'Draft',
-        date: new Date().toISOString().split('T')[0]
-      };
-      setContracts([newContract, ...contracts]);
-      setIsGenerating(false);
-    }, 1200);
+  const handleSaveContract = (contractData: any) => {
+    const newContract = {
+      id: `cnt_${Math.floor(Math.random() * 1000)}`,
+      title: contractData.title,
+      freelancer: contractData.freelancer,
+      project: contractData.project,
+      amount: contractData.amount,
+      status: contractData.status,
+      date: contractData.date,
+    };
+    setContracts([newContract, ...contracts]);
+    setIsModalOpen(false);
   };
 
   return (
@@ -37,16 +34,10 @@ export default function ContractsPage() {
           <p className="text-slate-500 mt-2 font-medium">Manage your active agreements, NDAs, and project contracts.</p>
         </div>
         <button 
-          onClick={handleGenerateContract}
-          disabled={isGenerating}
-          className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2 disabled:opacity-70"
+          onClick={() => setIsModalOpen(true)}
+          className="px-5 py-2.5 bg-[#00b259] hover:bg-[#009b4d] text-white font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2"
         >
-          {isGenerating ? (
-            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-          ) : (
-            <Plus className="w-5 h-5" />
-          )}
-          {isGenerating ? 'Generating...' : 'Generate Contract'}
+          <Plus className="w-5 h-5" /> Generate Contract
         </button>
       </div>
 
@@ -114,6 +105,12 @@ export default function ContractsPage() {
           </tbody>
         </table>
       </div>
+
+      <ContractGeneratorModal 
+        open={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSave={handleSaveContract} 
+      />
     </div>
   );
 }
