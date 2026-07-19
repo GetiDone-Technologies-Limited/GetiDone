@@ -65,3 +65,26 @@
     font-family: var(--font-heading), sans-serif;
   }
 }
+
+/* Print Styles for PDF Generation */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-document, .print-document * {
+    visibility: visible;
+  }
+  .print-document {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+  @page {
+    margin: 2cm;
+  }
+}

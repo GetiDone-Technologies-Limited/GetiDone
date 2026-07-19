@@ -3,14 +3,18 @@
 import { FileSignature, Plus, Download, Eye, FileText } from 'lucide-react';
 import { useState } from 'react';
 import { ContractGeneratorModal } from '@/features/contracts/components/ContractGeneratorModal';
+import { ContractPreviewModal } from '@/features/contracts/components/ContractPreviewModal';
 
 export default function ContractsPage() {
+  const defaultMockContent = `## MASTER INDEPENDENT CONTRACTOR AGREEMENT\n\nThis Master Independent Contractor Agreement (the "Agreement") is entered into as of the Effective Date by and between **GetiDone Corp** (the "Client") and the **Contractor**.\n\n### 1. ENGAGEMENT OF SERVICES\nThe Client hereby engages the Contractor, and the Contractor accepts such engagement, to provide professional services in connection with the project.\n\n### 2. COMPENSATION AND PAYMENT TERMS\nAll payments shall be held securely in escrow by the GetiDone Platform and released to the Contractor subject to the Client's approval of the corresponding deliverables or milestones.\n\n### 3. CONFIDENTIALITY AND NON-DISCLOSURE\nThe Contractor acknowledges that in the course of performing the Services, they may acquire access to confidential information of the Client.\n\n**IN WITNESS WHEREOF**, the parties hereto have caused this Agreement to be executed.\n\n**CLIENT:** GetiDone Corp`;
+  
   const [contracts, setContracts] = useState([
-    { id: 'cnt_1', title: 'Senior Developer Agreement', freelancer: 'Sarah Jenkins', project: 'Fintech Mobile App', amount: 4500, status: 'Signed', date: '2026-07-15' },
-    { id: 'cnt_2', title: 'UI/UX Design Retainer', freelancer: 'Daniel Benson', project: 'Marketing Website', amount: 2000, status: 'Pending Signature', date: '2026-07-17' },
-    { id: 'cnt_3', title: 'Smart Contract Audit', freelancer: 'Alex Chen', project: 'DeFi Protocol', amount: 8000, status: 'Draft', date: '2026-07-18' },
+    { id: 'cnt_1', title: 'Senior Developer Agreement', freelancer: 'Sarah Jenkins', project: 'Fintech Mobile App', amount: 4500, status: 'Signed', date: '2026-07-15', content: defaultMockContent },
+    { id: 'cnt_2', title: 'UI/UX Design Retainer', freelancer: 'Daniel Benson', project: 'Marketing Website', amount: 2000, status: 'Pending Signature', date: '2026-07-17', content: defaultMockContent },
+    { id: 'cnt_3', title: 'Smart Contract Audit', freelancer: 'Alex Chen', project: 'DeFi Protocol', amount: 8000, status: 'Draft', date: '2026-07-18', content: defaultMockContent },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewContract, setPreviewContract] = useState<any | null>(null);
 
   const handleSaveContract = (contractData: any) => {
     const newContract = {
@@ -70,12 +74,12 @@ export default function ContractsPage() {
             {contracts.map(contract => (
               <tr key={contract.id} className="hover:bg-slate-50 transition-colors group">
                 <td className="py-4 px-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center">
+                  <div className="flex items-center gap-3 cursor-pointer group/title" onClick={() => setPreviewContract(contract)}>
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center group-hover/title:bg-[#00b259] group-hover/title:text-white transition-colors">
                       <FileText className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="block text-sm font-bold text-slate-900">{contract.title}</span>
+                      <span className="block text-sm font-bold text-slate-900 group-hover/title:text-[#00b259] transition-colors">{contract.title}</span>
                       <span className="block text-[11px] font-semibold text-slate-500 mt-0.5">Created {contract.date}</span>
                     </div>
                   </div>
@@ -92,10 +96,22 @@ export default function ContractsPage() {
                 </td>
                 <td className="py-4 px-6 text-right">
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors">
+                    <button 
+                      onClick={() => setPreviewContract(contract)}
+                      className="p-2 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors"
+                      title="View Contract"
+                    >
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="p-2 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors">
+                    <button 
+                      onClick={() => {
+                        setPreviewContract(contract);
+                        // Using setTimeout to allow modal to render before triggering print
+                        setTimeout(() => window.print(), 100);
+                      }}
+                      className="p-2 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors"
+                      title="Download PDF"
+                    >
                       <Download className="w-4 h-4" />
                     </button>
                   </div>
@@ -110,6 +126,12 @@ export default function ContractsPage() {
         open={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onSave={handleSaveContract} 
+      />
+
+      <ContractPreviewModal
+        open={!!previewContract}
+        onClose={() => setPreviewContract(null)}
+        contract={previewContract}
       />
     </div>
   );
