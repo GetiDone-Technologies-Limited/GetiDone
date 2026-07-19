@@ -34,7 +34,37 @@ export function ContractGeneratorModal({ open, onClose, onSave }: ContractGenera
     
     // Simulate initial AI Generation
     setTimeout(() => {
-      const mockContract = `## FREELANCE SERVICES AGREEMENT\n\n**Date:** ${new Date().toLocaleDateString()}\n**Client:** GetiDone Corp\n**Freelancer:** ${freelancer || '[Freelancer Name]'}\n**Project:** ${project || '[Project Name]'}\n**Total Compensation:** $${amount || '0.00'}\n\n### 1. Services\nThe Freelancer agrees to perform the services described as follows: ${terms || 'Standard development and design services as agreed upon.'}\n\n### 2. Payment Terms\nPayment will be held in escrow and released upon milestone completion.\n\n### 3. Confidentiality\nThe Freelancer agrees to keep all project materials confidential.\n\n### 4. Revisions\nUp to 2 rounds of revisions are included in this agreement.`;
+      const mockContract = `## MASTER INDEPENDENT CONTRACTOR AGREEMENT
+
+This Master Independent Contractor Agreement (the "Agreement") is entered into as of ${new Date().toLocaleDateString()} (the "Effective Date") by and between **GetiDone Corp** (the "Client") and **${freelancer || '[Freelancer Name]'}** (the "Contractor").
+
+### 1. ENGAGEMENT OF SERVICES
+The Client hereby engages the Contractor, and the Contractor accepts such engagement, to provide the following professional services (the "Services") in connection with the project titled **${project || '[Project Name]'}**:
+${terms || 'The Contractor shall perform design, development, and advisory services as mutually agreed upon by the parties, adhering to the highest industry standards of professional excellence.'}
+
+### 2. COMPENSATION AND PAYMENT TERMS
+In full consideration for the Services rendered, the Client shall pay the Contractor a total fee of **$${amount || '0.00'} USD**. 
+All payments shall be held securely in escrow by the GetiDone Platform and released to the Contractor subject to the Client's approval of the corresponding deliverables or milestones.
+
+### 3. INDEPENDENT CONTRACTOR RELATIONSHIP
+The Contractor's relationship with the Client is that of an independent contractor, and nothing in this Agreement is intended to, or should be construed to, create a partnership, agency, joint venture, or employment relationship.
+
+### 4. INTELLECTUAL PROPERTY RIGHTS
+Upon receipt of full payment by the Contractor, all right, title, and interest in and to all deliverables, work product, and intellectual property created by the Contractor pursuant to this Agreement (the "Work Product") shall automatically vest in and become the sole property of the Client.
+
+### 5. CONFIDENTIALITY AND NON-DISCLOSURE
+The Contractor acknowledges that in the course of performing the Services, they may acquire access to confidential information of the Client. The Contractor agrees to maintain all such information in strict confidence and shall not disclose it to any third party without prior written consent.
+
+### 6. WARRANTIES AND REPRESENTATIONS
+The Contractor represents and warrants that all Work Product will be original, will not infringe upon the intellectual property rights of any third party, and will be performed in a diligent, professional, and workmanlike manner.
+
+### 7. GOVERNING LAW AND DISPUTE RESOLUTION
+This Agreement shall be governed by and construed in accordance with the laws of the applicable jurisdiction, without regard to its conflict of law principles. Any dispute arising out of this Agreement shall be resolved through binding arbitration administered by the GetiDone Arbitration Protocol.
+
+**IN WITNESS WHEREOF**, the parties hereto have caused this Agreement to be executed as of the Effective Date.
+
+**CLIENT:** GetiDone Corp
+**CONTRACTOR:** ${freelancer || '[Freelancer Name]'}`;
       
       setGeneratedText(mockContract);
       setStep('review');
