@@ -8,6 +8,8 @@ export interface UserProfile {
   doneScore: number;
   kycStatus: KycStatus;
   avatarUrl?: string;
+  bannerUrl?: string;
+  gender?: 'male' | 'female';
   bio?: string;
   location?: string;
   createdAt: string;
@@ -24,6 +26,8 @@ export interface UpdateProfileRequest {
   bio?: string;
   location?: string;
   avatarUrl?: string;
+  bannerUrl?: string;
+  gender?: 'male' | 'female';
   // Freelancer-specific
   skills?: string[];
   hourlyRate?: number;

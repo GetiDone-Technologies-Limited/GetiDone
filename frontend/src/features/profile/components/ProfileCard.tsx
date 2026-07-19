@@ -20,7 +20,7 @@ export function ProfileCard({ userId }: ProfileCardProps) {
     <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm relative pt-16">
       <div className="absolute -top-16 left-8">
         <div className="rounded-full p-1.5 bg-white shadow-sm border border-slate-100">
-          <Avatar src={profile.avatarUrl} name={profile.name} size="xl" className="w-28 h-28 border-2 border-white" />
+          <Avatar src={profile.avatarUrl} name={profile.name} gender={profile.gender} size="xl" className="w-28 h-28 border-2 border-white" />
           <div className="absolute bottom-2 right-2 w-5 h-5 bg-[#00b259] border-4 border-white rounded-full"></div>
         </div>
       </div>

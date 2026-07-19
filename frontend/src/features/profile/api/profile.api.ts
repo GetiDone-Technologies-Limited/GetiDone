@@ -3,11 +3,17 @@ import type { UserProfile, UpdateProfileRequest } from '../types/profile.types';
 
 export const profileApi = {
   getProfile(userId: string): Promise<UserProfile> {
-    return apiClient.get<UserProfile>(`/users/${userId}`);
+    return apiClient.get<UserProfile>(`/users/${userId}`).then(profile => ({
+      ...profile,
+      gender: profile.gender || (profile.name?.toLowerCase().includes('sarah') ? 'female' : 'male'),
+    }));
   },
 
   getMyProfile(): Promise<UserProfile> {
-    return apiClient.get<UserProfile>('/users/me');
+    return apiClient.get<UserProfile>('/users/me').then(profile => ({
+      ...profile,
+      gender: profile.gender || 'male',
+    }));
   },
 
   updateProfile(data: UpdateProfileRequest): Promise<UserProfile> {

@@ -18,9 +18,16 @@ export default function ProfilePage() {
     <div className="pb-10">
       
       {/* Cover Photo */}
-      <div className="h-64 w-full bg-slate-800 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-[#00b259]/20 mix-blend-multiply" />
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+      <div 
+        className="h-64 w-full relative bg-slate-800"
+        style={user.bannerUrl ? { backgroundImage: `url(${user.bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      >
+        {!user.bannerUrl && (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-[#00b259]/20 mix-blend-multiply" />
+            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+          </>
+        )}
         
         {/* Profile Actions Over Cover */}
         <div className="absolute top-6 right-6 flex gap-3">

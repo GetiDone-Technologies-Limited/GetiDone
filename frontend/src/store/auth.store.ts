@@ -10,6 +10,8 @@ export interface AuthUser {
   doneScore: number;
   kycStatus: KycStatus;
   avatarUrl?: string;
+  bannerUrl?: string;
+  gender?: 'male' | 'female';
 }
 
 interface AuthState {

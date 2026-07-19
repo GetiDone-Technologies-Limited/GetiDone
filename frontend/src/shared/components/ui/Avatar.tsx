@@ -4,6 +4,7 @@ import { getInitials } from '@/shared/lib/utils';
 interface AvatarProps {
   src?: string;
   name?: string;
+  gender?: 'male' | 'female';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   alt?: string;
@@ -31,9 +32,13 @@ function getColorClass(name = ''): string {
   return bgColors[sum % bgColors.length];
 }
 
-export function Avatar({ src, name = '', size = 'md', className = '', alt }: AvatarProps) {
+export function Avatar({ src, name = '', gender, size = 'md', className = '', alt }: AvatarProps) {
   const [imgError, setImgError] = React.useState(false);
-  const showFallback = !src || imgError;
+
+  // If no src is provided, but we have a gender, use the avatar service.
+  // Otherwise, fallback to the colored initials.
+  const resolvedSrc = src || (gender ? `https://avatar.iran.liara.run/public/${gender === 'male' ? 'boy' : 'girl'}?username=${encodeURIComponent(name)}` : undefined);
+  const showFallback = !resolvedSrc || imgError;
 
   return (
     <span
@@ -42,7 +47,7 @@ export function Avatar({ src, name = '', size = 'md', className = '', alt }: Ava
       {!showFallback ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src}
+          src={resolvedSrc}
           alt={alt ?? name}
           className="h-full w-full object-cover"
           onError={() => setImgError(true)}
