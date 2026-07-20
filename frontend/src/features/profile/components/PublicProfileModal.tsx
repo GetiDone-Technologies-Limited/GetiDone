@@ -88,6 +88,15 @@ export function PublicProfileModal({ userId, open, onClose }: PublicProfileModal
                    <h2 className="text-lg font-bold text-slate-900 mb-5">Work History & Reviews</h2>
                    <ReviewList userId={userId} />
                  </div>
+                 {/* Action Buttons */}
+                 <div className="flex gap-4 mt-4">
+                   <button className="flex-1 bg-slate-900 hover:bg-[#00b259] text-white py-2 rounded-xl text-sm font-bold shadow-sm transition-colors">
+                     Invite to Job (coming soon)
+                   </button>
+                   <button className="flex-1 bg-white border border-slate-300 hover:bg-slate-100 text-slate-900 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors">
+                     Message (coming soon)
+                   </button>
+                 </div>
               </div>
             </div>
           </div>
