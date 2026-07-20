@@ -1,21 +1,39 @@
 import type { Metadata } from 'next';
-import { AIMatchList } from '@/features/matching/components/AIMatchList';
+import { WelcomeHeader } from './components/WelcomeHeader';
+import { StatCardsRow } from './components/StatCardsRow';
+import { RecommendedJobs } from './components/RecommendedJobs';
+import { MyProposalsWidget } from './components/MyProposalsWidget';
+import { ActiveProjectsWidget } from './components/ActiveProjectsWidget';
+import { BoostVisibilityBanner } from './components/BoostVisibilityBanner';
+import { ProfileOverviewWidget } from './components/ProfileOverviewWidget';
+import { UpcomingScheduleWidget } from './components/UpcomingScheduleWidget';
+import { RecentActivityWidget } from './components/RecentActivityWidget';
 
 export const metadata: Metadata = { title: 'Freelancer Dashboard' };
 
 export default function FreelancerDashboardPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Your AI Matches</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Jobs ranked by our AI engine based on your skills and DoneScore™.
-          </p>
+    <div className="flex flex-col xl:flex-row gap-8">
+      {/* Main Content Column */}
+      <div className="flex-1 min-w-0">
+        <WelcomeHeader />
+        <StatCardsRow />
+        <RecommendedJobs />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <MyProposalsWidget />
+          <ActiveProjectsWidget />
         </div>
+        
+        <BoostVisibilityBanner />
       </div>
-
-      <AIMatchList />
+      
+      {/* Right Sidebar Column */}
+      <div className="w-full xl:w-[320px] shrink-0">
+        <ProfileOverviewWidget />
+        <UpcomingScheduleWidget />
+        <RecentActivityWidget />
+      </div>
     </div>
   );
 }
