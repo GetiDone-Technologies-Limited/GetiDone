@@ -1,5 +1,8 @@
+'use client';
+
 import { Search, SlidersHorizontal, MoreVertical } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 const mockProposals = [
   { id: 'p1', title: 'SaaS Dashboard Development', client: 'TechNova Inc.', price: '$3,500', type: 'Fixed Price', status: 'Interview', statusColor: 'bg-purple-100 text-purple-600', iconColor: 'bg-purple-100 text-purple-600', date: 'Oct 12, 2023' },
@@ -26,7 +29,10 @@ export default function ProposalsPage() {
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#00b259] focus:border-transparent transition-shadow font-medium"
             />
           </div>
-          <button className="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-bold transition-all shadow-sm flex items-center justify-center shrink-0">
+          <button 
+            onClick={() => toast.success('Opening filter settings...')}
+            className="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-bold transition-all shadow-sm flex items-center justify-center shrink-0"
+          >
             <SlidersHorizontal className="w-4 h-4" />
           </button>
         </div>
@@ -75,7 +81,10 @@ export default function ProposalsPage() {
                     </span>
                   </td>
                   <td className="p-6 text-right">
-                     <button className="w-10 h-10 inline-flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all">
+                     <button 
+                       onClick={() => toast.success(`Managing proposal for ${proposal.title}`)}
+                       className="w-10 h-10 inline-flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+                     >
                       <MoreVertical className="w-5 h-5" />
                     </button>
                   </td>

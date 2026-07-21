@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, MoreVertical } from 'lucide-react';
 import { Avatar } from '@/shared/components/ui/Avatar';
+import { toast } from 'react-hot-toast';
 
 const tabs = [
   { id: 'all', label: 'All', count: 18 },
@@ -116,7 +117,10 @@ export function MyProposalsWidget() {
                 </span>
               </div>
               
-              <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all">
+              <button 
+                onClick={() => toast.success(`Managing proposal for ${proposal.title}`)}
+                className="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+              >
                 <MoreVertical className="w-5 h-5" />
               </button>
             </div>

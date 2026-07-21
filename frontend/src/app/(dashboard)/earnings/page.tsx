@@ -1,4 +1,9 @@
-import { Wallet, ArrowUpRight, ArrowDownRight, Download, Receipt } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Wallet, ArrowUpRight, ArrowDownRight, Download, Receipt, Building2, Banknote } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { Modal } from '@/shared/components/ui/Modal';
 
 const mockTransactions = [
   { id: 'tx1', type: 'Credit', amount: '+$1,250.00', date: 'Oct 24, 2023', description: 'Milestone 2 - TechNova Inc.', status: 'Completed', statusColor: 'bg-[#00b259]/10 text-[#00b259]' },
@@ -8,6 +13,27 @@ const mockTransactions = [
 ];
 
 export default function EarningsPage() {
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [isTaxFormsOpen, setIsTaxFormsOpen] = useState(false);
+  const [withdrawMethod, setWithdrawMethod] = useState('bank');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+
+  const handleWithdraw = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!withdrawAmount) return;
+    toast.success(`Processing withdrawal of $${withdrawAmount} to ${withdrawMethod === 'bank' ? 'Bank Account' : 'PayPal'}`);
+    setIsWithdrawOpen(false);
+    setWithdrawAmount('');
+  };
+
+  const handleDownloadStatement = () => {
+    toast.success('Preparing your statement for download...');
+  };
+
+  const handleDownloadTaxForm = (year: string) => {
+    toast.success(`Downloading ${year} 1099-K form...`);
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -16,7 +42,10 @@ export default function EarningsPage() {
           <p className="text-slate-500 font-medium mt-2">Manage your funds, track your earnings, and view transaction history.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-5 py-2.5 bg-[#00b259] text-white hover:bg-[#009e4f] rounded-xl text-sm font-bold transition-all shadow-sm">
+          <button 
+            onClick={() => setIsWithdrawOpen(true)}
+            className="px-5 py-2.5 bg-[#00b259] text-white hover:bg-[#009e4f] rounded-xl text-sm font-bold transition-all shadow-sm"
+          >
             Withdraw Funds
           </button>
         </div>
@@ -51,7 +80,10 @@ export default function EarningsPage() {
              <p className="text-slate-500 font-bold text-sm mb-1">Lifetime Earnings</p>
              <p className="text-3xl font-black text-slate-900 tracking-tight">$45,231.00</p>
            </div>
-           <button className="mt-4 w-full py-2.5 bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-xl text-sm font-bold transition-colors">
+           <button 
+             onClick={() => setIsTaxFormsOpen(true)}
+             className="mt-4 w-full py-2.5 bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-xl text-sm font-bold transition-colors"
+           >
              View Tax Forms
            </button>
         </div>
@@ -60,7 +92,10 @@ export default function EarningsPage() {
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-xl font-bold text-slate-900">Transaction History</h2>
-          <button className="text-sm font-bold text-slate-500 flex items-center gap-1 hover:text-slate-900 transition-colors">
+          <button 
+            onClick={handleDownloadStatement}
+            className="text-sm font-bold text-slate-500 flex items-center gap-1 hover:text-slate-900 transition-colors"
+          >
             <Download className="w-4 h-4" /> Download Statement
           </button>
         </div>
@@ -93,6 +128,92 @@ export default function EarningsPage() {
           ))}
         </div>
       </div>
+
+      {/* Withdraw Modal */}
+      <Modal open={isWithdrawOpen} onClose={() => setIsWithdrawOpen(false)} title="Withdraw Funds" size="sm">
+        <form onSubmit={handleWithdraw} className="space-y-6">
+          <div className="p-4 bg-slate-50 rounded-2xl text-center mb-6">
+            <p className="text-sm font-medium text-slate-500 mb-1">Available to withdraw</p>
+            <p className="text-3xl font-black text-slate-900">$3,450.00</p>
+          </div>
+          
+          <div className="space-y-4">
+            <label className="block text-sm font-bold text-slate-900">Select Destination</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setWithdrawMethod('bank')}
+                className={`p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all ${withdrawMethod === 'bank' ? 'border-[#00b259] bg-[#00b259]/5 text-[#00b259]' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+              >
+                <Building2 className="w-6 h-6" />
+                <span className="text-sm font-bold">Bank Transfer</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setWithdrawMethod('paypal')}
+                className={`p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all ${withdrawMethod === 'paypal' ? 'border-[#00b259] bg-[#00b259]/5 text-[#00b259]' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+              >
+                <Banknote className="w-6 h-6" />
+                <span className="text-sm font-bold">PayPal</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-slate-900">Amount</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+              <input 
+                type="number" 
+                max="3450"
+                required
+                value={withdrawAmount}
+                onChange={(e) => setWithdrawAmount(e.target.value)}
+                className="w-full pl-8 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#00b259] focus:border-transparent"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div className="pt-4 flex gap-3">
+            <button type="button" onClick={() => setIsWithdrawOpen(false)} className="flex-1 py-3 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl text-sm font-bold transition-colors">
+              Cancel
+            </button>
+            <button type="submit" className="flex-1 py-3 bg-[#00b259] text-white hover:bg-[#009e4f] rounded-xl text-sm font-bold transition-colors">
+              Withdraw
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Tax Forms Modal */}
+      <Modal open={isTaxFormsOpen} onClose={() => setIsTaxFormsOpen(false)} title="Tax Documents" size="md">
+        <div className="space-y-4">
+          <p className="text-sm text-slate-500 font-medium mb-6">Download your official tax forms for the current and previous years.</p>
+          
+          <div className="space-y-3">
+            {[2023, 2022, 2021].map((year) => (
+              <div key={year} className="flex items-center justify-between p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                    <Receipt className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">Form 1099-K ({year})</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Issued Jan 31, {year + 1}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => handleDownloadTaxForm(year.toString())}
+                  className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
+                >
+                  Download
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

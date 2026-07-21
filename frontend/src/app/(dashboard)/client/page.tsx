@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useDashboardStats, useMyProjects } from '@/features/dashboard/hooks/useDashboard';
 import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
 import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
+import { toast } from 'react-hot-toast';
 import { 
   FolderOpen, ClipboardCheck, Clock, Wallet, 
   MoreVertical, Plus, UserPlus, CreditCard, FileSignature, Headset 
@@ -407,7 +408,10 @@ export default function ClientDashboardPage() {
             <h2 className="text-lg font-bold">Need Help?</h2>
             <p className="text-sm text-slate-300">Our support team is here to help you 24/7.</p>
             <div className="flex justify-between items-end">
-              <button className="bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors text-sm">
+              <button 
+                onClick={() => toast.success('Connecting you to a support agent...')}
+                className="bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors text-sm"
+              >
                 Contact Support
               </button>
               <Headset className="w-12 h-12 text-primary opacity-80" />

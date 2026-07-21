@@ -1,4 +1,7 @@
+'use client';
+
 import { FileSignature, Download, MoreVertical, Search, FileText } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const mockContracts = [
   { id: 'c1', title: 'SaaS Dashboard Development', client: 'TechNova Inc.', date: 'Oct 15, 2023', status: 'Active', value: '$3,500', type: 'Fixed Price' },
@@ -55,10 +58,16 @@ export default function ContractsPage() {
                 <p className="text-2xl font-black text-slate-900">{contract.value}</p>
               </div>
               <div className="flex items-center gap-2">
-                <button className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-[#00b259] hover:text-white transition-colors" title="Download PDF">
+                <button 
+                  onClick={() => toast.success(`Downloading PDF for ${contract.title}...`)}
+                  className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-[#00b259] hover:text-white transition-colors" title="Download PDF"
+                >
                   <Download className="w-4 h-4" />
                 </button>
-                <button className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors">
+                <button 
+                  onClick={() => toast.success(`Managing contract options for ${contract.title}`)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
+                >
                   <MoreVertical className="w-5 h-5" />
                 </button>
               </div>
