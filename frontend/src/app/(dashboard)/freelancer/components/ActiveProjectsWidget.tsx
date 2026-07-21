@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, MessageSquare } from 'lucide-react';
 import { useMyProjects } from '@/features/dashboard/hooks/useDashboard';

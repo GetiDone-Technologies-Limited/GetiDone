@@ -1,3 +1,5 @@
+'use client';
+
 import { Wallet, Briefcase, Send, Eye, TrendingUp } from 'lucide-react';
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboard';
 import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
