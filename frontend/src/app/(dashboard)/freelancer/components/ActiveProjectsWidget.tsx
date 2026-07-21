@@ -66,8 +66,8 @@ export function ActiveProjectsWidget() {
 
       <div className="space-y-6 flex-1 mt-2">
         {displayProjects.map((project) => (
-          <div key={project.id} className="flex items-center justify-between group p-3 -mx-3 rounded-2xl hover:bg-slate-50 transition-colors">
-            <div className="flex items-center gap-5 flex-1">
+          <div key={project.id} className="flex flex-wrap sm:flex-nowrap items-center justify-between group p-3 -mx-3 rounded-2xl hover:bg-slate-50 transition-colors">
+            <div className="flex items-center gap-5 flex-1 min-w-0 mb-3 sm:mb-0">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner ${project.iconColor}`}>
                 <span className="font-black text-xl">{project.title.charAt(0)}</span>
               </div>
@@ -77,11 +77,11 @@ export function ActiveProjectsWidget() {
                     {project.title}
                   </h4>
                 </Link>
-                <p className="text-[12px] font-semibold text-slate-500 mt-1">{project.client}</p>
+                <p className="text-[12px] font-semibold text-slate-500 mt-1 truncate">{project.client}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-5 w-56 shrink-0 justify-end">
+            <div className="flex items-center gap-5 w-full sm:w-auto sm:justify-end">
                <div className="w-28 bg-slate-100 h-2 rounded-full overflow-hidden hidden sm:block shadow-inner">
                  <div className="bg-[#00b259] h-full rounded-full transition-all duration-1000" style={{ width: `${project.progress}%` }}></div>
                </div>

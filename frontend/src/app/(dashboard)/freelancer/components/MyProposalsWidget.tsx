@@ -89,22 +89,22 @@ export function MyProposalsWidget() {
         {mockProposals
           .filter(p => activeTab === 'all' || p.status.toLowerCase() === activeTab)
           .map((proposal) => (
-          <div key={proposal.id} className="flex items-center justify-between p-4 -mx-4 hover:bg-slate-50 rounded-2xl transition-colors group">
-            <div className="flex items-center gap-5">
+          <div key={proposal.id} className="flex flex-wrap sm:flex-nowrap items-center justify-between p-4 -mx-4 hover:bg-slate-50 rounded-2xl transition-colors group">
+            <div className="flex items-center gap-5 flex-1 min-w-0 mb-4 sm:mb-0">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner ${proposal.iconColor}`}>
                 <span className="font-black text-xl">{proposal.title.charAt(0)}</span>
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <Link href="/proposals">
-                  <h4 className="text-base font-extrabold text-slate-900 group-hover:text-[#00b259] transition-colors">
+                  <h4 className="text-base font-extrabold text-slate-900 group-hover:text-[#00b259] transition-colors truncate">
                     {proposal.title}
                   </h4>
                 </Link>
-                <p className="text-[12px] font-semibold text-slate-500 mt-1">{proposal.client}</p>
+                <p className="text-[12px] font-semibold text-slate-500 mt-1 truncate">{proposal.client}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 sm:gap-8 w-full sm:w-auto justify-end">
               <div className="text-right hidden sm:block">
                 <p className="text-base font-black text-slate-900">{proposal.price}</p>
                 <p className="text-[11px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{proposal.type}</p>
