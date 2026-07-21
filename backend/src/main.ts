@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './http-exception.filter';
+import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
+import { AuditInterceptor } from './shared/interceptors/audit.interceptor';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+  app.useGlobalInterceptors(new AuditInterceptor());
 
   // Enable CORS for frontend integration
   app.enableCors();

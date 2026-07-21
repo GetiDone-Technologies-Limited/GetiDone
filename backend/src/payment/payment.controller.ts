@@ -1,8 +1,10 @@
-import { Controller, Post, Get, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, NotFoundException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PaymentService } from './payment.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Controller('payment')
+@UseGuards(JwtAuthGuard)
 export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,

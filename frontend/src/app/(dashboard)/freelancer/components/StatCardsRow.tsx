@@ -16,16 +16,18 @@ interface StatCardProps {
 
 function StatCard({ title, value, trend, trendUp, icon, iconBgColor, iconColor }: StatCardProps) {
   return (
-    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-3 sm:gap-4">
-      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 ${iconBgColor}`}>
-        <div className={iconColor}>{icon}</div>
+    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow min-h-[140px]">
+      <div className="flex items-start justify-between mb-4">
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-inner ${iconBgColor}`}>
+          <div className={iconColor}>{icon}</div>
+        </div>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 truncate" title={title}>{title}</p>
-        <p className="text-xl sm:text-2xl font-black text-slate-900 mb-1 truncate" title={value}>{value}</p>
-        <p className={`flex items-center gap-1 text-[10px] sm:text-xs font-semibold ${trendUp ? 'text-[#00b259]' : 'text-red-500'} truncate`} title={`${trend} from last month`}>
-          {trendUp ? <TrendingUp className="w-3.5 h-3.5 shrink-0" /> : <TrendingUp className="w-3.5 h-3.5 rotate-180 shrink-0" />}
-          <span className="truncate">{trend} from last month</span>
+      <div>
+        <p className="text-4xl font-black text-slate-900 tracking-tight">{value}</p>
+        <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">{title}</p>
+        <p className={`flex items-center text-xs font-bold ${trendUp ? 'text-[#00b259]' : 'text-red-500'}`}>
+          {trendUp ? <TrendingUp className="w-3.5 h-3.5 mr-1" /> : <TrendingUp className="w-3.5 h-3.5 rotate-180 mr-1" />}
+          {trend} <span className="text-slate-400 font-medium ml-1.5">from last month</span>
         </p>
       </div>
     </div>

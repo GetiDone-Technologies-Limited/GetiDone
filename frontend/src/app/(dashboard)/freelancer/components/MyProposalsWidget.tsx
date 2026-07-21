@@ -89,32 +89,34 @@ export function MyProposalsWidget() {
         {mockProposals
           .filter(p => activeTab === 'all' || p.status.toLowerCase() === activeTab)
           .map((proposal) => (
-          <div key={proposal.id} className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-2xl transition-colors group">
-            <div className="flex items-center gap-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${proposal.iconColor}`}>
-                <span className="font-bold text-lg">{proposal.title.charAt(0)}</span>
+          <div key={proposal.id} className="flex items-center justify-between p-4 -mx-4 hover:bg-slate-50 rounded-2xl transition-colors group">
+            <div className="flex items-center gap-5">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner ${proposal.iconColor}`}>
+                <span className="font-black text-xl">{proposal.title.charAt(0)}</span>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#00b259] transition-colors cursor-pointer">
-                  {proposal.title}
-                </h4>
-                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{proposal.client}</p>
+                <Link href="/proposals">
+                  <h4 className="text-base font-extrabold text-slate-900 group-hover:text-[#00b259] transition-colors">
+                    {proposal.title}
+                  </h4>
+                </Link>
+                <p className="text-[12px] font-semibold text-slate-500 mt-1">{proposal.client}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-8">
-              <div className="text-right">
-                <p className="text-sm font-bold text-slate-900">{proposal.price}</p>
-                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{proposal.type}</p>
+              <div className="text-right hidden sm:block">
+                <p className="text-base font-black text-slate-900">{proposal.price}</p>
+                <p className="text-[11px] font-bold text-slate-400 mt-1 uppercase tracking-widest">{proposal.type}</p>
               </div>
               
-              <div className="w-24 text-right">
-                <span className={`inline-block px-3 py-1 rounded-lg text-[11px] font-bold ${proposal.statusColor}`}>
+              <div className="w-28 text-right">
+                <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm ${proposal.statusColor}`}>
                   {proposal.status}
                 </span>
               </div>
               
-              <button className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all">
                 <MoreVertical className="w-5 h-5" />
               </button>
             </div>

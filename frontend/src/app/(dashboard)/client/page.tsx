@@ -141,67 +141,67 @@ export default function ClientDashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
-                <FolderOpen className="w-6 h-6 text-green-600" />
+              <div className="w-14 h-14 rounded-2xl bg-green-50/80 shadow-inner shadow-green-100 flex items-center justify-center">
+                <FolderOpen className="w-7 h-7 text-[#00b259]" />
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">{stats?.activeProjects || 0}</p>
-              <p className="text-sm font-medium text-slate-500 mb-2">Active Projects</p>
-              <p className="text-xs text-green-600 flex items-center font-medium">
-                <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                20% <span className="text-slate-400 ml-1">from last month</span>
+              <p className="text-4xl font-black text-slate-900 tracking-tight">{stats?.activeProjects || 0}</p>
+              <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">Active Projects</p>
+              <p className="text-xs text-[#00b259] flex items-center font-bold">
+                <svg className="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                20% <span className="text-slate-400 font-medium ml-1.5">from last month</span>
               </p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
-                <ClipboardCheck className="w-6 h-6 text-purple-600" />
+              <div className="w-14 h-14 rounded-2xl bg-purple-50/80 shadow-inner shadow-purple-100 flex items-center justify-center">
+                <ClipboardCheck className="w-7 h-7 text-purple-600" />
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">{stats?.inReview || 0}</p>
-              <p className="text-sm font-medium text-slate-500 mb-2">In Review</p>
-              <p className="text-xs text-green-600 flex items-center font-medium">
-                <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                12% <span className="text-slate-400 ml-1">from last month</span>
+              <p className="text-4xl font-black text-slate-900 tracking-tight">{stats?.inReview || 0}</p>
+              <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">In Review</p>
+              <p className="text-xs text-[#00b259] flex items-center font-bold">
+                <svg className="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                12% <span className="text-slate-400 font-medium ml-1.5">from last month</span>
               </p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-orange-500" />
+              <div className="w-14 h-14 rounded-2xl bg-orange-50/80 shadow-inner shadow-orange-100 flex items-center justify-center">
+                <Clock className="w-7 h-7 text-orange-500" />
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">{stats?.hiredCount || 0}</p>
-              <p className="text-sm font-medium text-slate-500 mb-2">Freelancers Hired</p>
-              <p className="text-xs text-red-500 flex items-center font-medium">
-                <svg className="w-3 h-3 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                8% <span className="text-slate-400 ml-1">from last month</span>
+              <p className="text-4xl font-black text-slate-900 tracking-tight">{stats?.hiredCount || 0}</p>
+              <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">Freelancers Hired</p>
+              <p className="text-xs text-red-500 flex items-center font-bold">
+                <svg className="w-3.5 h-3.5 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                8% <span className="text-slate-400 font-medium ml-1.5">from last month</span>
               </p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Wallet className="w-6 h-6 text-blue-500" />
+              <div className="w-14 h-14 rounded-2xl bg-blue-50/80 shadow-inner shadow-blue-100 flex items-center justify-center">
+                <Wallet className="w-7 h-7 text-blue-500" />
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">${stats?.totalSpent?.toLocaleString() || 0}</p>
-              <p className="text-sm font-medium text-slate-500 mb-2">Total Spent</p>
-              <p className="text-xs text-green-600 flex items-center font-medium">
-                <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                15% <span className="text-slate-400 ml-1">from last month</span>
+              <p className="text-4xl font-black text-slate-900 tracking-tight">${stats?.totalSpent?.toLocaleString() || 0}</p>
+              <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">Total Spent</p>
+              <p className="text-xs text-[#00b259] flex items-center font-bold">
+                <svg className="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                15% <span className="text-slate-400 font-medium ml-1.5">from last month</span>
               </p>
             </div>
           </div>
@@ -215,38 +215,44 @@ export default function ClientDashboardPage() {
           </div>
           <div className="divide-y divide-slate-100">
             {myProjects && myProjects.length > 0 ? myProjects.slice(0, 4).map((project) => (
-              <div key={project.id} className="p-6 flex flex-wrap sm:flex-nowrap items-center hover:bg-slate-50/50 transition-colors w-full group">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 mb-4 sm:mb-0 ${
-                  project.status === 'IN_PROGRESS' ? 'bg-blue-50' : 
-                  project.status === 'COMPLETED' ? 'bg-green-50' : 
-                  'bg-slate-100'
+              <div key={project.id} className="p-8 flex flex-wrap sm:flex-nowrap items-center hover:bg-slate-50 transition-all w-full group">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 mb-4 sm:mb-0 ${
+                  project.status === 'IN_PROGRESS' ? 'bg-blue-50/80 shadow-inner shadow-blue-100' : 
+                  project.status === 'COMPLETED' ? 'bg-green-50/80 shadow-inner shadow-green-100' : 
+                  'bg-slate-50 shadow-inner shadow-slate-100'
                 }`}>
-                  <FolderOpen className={`w-5 h-5 ${
+                  <FolderOpen className={`w-6 h-6 ${
                     project.status === 'IN_PROGRESS' ? 'text-blue-600' : 
-                    project.status === 'COMPLETED' ? 'text-green-600' : 
+                    project.status === 'COMPLETED' ? 'text-[#00b259]' : 
                     'text-slate-500'
                   }`} />
                 </div>
-                <div className="ml-0 sm:ml-4 flex-1 min-w-0 w-full sm:w-auto mb-4 sm:mb-0">
-                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors cursor-pointer truncate">{project.job?.title}</h3>
-                  <p className="text-xs text-slate-500 mt-1 truncate">Freelancer: {project.freelancer?.name || 'Unknown'}</p>
+                <div className="ml-0 sm:ml-6 flex-1 min-w-0 w-full sm:w-auto mb-4 sm:mb-0">
+                  <Link href={`/projects/${project.id}`}>
+                    <h3 className="text-base font-extrabold text-slate-900 group-hover:text-[#00b259] transition-colors truncate">
+                      {project.job?.title || 'Untitled Project'}
+                    </h3>
+                  </Link>
+                  <p className="text-sm font-medium text-slate-500 mt-1 truncate">
+                    Freelancer: <span className="text-slate-700">{project.freelancer?.name || 'Unassigned'}</span>
+                  </p>
                 </div>
-                <div className="w-full sm:w-32 px-0 sm:px-4 text-left sm:text-right">
-                  <p className="text-sm font-bold text-slate-900">${project.budget?.toLocaleString()}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider">Budget</p>
+                <div className="w-full sm:w-40 px-0 sm:px-6 text-left sm:text-right border-l border-transparent sm:border-slate-100">
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Budget</p>
+                  <p className="text-lg font-black text-slate-800">${project.budget?.toLocaleString()}</p>
                 </div>
-                <div className="w-full sm:w-32 px-0 sm:px-4 text-right">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    project.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-700' :
-                    project.status === 'COMPLETED' ? 'bg-green-50 text-green-700' :
-                    'bg-slate-100 text-slate-700'
+                <div className="w-full sm:w-40 px-0 sm:px-6 text-right flex justify-end">
+                  <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide shadow-sm ${
+                    project.status === 'IN_PROGRESS' ? 'bg-blue-500 text-white' :
+                    project.status === 'COMPLETED' ? 'bg-[#00b259] text-white' :
+                    'bg-slate-200 text-slate-700'
                   }`}>
                     {project.status.replace('_', ' ')}
                   </span>
                 </div>
               </div>
             )) : (
-              <div className="p-8 text-center text-sm font-medium text-slate-500">No active projects yet.</div>
+              <div className="p-12 text-center text-sm font-bold text-slate-400">No active projects yet.</div>
             )}
           </div>
         </div>
