@@ -50,7 +50,7 @@ export function RecentActivityWidget() {
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-slate-700 leading-relaxed line-clamp-2">
                 {activity.content}
-                {activity.rating && (
+                {'rating' in activity && activity.rating && (
                   <span className="inline-flex items-center gap-1 ml-2 bg-amber-50 px-2 py-0.5 rounded-full">
                     {[1, 2, 3, 4, 5].map(i => (
                       <Star key={i} className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
