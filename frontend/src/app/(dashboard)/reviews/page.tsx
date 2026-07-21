@@ -64,7 +64,7 @@ export default function ReviewsPage() {
             <div className="relative">
               <MessageSquareQuote className="absolute -left-2 -top-2 w-8 h-8 text-slate-100 rotate-180" />
               <p className="text-slate-700 leading-relaxed font-medium pl-6 relative z-10 italic">
-                "{review.comment}"
+                &quot;{review.comment}&quot;
               </p>
             </div>
           </div>

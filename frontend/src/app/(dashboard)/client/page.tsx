@@ -6,6 +6,7 @@ import { useDashboardStats, useMyProjects } from '@/features/dashboard/hooks/use
 import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
 import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { toast } from 'react-hot-toast';
+import Link from 'next/link';
 import { 
   FolderOpen, ClipboardCheck, Clock, Wallet, 
   MoreVertical, Plus, UserPlus, CreditCard, FileSignature, Headset 
