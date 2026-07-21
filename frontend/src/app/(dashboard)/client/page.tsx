@@ -390,7 +390,7 @@ export default function ClientDashboardPage() {
             {displayActivities.map((act) => (
               <div key={act.id} className="relative flex items-start gap-4 group">
                 <div className={`w-10 h-10 rounded-full border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center ${act.bgColor}`}>
-                  {act.icon ? act.icon : <span className="text-xs font-bold text-slate-500">{act.initials}</span>}
+                  {'icon' in act && act.icon ? act.icon : <span className="text-xs font-bold text-slate-500">{act.initials}</span>}
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">{act.title}</p>
