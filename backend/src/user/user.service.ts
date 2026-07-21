@@ -16,6 +16,14 @@ export class UserService {
         kycStatus: true,
         doneScore: true,
         createdAt: true,
+        title: true,
+        bio: true,
+        location: true,
+        hourlyRate: true,
+        avatarUrl: true,
+        bannerUrl: true,
+        portfolioItems: true,
+        services: true,
         skills: { select: { id: true, name: true } },
         reviewsReceived: {
           select: { rating: true, comment: true, category: true, createdAt: true },
@@ -32,16 +40,22 @@ export class UserService {
     return user;
   }
 
-  async updateProfile(id: string, body: { name?: string; skillIds?: string[] }) {
-    const { name, skillIds } = body;
+  async updateProfile(id: string, body: any) {
+    const { name, title, bio, location, hourlyRate, avatarUrl, bannerUrl, skillIds } = body;
 
     const user = await this.prisma.user.update({
       where: { id },
       data: {
-        ...(name && { name }),
+        ...(name !== undefined && { name }),
+        ...(title !== undefined && { title }),
+        ...(bio !== undefined && { bio }),
+        ...(location !== undefined && { location }),
+        ...(hourlyRate !== undefined && { hourlyRate }),
+        ...(avatarUrl !== undefined && { avatarUrl }),
+        ...(bannerUrl !== undefined && { bannerUrl }),
         ...(skillIds && {
           skills: {
-            set: skillIds.map((sid) => ({ id: sid })),
+            set: skillIds.map((sid: string) => ({ id: sid })),
           },
         }),
       },
@@ -52,6 +66,12 @@ export class UserService {
         role: true,
         kycStatus: true,
         doneScore: true,
+        title: true,
+        bio: true,
+        location: true,
+        hourlyRate: true,
+        avatarUrl: true,
+        bannerUrl: true,
         skills: { select: { id: true, name: true } },
       },
     });
@@ -67,6 +87,10 @@ export class UserService {
         name: true,
         role: true,
         doneScore: true,
+        title: true,
+        location: true,
+        hourlyRate: true,
+        avatarUrl: true,
         skills: { select: { id: true, name: true } },
       },
       orderBy: { doneScore: 'desc' },

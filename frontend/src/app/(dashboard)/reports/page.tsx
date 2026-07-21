@@ -19,7 +19,7 @@ export default function ReportsPage() {
         </div>
         <h3 className="text-2xl font-bold text-slate-900 mb-2">Analytics Dashboard Coming Soon</h3>
         <p className="text-slate-500 max-w-md">
-          We're building powerful analytics tools to help you track ROI, time-to-completion, and team performance metrics.
+          We&apos;re building powerful analytics tools to help you track ROI, time-to-completion, and team performance metrics.
         </p>
       </div>
     </div>

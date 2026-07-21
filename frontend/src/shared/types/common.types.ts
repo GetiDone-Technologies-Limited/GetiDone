@@ -3,7 +3,7 @@ export type KycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
 export type JobStatus = 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
 export type ProjectStatus = 'ACTIVE' | 'COMPLETED' | 'DISPUTED' | 'CANCELLED';
-export type EscrowStatus = 'HELD' | 'RELEASED' | 'REFUNDED';
+export type EscrowStatus = 'PENDING' | 'HELD' | 'RELEASED' | 'REFUNDED';
 export type ReviewCategory = 'COMMUNICATION' | 'QUALITY' | 'TIMELINESS' | 'OVERALL';
 
 export interface ApiResponse<T> {

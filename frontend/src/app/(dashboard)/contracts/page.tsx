@@ -14,17 +14,18 @@ export default function ContractsPage() {
     { id: 'cnt_3', title: 'Smart Contract Audit', freelancer: 'Alex Chen', project: 'DeFi Protocol', amount: 8000, status: 'Draft', date: '2026-07-18', content: defaultMockContent },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [previewContract, setPreviewContract] = useState<any | null>(null);
+  const [previewContract, setPreviewContract] = useState<{ id: string; title: string; freelancer: string; project: string; amount: number; status?: string; date?: string; content?: string } | null>(null);
 
-  const handleSaveContract = (contractData: any) => {
+  const handleSaveContract = (contractData: { title: string; freelancer: string; project: string; amount: number; status?: string; date?: string; content?: string }) => {
     const newContract = {
       id: `cnt_${Math.floor(Math.random() * 1000)}`,
       title: contractData.title,
       freelancer: contractData.freelancer,
       project: contractData.project,
       amount: contractData.amount,
-      status: contractData.status,
-      date: contractData.date,
+      status: contractData.status || 'Draft',
+      date: contractData.date || new Date().toISOString().split('T')[0],
+      content: contractData.content || defaultMockContent,
     };
     setContracts([newContract, ...contracts]);
     setIsModalOpen(false);

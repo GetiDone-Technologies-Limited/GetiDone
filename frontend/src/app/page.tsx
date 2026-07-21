@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 // Import all sections
 import { HeroSection } from '@/features/landing/components/HeroSection';
@@ -54,7 +55,9 @@ export default function LandingPage() {
           <TrustedBySection />
           <HowItWorksSection />
           <SmartMatchDemo />
-          <ExpertsSection />
+          <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading experts...</div>}>
+            <ExpertsSection />
+          </Suspense>
         </div>
         <div className="dark">
           <WhyChooseSection />

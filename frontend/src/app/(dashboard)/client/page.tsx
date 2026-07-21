@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
-import Link from 'next/link';
+import { useDashboardStats, useMyProjects } from '@/features/dashboard/hooks/useDashboard';
+import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
 import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   FolderOpen, ClipboardCheck, Clock, Wallet, 
@@ -13,7 +14,7 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 
-const spendingData = [
+const mockSpendingData = [
   { name: 'May 1', value: 1000 },
   { name: 'May 5', value: 1500 },
   { name: 'May 10', value: 2000 },
@@ -21,6 +22,49 @@ const spendingData = [
   { name: 'May 20', value: 4260 },
   { name: 'May 25', value: 4800 },
   { name: 'May 31', value: 5500 },
+];
+
+const mockActivities = [
+  {
+    id: 'm1',
+    initials: 'DB',
+    bgColor: 'bg-slate-200',
+    title: <><span className="font-bold text-slate-900">Daniel B.</span> submitted work for <span className="font-bold text-slate-900">E-commerce Website Redesign</span></>,
+    time: '2 hours ago',
+    dotColor: 'bg-green-500'
+  },
+  {
+    id: 'm2',
+    initials: 'EO',
+    bgColor: 'bg-slate-200',
+    title: <><span className="font-bold text-slate-900">Esther O.</span> requested a milestone payment of <span className="font-bold text-slate-900">$1,600</span></>,
+    time: '5 hours ago',
+    dotColor: 'bg-yellow-500'
+  },
+  {
+    id: 'm3',
+    icon: <CreditCard className="w-4 h-4 text-green-600" />,
+    bgColor: 'bg-green-50',
+    title: <>Payment of <span className="font-bold text-slate-900">$1,250</span> released to <span className="font-bold text-slate-900">Tunde A.</span></>,
+    time: '1 day ago',
+    dotColor: 'bg-green-500'
+  },
+  {
+    id: 'm4',
+    initials: 'PU',
+    bgColor: 'bg-slate-200',
+    title: <><span className="font-bold text-slate-900">Praise U.</span> sent a message regarding <span className="font-bold text-slate-900">Shopify Store</span></>,
+    time: '1 day ago',
+    dotColor: 'bg-blue-500'
+  },
+  {
+    id: 'm5',
+    icon: <FileSignature className="w-4 h-4 text-purple-600" />,
+    bgColor: 'bg-purple-50',
+    title: <>New contract created for <span className="font-bold text-slate-900">Mobile App UI/UX Design</span></>,
+    time: '2 days ago',
+    dotColor: 'bg-purple-500'
+  }
 ];
 
 const statusData = [
@@ -55,8 +99,34 @@ const projects = [
 
 export default function ClientDashboardPage() {
   const { user } = useAuthStore();
-  const firstName = user?.name ? user.name.split(' ')[0] : 'John';
+  const firstName = user?.name ? user.name.split(' ')[0] : 'Client';
   const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
+  
+  const { data: stats, isLoading: statsLoading } = useDashboardStats();
+  const { data: myProjects, isLoading: projectsLoading } = useMyProjects();
+
+  const combinedSpendingData = [...mockSpendingData];
+  if (stats?.totalSpent && stats.totalSpent > 0) {
+    combinedSpendingData.push({ name: 'Current', value: stats.totalSpent });
+  }
+
+  const actualActivities = (myProjects || []).slice(0, 3).map((p, idx) => {
+    const initials = p.freelancer?.name ? p.freelancer.name.substring(0, 2).toUpperCase() : 'FL';
+    return {
+      id: `actual-${p.id}-${idx}`,
+      initials,
+      bgColor: 'bg-blue-50',
+      title: <><span className="font-bold text-slate-900">Project update:</span> {p.job?.title} is now <span className="font-bold text-slate-900">{p.status}</span></>,
+      time: 'Just now',
+      dotColor: 'bg-blue-500'
+    };
+  });
+  
+  const displayActivities = [...actualActivities, ...mockActivities];
+
+  if (statsLoading || projectsLoading) {
+    return <div className="flex h-[80vh] items-center justify-center"><LoadingSpinner size="lg" /></div>;
+  }
 
   return (
     <div className="flex flex-col xl:flex-row gap-8">
@@ -79,7 +149,7 @@ export default function ClientDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">12</p>
+              <p className="text-3xl font-bold text-slate-900">{stats?.activeProjects || 0}</p>
               <p className="text-sm font-medium text-slate-500 mb-2">Active Projects</p>
               <p className="text-xs text-green-600 flex items-center font-medium">
                 <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -95,7 +165,7 @@ export default function ClientDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">5</p>
+              <p className="text-3xl font-bold text-slate-900">{stats?.inReview || 0}</p>
               <p className="text-sm font-medium text-slate-500 mb-2">In Review</p>
               <p className="text-xs text-green-600 flex items-center font-medium">
                 <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -111,8 +181,8 @@ export default function ClientDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">3</p>
-              <p className="text-sm font-medium text-slate-500 mb-2">Pending Payments</p>
+              <p className="text-3xl font-bold text-slate-900">{stats?.hiredCount || 0}</p>
+              <p className="text-sm font-medium text-slate-500 mb-2">Freelancers Hired</p>
               <p className="text-xs text-red-500 flex items-center font-medium">
                 <svg className="w-3 h-3 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
                 8% <span className="text-slate-400 ml-1">from last month</span>
@@ -127,7 +197,7 @@ export default function ClientDashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-slate-900">$18,560</p>
+              <p className="text-3xl font-bold text-slate-900">${stats?.totalSpent?.toLocaleString() || 0}</p>
               <p className="text-sm font-medium text-slate-500 mb-2">Total Spent</p>
               <p className="text-xs text-green-600 flex items-center font-medium">
                 <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -143,53 +213,41 @@ export default function ClientDashboardPage() {
             <h2 className="text-lg font-bold text-slate-900">My Projects</h2>
             <Link href="/projects" className="text-sm font-semibold text-primary hover:text-primary-600">View All Projects →</Link>
           </div>
-          
-          <div className="border-b border-slate-100 px-6 flex gap-6 text-sm font-medium">
-            <button className="py-4 text-primary border-b-2 border-primary">All Projects</button>
-            <button className="py-4 text-slate-500 hover:text-slate-700">In Progress</button>
-            <button className="py-4 text-slate-500 hover:text-slate-700">In Review</button>
-            <button className="py-4 text-slate-500 hover:text-slate-700">Completed</button>
-            <button className="py-4 text-slate-500 hover:text-slate-700">Cancelled</button>
-          </div>
-
           <div className="divide-y divide-slate-100">
-            {projects.map(p => (
-              <Link href="/projects/seed-project-1" key={p.id} className="p-6 flex flex-wrap sm:flex-nowrap items-center hover:bg-slate-50/50 transition-colors w-full">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${p.iconBg} mb-4 sm:mb-0`}>
-                  <FolderOpen className={`w-5 h-5 ${p.iconColor}`} />
+            {myProjects && myProjects.length > 0 ? myProjects.slice(0, 4).map((project) => (
+              <div key={project.id} className="p-6 flex flex-wrap sm:flex-nowrap items-center hover:bg-slate-50/50 transition-colors w-full group">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 mb-4 sm:mb-0 ${
+                  project.status === 'IN_PROGRESS' ? 'bg-blue-50' : 
+                  project.status === 'COMPLETED' ? 'bg-green-50' : 
+                  'bg-slate-100'
+                }`}>
+                  <FolderOpen className={`w-5 h-5 ${
+                    project.status === 'IN_PROGRESS' ? 'text-blue-600' : 
+                    project.status === 'COMPLETED' ? 'text-green-600' : 
+                    'text-slate-500'
+                  }`} />
                 </div>
                 <div className="ml-0 sm:ml-4 flex-1 min-w-0 w-full sm:w-auto mb-4 sm:mb-0">
-                  <h3 className="text-sm font-bold text-slate-900 truncate">{p.title}</h3>
-                  <p className="text-xs text-slate-500 mt-1">With {p.freelancer}</p>
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors cursor-pointer truncate">{project.job?.title}</h3>
+                  <p className="text-xs text-slate-500 mt-1 truncate">Freelancer: {project.freelancer?.name || 'Unknown'}</p>
                 </div>
-                <div className="w-full sm:w-24 px-0 sm:px-4 mb-4 sm:mb-0">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
-                    ${p.status === 'In Progress' ? 'bg-green-50 text-green-700' : 
-                      p.status === 'In Review' ? 'bg-purple-50 text-purple-700' : 
-                      'bg-slate-100 text-slate-700'}`}
-                  >
-                    {p.status}
+                <div className="w-full sm:w-32 px-0 sm:px-4 text-left sm:text-right">
+                  <p className="text-sm font-bold text-slate-900">${project.budget?.toLocaleString()}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider">Budget</p>
+                </div>
+                <div className="w-full sm:w-32 px-0 sm:px-4 text-right">
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
+                    project.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-700' :
+                    project.status === 'COMPLETED' ? 'bg-green-50 text-green-700' :
+                    'bg-slate-100 text-slate-700'
+                  }`}>
+                    {project.status.replace('_', ' ')}
                   </span>
                 </div>
-                <div className="w-full sm:w-32 px-0 sm:px-4 hidden md:flex items-center gap-3">
-                  <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full ${p.status === 'In Progress' ? 'bg-green-500' : p.status === 'In Review' ? 'bg-purple-500' : 'bg-slate-400'}`} 
-                      style={{ width: `${p.progress}%` }}
-                    />
-                  </div>
-                  <span className="text-xs font-semibold text-slate-700">{p.progress}%</span>
-                </div>
-                <div className="w-1/2 sm:w-24 px-0 sm:px-4 text-left sm:text-right">
-                  <p className="text-sm font-bold text-slate-900">${p.budget.toLocaleString()}</p>
-                  <p className="text-[10px] text-slate-400">Budget</p>
-                </div>
-                <div className="w-1/2 sm:w-28 px-0 sm:px-4 text-right">
-                  <p className="text-sm font-semibold text-slate-700">{p.due}</p>
-                  <p className="text-[10px] text-slate-400">Due Date</p>
-                </div>
-              </Link>
-            ))}
+              </div>
+            )) : (
+              <div className="p-8 text-center text-sm font-medium text-slate-500">No active projects yet.</div>
+            )}
           </div>
         </div>
 
@@ -205,7 +263,7 @@ export default function ClientDashboardPage() {
             </div>
             <div className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={spendingData}>
+                <LineChart data={combinedSpendingData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis 
                     dataKey="name" 
@@ -223,7 +281,7 @@ export default function ClientDashboardPage() {
                   />
                   <RechartsTooltip 
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    formatter={(value: number) => [`$${value.toLocaleString()}`, 'Spent']}
+                    formatter={(value) => [`$${Number(value || 0).toLocaleString()}`, 'Spent']}
                   />
                   <Line 
                     type="monotone" 
@@ -321,60 +379,18 @@ export default function ClientDashboardPage() {
           </div>
           
           <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[19px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-slate-100">
-            <div className="relative flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-slate-200 border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center">
-                <span className="text-xs font-bold text-slate-500">DB</span>
+            {displayActivities.map((act) => (
+              <div key={act.id} className="relative flex items-start gap-4 group">
+                <div className={`w-10 h-10 rounded-full border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center ${act.bgColor}`}>
+                  {act.icon ? act.icon : <span className="text-xs font-bold text-slate-500">{act.initials}</span>}
+                </div>
+                <div>
+                  <p className="text-sm text-slate-600">{act.title}</p>
+                  <p className="text-xs text-slate-400 mt-1">{act.time}</p>
+                </div>
+                <div className={`w-2 h-2 rounded-full absolute right-0 top-2 ${act.dotColor}`} />
               </div>
-              <div>
-                <p className="text-sm text-slate-600"><span className="font-bold text-slate-900">Daniel B.</span> submitted work for <span className="font-bold text-slate-900">E-commerce Website Redesign</span></p>
-                <p className="text-xs text-slate-400 mt-1">2 hours ago</p>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-green-500 absolute right-0 top-2" />
-            </div>
-
-            <div className="relative flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-slate-200 border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center">
-                <span className="text-xs font-bold text-slate-500">EO</span>
-              </div>
-              <div>
-                <p className="text-sm text-slate-600"><span className="font-bold text-slate-900">Esther O.</span> requested a milestone payment of <span className="font-bold text-slate-900">$1,600</span></p>
-                <p className="text-xs text-slate-400 mt-1">5 hours ago</p>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-yellow-500 absolute right-0 top-2" />
-            </div>
-
-            <div className="relative flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-green-50 border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center">
-                <CreditCard className="w-4 h-4 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-slate-600">Payment of <span className="font-bold text-slate-900">$1,250</span> released to <span className="font-bold text-slate-900">Tunde A.</span></p>
-                <p className="text-xs text-slate-400 mt-1">1 day ago</p>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-green-500 absolute right-0 top-2" />
-            </div>
-
-            <div className="relative flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-slate-200 border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center">
-                <span className="text-xs font-bold text-slate-500">PU</span>
-              </div>
-              <div>
-                <p className="text-sm text-slate-600"><span className="font-bold text-slate-900">Praise U.</span> sent a message regarding <span className="font-bold text-slate-900">Shopify Store</span></p>
-                <p className="text-xs text-slate-400 mt-1">1 day ago</p>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-blue-500 absolute right-0 top-2" />
-            </div>
-
-            <div className="relative flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-purple-50 border-4 border-white shadow-sm shrink-0 z-10 overflow-hidden flex items-center justify-center">
-                <FileSignature className="w-4 h-4 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-sm text-slate-600">New contract created for <span className="font-bold text-slate-900">Mobile App UI/UX Design</span></p>
-                <p className="text-xs text-slate-400 mt-1">2 days ago</p>
-              </div>
-              <div className="w-2 h-2 rounded-full bg-purple-500 absolute right-0 top-2" />
-            </div>
+            ))}
           </div>
         </div>
 

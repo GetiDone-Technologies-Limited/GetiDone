@@ -26,8 +26,8 @@ export function EscrowPanel({ projectId }: EscrowPanelProps) {
   if (!escrow) return <div className="text-sm text-slate-500">Escrow data not found.</div>;
 
   const isClient = user?.role === 'CLIENT';
-  const canFund = isClient && escrow.status === 'UNFUNDED';
-  const canRelease = isClient && escrow.status === 'FUNDED';
+  const canFund = isClient && escrow.status === 'PENDING';
+  const canRelease = isClient && escrow.status === 'HELD';
 
   const handleFund = () => {
     createPayment.mutate({
@@ -47,8 +47,8 @@ export function EscrowPanel({ projectId }: EscrowPanelProps) {
   };
 
   const steps = [
-    { label: 'Unfunded', status: escrow.status === 'UNFUNDED' ? 'current' : 'complete' },
-    { label: 'In Escrow', status: escrow.status === 'FUNDED' ? 'current' : escrow.status === 'RELEASED' ? 'complete' : 'upcoming' },
+    { label: 'Unfunded', status: escrow.status === 'PENDING' ? 'current' : 'complete' },
+    { label: 'In Escrow', status: escrow.status === 'HELD' ? 'current' : escrow.status === 'RELEASED' ? 'complete' : 'upcoming' },
     { label: 'Released', status: escrow.status === 'RELEASED' ? 'complete' : 'upcoming' },
   ];
 
@@ -64,7 +64,7 @@ export function EscrowPanel({ projectId }: EscrowPanelProps) {
              </div>
              <h3 className="font-bold text-lg">Secure Escrow</h3>
            </div>
-           <Badge variant={escrow.status === 'RELEASED' ? 'success' : escrow.status === 'FUNDED' ? 'default' : 'warning'} className="bg-white/10 text-white border-white/20 backdrop-blur-md">
+           <Badge variant={escrow.status === 'RELEASED' ? 'success' : escrow.status === 'HELD' ? 'default' : 'warning'} className="bg-white/10 text-white border-white/20 backdrop-blur-md">
              {escrow.status}
            </Badge>
          </div>
@@ -93,7 +93,7 @@ export function EscrowPanel({ projectId }: EscrowPanelProps) {
              </div>
            ))}
            <div className="absolute top-4 left-1/6 right-1/6 h-1 bg-slate-800 -z-0">
-             <div className="h-full bg-[#00b259] transition-all duration-1000" style={{ width: escrow.status === 'UNFUNDED' ? '0%' : escrow.status === 'FUNDED' ? '50%' : '100%' }}></div>
+             <div className="h-full bg-[#00b259] transition-all duration-1000" style={{ width: escrow.status === 'PENDING' ? '0%' : escrow.status === 'HELD' ? '50%' : '100%' }}></div>
            </div>
          </div>
       </div>
@@ -125,7 +125,7 @@ export function EscrowPanel({ projectId }: EscrowPanelProps) {
                 ].map((gateway) => (
                   <button 
                     key={gateway.id}
-                    onClick={() => setSelectedGateway(gateway.id as any)}
+                    onClick={() => setSelectedGateway(gateway.id as 'stripe' | 'paystack' | 'flutterwave')}
                     className={`p-4 border-2 rounded-2xl flex flex-col items-center gap-2 transition-all duration-300 ${
                       selectedGateway === gateway.id 
                         ? 'border-[#00b259] bg-[#00b259]/5 text-[#00b259] shadow-sm' 

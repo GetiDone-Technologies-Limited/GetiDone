@@ -76,8 +76,8 @@ export default function PaymentsPage() {
             <tbody className="divide-y divide-slate-50">
               {payments.map(payment => (
                 <tr key={payment.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="py-4 px-6 text-sm font-bold text-slate-900">{payment.reference}</td>
-                  <td className="py-4 px-6 text-sm font-medium text-slate-600">{payment.type}</td>
+                  <td className="py-4 px-6 text-sm font-bold text-slate-900">{payment.id}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-600">Escrow</td>
                   <td className="py-4 px-6 text-sm font-medium text-slate-500">{new Date(payment.createdAt).toLocaleDateString()}</td>
                   <td className="py-4 px-6 text-sm font-black text-slate-900 text-right">${payment.amount.toLocaleString()}</td>
                   <td className="py-4 px-6 text-right">

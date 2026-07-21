@@ -64,8 +64,8 @@ export function MyProposalsWidget() {
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-bold text-slate-900">My Proposals</h2>
-        <Link href="/proposals" className="text-sm font-bold text-[#00b259] hover:underline flex items-center gap-1">
-          View All Proposals <ArrowRight className="w-4 h-4" />
+        <Link href="/jobs" className="text-sm font-bold text-[#00b259] hover:underline flex items-center gap-1">
+          Find Jobs <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
 
@@ -86,7 +86,9 @@ export function MyProposalsWidget() {
       </div>
 
       <div className="space-y-4">
-        {mockProposals.map((proposal) => (
+        {mockProposals
+          .filter(p => activeTab === 'all' || p.status.toLowerCase() === activeTab)
+          .map((proposal) => (
           <div key={proposal.id} className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-2xl transition-colors group">
             <div className="flex items-center gap-4">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${proposal.iconColor}`}>

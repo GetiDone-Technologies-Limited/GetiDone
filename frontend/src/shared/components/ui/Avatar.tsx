@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { getInitials } from '@/shared/lib/utils';
 

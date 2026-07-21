@@ -8,7 +8,27 @@ const mockActivity = [
   { id: 'act4', type: 'view', content: 'Profile viewed by 18 clients', time: '1 day ago', icon: <Eye className="w-4 h-4 text-white" />, iconBg: 'bg-slate-400' },
 ];
 
+import { useMyProjects } from '@/features/dashboard/hooks/useDashboard';
+import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
+
 export function RecentActivityWidget() {
+  const { data: myProjects, isLoading } = useMyProjects();
+
+  if (isLoading) {
+    return <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 mb-6 h-64 flex items-center justify-center"><LoadingSpinner /></div>;
+  }
+
+  const actualActivities = (myProjects || []).slice(0, 3).map((p, idx) => ({
+    id: `actual-${p.id}-${idx}`,
+    type: 'project',
+    content: `Project "${p.job?.title}" status changed to ${p.status}`,
+    time: 'Just now',
+    icon: <CheckCircle2 className="w-4 h-4 text-white" />,
+    iconBg: 'bg-blue-500'
+  }));
+
+  const displayActivity = [...actualActivities, ...mockActivity];
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 mb-6">
       <div className="flex items-center justify-between mb-6">
@@ -19,7 +39,7 @@ export function RecentActivityWidget() {
       </div>
 
       <div className="space-y-5">
-        {mockActivity.map((activity) => (
+        {displayActivity.map((activity) => (
           <div key={activity.id} className="flex items-start gap-4">
             <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${activity.iconBg}`}>
               {activity.icon}

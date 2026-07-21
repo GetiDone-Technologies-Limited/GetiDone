@@ -81,7 +81,11 @@ export function MessageDropdown() {
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
-                          isUnread ? markAsRead(conv.id) : markAsUnread(conv.id);
+                          if (isUnread) {
+                            markAsRead(conv.id);
+                          } else {
+                            markAsUnread(conv.id);
+                          }
                         }}
                         className="shrink-0 p-1.5 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors"
                         title={isUnread ? "Mark as read" : "Mark as unread"}

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, MessageSquare } from 'lucide-react';
+import { useMyProjects } from '@/features/dashboard/hooks/useDashboard';
+import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
 
 const mockProjects = [
   {
@@ -33,17 +35,35 @@ const mockProjects = [
 ];
 
 export function ActiveProjectsWidget() {
+  const { data: myProjects, isLoading } = useMyProjects();
+
+  if (isLoading) {
+    return <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 h-64 flex items-center justify-center"><LoadingSpinner /></div>;
+  }
+
+  const activeRealProjects = (myProjects || [])
+    .filter(p => p.status === 'IN_PROGRESS')
+    .map(p => ({
+      id: p.id,
+      title: p.job?.title || 'Unknown Job',
+      client: p.client?.name || 'Unknown Client',
+      progress: 50, // mock progress for real projects
+      iconColor: 'bg-[#00b259]/10 text-[#00b259]'
+    }));
+
+  const displayProjects = [...activeRealProjects, ...mockProjects].slice(0, 5);
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 flex flex-col h-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-bold text-slate-900">Active Projects</h2>
-        <Link href="/freelancer/projects" className="text-sm font-bold text-[#00b259] hover:underline flex items-center gap-1">
-          View All Projects <ArrowRight className="w-4 h-4" />
+        <Link href="/projects" className="text-sm font-bold text-[#00b259] hover:underline flex items-center gap-1">
+          View All <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
 
       <div className="space-y-6 flex-1">
-        {mockProjects.map((project) => (
+        {displayProjects.map((project) => (
           <div key={project.id} className="flex items-center justify-between group">
             <div className="flex items-center gap-4 flex-1">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${project.iconColor}`}>
@@ -54,8 +74,6 @@ export function ActiveProjectsWidget() {
                   {project.title}
                 </h4>
                 <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{project.client}</p>
-                
-                {/* Progress bar (Mobile view inline) - shown here for compact layout if needed, but the design has it to the right. Let's put it next to text for larger screens, or below. Actually, the design shows: Icon | Title & Client | Progress Bar | % | Chat */}
               </div>
             </div>
             
@@ -70,12 +88,6 @@ export function ActiveProjectsWidget() {
             </div>
           </div>
         ))}
-      </div>
-      
-      <div className="mt-4 pt-4 border-t border-slate-100">
-        <Link href="/freelancer/projects" className="text-sm font-bold text-[#00b259] hover:underline flex items-center gap-1">
-          View All Active Projects <ArrowRight className="w-4 h-4" />
-        </Link>
       </div>
     </div>
   );

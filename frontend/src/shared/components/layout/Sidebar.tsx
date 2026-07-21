@@ -11,7 +11,7 @@ import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
   FileText, BarChart2, Users2, Settings, Plus, CheckCircle2, ChevronLeft,
-  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket
+  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket, LogOut
 } from 'lucide-react';
 
 interface SidebarLink {
@@ -219,6 +219,21 @@ export function Sidebar() {
             </div>
           )}
 
+        </div>
+        
+        {/* Sign Out Button */}
+        <div className={`p-4 pt-0 shrink-0 ${!sidebarOpen && 'px-2 flex flex-col items-center'}`}>
+           <button 
+             onClick={() => {
+               useAuthStore.getState().logout();
+               window.location.href = '/login';
+             }}
+             className={`flex items-center gap-3 w-full rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-500/10 py-2.5 transition-all ${sidebarOpen ? 'px-4' : 'justify-center px-0'}`}
+             title={!sidebarOpen ? 'Sign Out' : undefined}
+           >
+             <LogOut className="w-5 h-5 shrink-0" />
+             {sidebarOpen && <span className="text-sm font-bold truncate">Sign Out</span>}
+           </button>
         </div>
       </div>
       <AddFundsModal isOpen={isAddFundsOpen} onClose={() => setIsAddFundsOpen(false)} />

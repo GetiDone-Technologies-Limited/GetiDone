@@ -6,7 +6,6 @@ export const profileApi = {
     return apiClient.get<UserProfile>(`/users/${userId}`)
       .then(profile => ({
         ...profile,
-        gender: profile.gender || (profile.name?.toLowerCase().includes('sarah') ? 'female' : 'male') as 'male' | 'female',
       }))
       .catch((err) => {
         // Fallback mock for fake generated IDs
@@ -17,20 +16,16 @@ export const profileApi = {
           role: 'FREELANCER',
           doneScore: 95,
           kycStatus: 'VERIFIED',
-          gender: userId.includes('sarah') ? 'female' : 'male',
           bio: 'Experienced professional with a strong track record of successful projects.',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          skills: ['React', 'Node.js', 'UI/UX']
+          skills: [{id: '1', name: 'React'}, {id: '2', name: 'Node.js'}, {id: '3', name: 'UI/UX'}]
         } as UserProfile;
       });
   },
 
   getMyProfile(): Promise<UserProfile> {
-    return apiClient.get<UserProfile>('/users/me').then(profile => ({
-      ...profile,
-      gender: profile.gender || 'male',
-    }));
+    return apiClient.get<UserProfile>('/users/me');
   },
 
   updateProfile(data: UpdateProfileRequest): Promise<UserProfile> {

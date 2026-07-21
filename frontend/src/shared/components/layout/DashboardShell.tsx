@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { NotificationDropdown } from './NotificationDropdown';
 import { MessageDropdown } from './MessageDropdown';
+import { UserDropdown } from './UserDropdown';
 import { DashboardNavControls } from './DashboardNavControls';
 
 interface DashboardShellProps {
@@ -54,7 +55,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
             {/* Icons */}
             <MessageDropdown />
             <NotificationDropdown />
-
+            <div className="w-px h-8 bg-slate-200 mx-2 hidden md:block"></div>
+            <UserDropdown />
           </div>
         </header>
 

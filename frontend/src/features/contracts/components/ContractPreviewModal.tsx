@@ -9,7 +9,7 @@ import { Download, Printer } from 'lucide-react';
 interface ContractPreviewModalProps {
   open: boolean;
   onClose: () => void;
-  contract: any | null;
+  contract: { id: string; title: string; freelancer: string; project: string; amount: number; status?: string; date?: string; content?: string } | null;
 }
 
 export function ContractPreviewModal({ open, onClose, contract }: ContractPreviewModalProps) {

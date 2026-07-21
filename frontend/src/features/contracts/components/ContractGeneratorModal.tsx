@@ -10,7 +10,7 @@ import { FileSignature, Sparkles, RefreshCcw, Send } from 'lucide-react';
 interface ContractGeneratorModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (contractData: any) => void;
+  onSave: (contractData: { title: string; freelancer: string; project: string; amount: number; status?: string; date?: string; content?: string }) => void;
 }
 
 type Step = 'input' | 'generating' | 'review';

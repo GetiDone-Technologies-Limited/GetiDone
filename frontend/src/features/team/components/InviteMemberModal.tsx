@@ -9,7 +9,7 @@ import { Mail, Send } from 'lucide-react';
 interface InviteMemberModalProps {
   open: boolean;
   onClose: () => void;
-  onInvite: (memberData: any) => void;
+  onInvite: (memberData: { name?: string; email: string; role: string }) => void;
 }
 
 export function InviteMemberModal({ open, onClose, onInvite }: InviteMemberModalProps) {
@@ -29,7 +29,6 @@ export function InviteMemberModal({ open, onClose, onInvite }: InviteMemberModal
       onInvite({
         email,
         role,
-        message,
         name: email.split('@')[0], // Mock name based on email
       });
       

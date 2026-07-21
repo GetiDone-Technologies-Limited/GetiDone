@@ -46,7 +46,7 @@ export function useCreateJob() {
           ...data,
           status: 'OPEN',
           clientId: 'client_1',
-        } as any; // Type coercion to satisfy the mock response
+        } as { id: string }; // Type coercion to satisfy the mock response
       }
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [JOBS_KEY] }),

@@ -83,6 +83,14 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
+  // Profile specific
+  title        String?
+  bio          String?
+  location     String?
+  hourlyRate   Decimal?  @db.Decimal(10, 2)
+  avatarUrl    String?
+  bannerUrl    String?
+
   // Relations
   skills             Skill[]
   jobs               Job[]                 @relation("ClientJobs")
@@ -94,6 +102,8 @@ model User {
   conversations      Conversation[]        @relation("ConversationParticipants")
   reviewsWritten     Review[]              @relation("ReviewsWritten")
   reviewsReceived    Review[]              @relation("ReviewsReceived")
+  portfolioItems     PortfolioItem[]
+  services           Service[]
 }
 
 model Skill {
@@ -225,4 +235,30 @@ model Review {
 
   revieweeId String
   reviewee   User   @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+}
+
+model PortfolioItem {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  imageUrl    String?
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Service {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  price        Decimal  @db.Decimal(10, 2)
+  deliveryTime String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

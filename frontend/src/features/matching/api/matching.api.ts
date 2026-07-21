@@ -14,7 +14,7 @@ export const matchingApi = {
     return apiClient.get<FreelancerProfile>(`/matching/freelancers/${id}`);
   },
 
-  recommendJobsForFreelancer(freelancerId: string): Promise<import('./matching.types').JobMatch[]> {
-    return apiClient.get<import('./matching.types').JobMatch[]>(`/matching/jobs-for-freelancer/${freelancerId}`);
+  recommendJobsForFreelancer(freelancerId: string): Promise<import('../types/matching.types').JobMatch[]> {
+    return apiClient.get<import('../types/matching.types').JobMatch[]>(`/matching/jobs-for-freelancer/${freelancerId}`);
   },
 };

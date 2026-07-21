@@ -9,30 +9,27 @@ const mockGlobalPayments: Payment[] = [
     amount: 1200,
     currency: 'USD',
     status: 'COMPLETED',
-    type: 'MILESTONE',
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
     projectId: 'proj_1',
-    reference: 'REF-123456',
   },
   {
     id: 'pay_2',
     amount: 450,
     currency: 'USD',
     status: 'PENDING',
-    type: 'DEPOSIT',
     createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
     projectId: 'proj_2',
-    reference: 'REF-789012',
   },
   {
     id: 'pay_3',
     amount: 800,
     currency: 'USD',
     status: 'COMPLETED',
-    type: 'MILESTONE',
     createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
     projectId: 'proj_1',
-    reference: 'REF-345678',
   }
 ];
 

@@ -6,6 +6,7 @@ import { JobModule } from './job/job.module';
 import { MatchingModule } from './matching/matching.module';
 import { MessagingModule } from './messaging/messaging.module';
 import { PaymentModule } from './payment/payment.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -17,6 +18,7 @@ import { AppController } from './app.controller';
     MatchingModule,
     MessagingModule,
     PaymentModule,
+    DashboardModule,
   ],
   controllers: [AppController],
 })

@@ -12,6 +12,12 @@ export class UserController {
     return this.userService.listFreelancers();
   }
 
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMyProfile(@CurrentUser() user: { id: string }) {
+    return this.userService.getProfile(user.id);
+  }
+
   @Get(':id')
   getProfile(@Param('id') id: string) {
     return this.userService.getProfile(id);
@@ -21,7 +27,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   updateProfile(
     @CurrentUser() user: { id: string },
-    @Body() body: { name?: string; skillIds?: string[] },
+    @Body() body: any,
   ) {
     return this.userService.updateProfile(user.id, body);
   }

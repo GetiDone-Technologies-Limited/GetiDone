@@ -12,7 +12,7 @@ export default function TeamPage() {
   ]);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-  const handleInvite = (memberData: any) => {
+  const handleInvite = (memberData: { name?: string; email: string; role: string }) => {
     const newMember = {
       id: `usr_${Math.floor(Math.random() * 1000)}`,
       name: memberData.name || 'Invited User',
@@ -29,7 +29,7 @@ export default function TeamPage() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900">Team Members</h1>
-          <p className="text-slate-500 mt-2 font-medium">Manage your organization's members and their permissions.</p>
+          <p className="text-slate-500 max-w-md">Invite team members to collaborate on your projects. They&apos;ll be able to view, manage, and communicate with freelancers.</p>
         </div>
         <button 
           onClick={() => setIsInviteModalOpen(true)}
