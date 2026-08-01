@@ -46,6 +46,19 @@
   --soft: #94A39A;
   --border: #E2EAE5;
   --sidebar-text: #7A8A82;
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+}
+
+html.dark {
+  --bg: #0A0F0D;
+  --bg-alt: #121815;
+  --card: #181F1B;
+  --sidebar-hover: #1F2622;
+  --text: #FFFFFF;
+  --muted: #94A39A;
+  --soft: #6A7A71;
+  --border: rgba(255, 255, 255, 0.1);
+  --navbar-bg: rgba(10, 15, 13, 0.85);
 }
 
 * {
