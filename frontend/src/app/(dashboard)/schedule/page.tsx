@@ -395,7 +395,7 @@ export default function CalendarPage() {
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10B981, #34D399)' }}>
                     <CalendarIcon className="w-4 h-4 text-white" />
                   </div>
-                  <div className="getidone-text text-sm dark"><span class="geti">Geti</span><span class="done">Done</span></div>
+                  <div className="getidone-text text-sm dark"><span className="geti">Geti</span><span className="done">Done</span></div>
                 </div>
                 <div className="text-[11px] font-bold tracking-widest uppercase mb-1" style={{ color: 'var(--primary)' }}>SCHEDULE</div>
                 <h2 className="font-extrabold text-2xl" style={{ fontFamily: "'Sora', sans-serif" }}>Create New Event</h2>

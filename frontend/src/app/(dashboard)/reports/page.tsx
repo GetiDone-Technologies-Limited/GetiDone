@@ -239,7 +239,7 @@ export default function ReportsPage() {
         <div className="gd-card p-6 flex flex-col justify-between">
           <div>
             <h2 className="font-bold text-lg" style={{ fontFamily: "'Sora', sans-serif" }}>Project Status</h2>
-            <p class="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>Current distribution</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>Current distribution</p>
           </div>
 
           <div className="h-[220px] w-full relative my-2">
