@@ -12,7 +12,7 @@ const services = [
   {
     id: 'packages',
     title: 'Fixed-Price Service Packages',
-    badge: 'FIVERR-STYLE GIG CATALOG',
+    badge: 'PRODUCTIZED SERVICE CATALOG',
     icon: Package,
     accent: 'from-emerald-500/20 to-teal-500/20 text-emerald-500',
     desc: 'Browse standardized 3-tier packages (Basic, Standard, Premium) from verified top-tier executioners. Order instantly with 1-click escrow protection.',
@@ -28,7 +28,7 @@ const services = [
   {
     id: 'talent',
     title: 'AI Talent Matching & Custom Contracts',
-    badge: 'UPWORK-STYLE TALENT MARKETPLACE',
+    badge: 'VERIFIED TALENT MARKETPLACE',
     icon: Users,
     accent: 'from-teal-500/20 to-cyan-500/20 text-teal-500',
     desc: 'Post custom project requirements and let GetiDone’s AI match you with top 3% vetted talent in under 60 seconds based on verified Done Scores.',
@@ -44,7 +44,7 @@ const services = [
   {
     id: 'consultations',
     title: '1-on-1 Paid Strategy Consultations',
-    badge: 'UPWORK-STYLE BLUEPRINTING',
+    badge: 'EXECUTIVE BLUEPRINTING',
     icon: Calendar,
     accent: 'from-cyan-500/20 to-blue-500/20 text-cyan-500',
     desc: 'Book 30-minute or 60-minute 1-on-1 strategy sessions with senior architects to review PRDs, database schemas, and project roadmaps before hiring.',
@@ -124,7 +124,7 @@ export default function OurServicesPage() {
           </h1>
 
           <p className="text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--muted)' }}>
-            Combining the simplicity of Fiverr&apos;s productized packages with the power of Upwork&apos;s custom talent marketplace—all backed by 0-risk automated test gates.
+            Combining the simplicity of productized service packages with the power of an elite custom talent marketplace—all backed by 0-risk automated test gates.
           </p>
         </div>
       </section>

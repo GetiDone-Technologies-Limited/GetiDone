@@ -9,7 +9,7 @@ import {
   Sun, Moon, ChevronRight, Check, Search, Package, Users, Calendar,
   Code, Layout, Cpu, Megaphone, Smartphone, Server, Sparkles, X,
   GitBranch, Terminal, Lock, DollarSign, Layers, Compass, CheckCircle2,
-  HelpCircle, ArrowDown
+  HelpCircle, ArrowDown, ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -292,7 +292,7 @@ export default function LandingPage() {
     },
     {
       q: 'What are Fixed-Price Service Packages ("GetiPacks")?',
-      a: 'Inspired by Fiverr, Service Packages allow freelancers to publish pre-packaged, fixed-price deliverables across 3 tiers (Basic, Standard, Premium). Clients can order instantly with 1-click Escrow funding without waiting for proposals.'
+      a: 'Service Packages allow freelancers to publish pre-packaged, fixed-price deliverables across 3 tiers (Basic, Standard, Premium). Clients can order instantly with 1-click Escrow funding without waiting for proposals.'
     },
     {
       q: 'How does the 1-on-1 Strategy Consultation fee credit work?',
@@ -440,7 +440,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-base sm:text-lg mb-8 max-w-lg leading-relaxed" style={{ color: 'var(--muted)' }}>
-              GetiDone combines Fiverr&apos;s instant 1-click service packages with Upwork&apos;s elite talent discovery—backed by 0-risk automated test gates and Escrow protection.
+              GetiDone combines instant 1-click service packages with elite verified talent discovery—backed by 0-risk automated test gates and Escrow protection.
             </p>
 
             {/* Interactive Search Bar (Dual Mode) */}
@@ -770,13 +770,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Featured Service Packages (Fiverr Style Showcase) */}
+      {/* Featured Service Packages Showcase */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-12">
             <div>
               <div className="inline-block px-4 py-1 rounded-full mb-3 text-xs font-bold uppercase tracking-wider border" style={{ background: 'rgba(16,185,129,0.1)', borderColor: 'rgba(16,185,129,0.2)', color: 'var(--primary)' }}>
-                FIVERR-STYLE PACKAGES
+                INSTANT SERVICE PACKAGES
               </div>
               <h2 className="font-extrabold text-3xl sm:text-4xl" style={{ fontFamily: "'Sora', sans-serif", color: 'var(--text)' }}>
                 Popular Service Packages<span className="text-emerald-500">.</span>
@@ -845,7 +845,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row items-end justify-between mb-12">
             <div>
               <div className="inline-block px-4 py-1 rounded-full mb-3 text-xs font-bold uppercase tracking-wider border" style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--primary)' }}>
-                UPWORK-STYLE TALENT SPOTLIGHT
+                VERIFIED TALENT SPOTLIGHT
               </div>
               <h2 className="font-extrabold text-3xl sm:text-4xl" style={{ fontFamily: "'Sora', sans-serif", color: 'var(--text)' }}>
                 Top Verified Executioners<span className="text-emerald-500">.</span>
@@ -1143,7 +1143,7 @@ export default function LandingPage() {
               <span className="text-white">Geti</span><span className="text-[var(--primary)]">Done</span>
             </div>
             <p className="text-xs max-w-xs leading-relaxed">
-              The smartest way to hire and get hired. Combining Fiverr&apos;s instant packages with Upwork&apos;s elite talent discovery.
+              The smartest way to hire and get hired. Combining productized service packages with verified talent discovery.
             </p>
           </div>
           <div>
