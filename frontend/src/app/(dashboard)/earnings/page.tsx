@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import {
-  DollarSign, Hourglass, Sack, CalendarCheck, Eye, EyeOff,
+  DollarSign, Hourglass, Coins, CalendarCheck, Eye, EyeOff,
   ChevronDown, Building2, Download, Plus, Trash2, ArrowUpRight,
   ArrowDownRight, Check, X, ShieldCheck, FileText
 } from 'lucide-react';
@@ -139,7 +139,7 @@ export default function EarningsPage() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>TOTAL EARNED</span>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(20,184,166,0.12)', color: 'var(--secondary)' }}>
-                <Sack className="w-4 h-4" />
+                <Coins className="w-4 h-4" />
               </div>
             </div>
             <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -257,7 +257,7 @@ export default function EarningsPage() {
 
               <div className="p-4 rounded-xl border flex items-center gap-3 bg-[var(--bg-alt)]" style={{ borderColor: 'var(--border)' }}>
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-500 text-white font-bold flex-shrink-0">
-                  <Sack className="w-5 h-5" />
+                  <Coins className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-xs truncate">PayPal</div>
