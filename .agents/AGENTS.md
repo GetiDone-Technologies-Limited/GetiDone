@@ -27,6 +27,7 @@ Current SampleAssets → Next.js page mapping:
 | Calendar.html           | frontend/src/app/(dashboard)/schedule/page.tsx            |
 | ActiveProjects.html     | frontend/src/app/(dashboard)/freelancer/projects/page.tsx |
 | Contracts.html          | frontend/src/app/(dashboard)/contracts/page.tsx          |
+| ContractsFreelancer.html| frontend/src/app/(dashboard)/contracts/page.tsx          |
 | ClientFreelancer.html   | frontend/src/app/(dashboard)/freelancers/page.tsx         |
 | SavedTalent.html        | frontend/src/app/(dashboard)/saved/page.tsx               |
 | Files.html              | frontend/src/app/(dashboard)/files/page.tsx               |
