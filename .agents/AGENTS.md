@@ -20,6 +20,7 @@ Current SampleAssets → Next.js page mapping:
 | MyProposals.html        | frontend/src/app/(dashboard)/proposals/page.tsx           |
 | MyProjects.html         | frontend/src/app/(dashboard)/projects/page.tsx            |
 | Payments.html           | frontend/src/app/(dashboard)/payments/page.tsx            |
+| PaymentsFreelancers.html| frontend/src/app/(dashboard)/earnings/page.tsx            |
 | TeamPODs.html           | frontend/src/app/(dashboard)/team/page.tsx                |
 | Settings.html           | frontend/src/app/(dashboard)/settings/page.tsx            |
 | Reports.html            | frontend/src/app/(dashboard)/reports/page.tsx             |
