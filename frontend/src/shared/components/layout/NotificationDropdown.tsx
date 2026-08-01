@@ -9,7 +9,14 @@ export function NotificationDropdown() {
   const { notifications, markAsRead, markAsUnread, markAllAsRead } = useNotificationStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  // Mock notifications if empty
+  const displayNotifications = notifications.length > 0 ? notifications : [
+    { id: 'n1', title: 'Sarah Kim submitted work', description: 'E-commerce Website Redesign milestone delivered', time: '2 hours ago', read: false },
+    { id: 'n2', title: 'Payment released', description: '$1,250 released to Tunde A. for Shopify Store', time: '5 hours ago', read: false },
+    { id: 'n3', title: 'New proposal received', description: 'Marcus Lee sent a proposal for Mobile App Development', time: '1 day ago', read: true }
+  ] as any[]; // cast to any for mock compat
+
+  const unreadCount = displayNotifications.filter(n => !n.read).length;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -25,52 +32,63 @@ export function NotificationDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors"
+        className="w-10 h-10 rounded-xl btn-ghost flex items-center justify-center lift relative"
       >
-        <Bell className="h-5 w-5" />
+        <Bell className="h-5 w-5" style={{ color: 'var(--muted)' }} />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white border-2 border-white">
-            {unreadCount}
-          </span>
+          <span className="notif-dot"></span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h3 className="font-bold text-slate-900">Notifications</h3>
+        <div 
+          className="absolute right-0 top-full mt-2 w-80 rounded-[18px] border shadow-[0_16px_40px_-12px_rgba(15,26,20,0.2)] z-50 overflow-hidden"
+          style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+        >
+          <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+            <h3 className="font-display font-bold text-base" style={{ color: 'var(--text)' }}>Notifications</h3>
             {unreadCount > 0 && (
               <button 
                 onClick={markAllAsRead}
-                className="text-xs font-semibold text-[#00b259] hover:text-[#009b4d]"
+                className="text-xs font-semibold hover:opacity-80 transition-opacity"
+                style={{ color: 'var(--primary)' }}
               >
-                Mark all as read
+                Mark all read
               </button>
             )}
           </div>
           <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
-            {notifications.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-sm">No notifications</div>
+            {displayNotifications.length === 0 ? (
+              <div className="p-8 text-center text-sm" style={{ color: 'var(--muted)' }}>No notifications</div>
             ) : (
-              notifications.map((notif) => (
+              displayNotifications.map((notif) => (
                 <div 
                   key={notif.id} 
-                  className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors ${!notif.read ? 'bg-green-50/30' : ''}`}
+                  className="p-4 border-b hover:bg-[var(--bg-alt)] transition-colors"
+                  style={{ 
+                    borderColor: 'var(--border)',
+                    background: !notif.read ? 'rgba(16,185,129,0.05)' : 'transparent'
+                  }}
                 >
                   <div className="flex justify-between items-start gap-3">
                     <div className="flex-1">
-                      <p className={`text-sm ${!notif.read ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}`}>
+                      <p className="text-sm" style={{ fontWeight: !notif.read ? 'bold' : '600', color: 'var(--text)' }}>
                         {notif.title}
                       </p>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{notif.description}</p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-2">{notif.time}</p>
+                      <p className="text-xs mt-0.5 line-clamp-2" style={{ color: 'var(--muted)' }}>{notif.description}</p>
+                      <p className="text-[10px] font-medium mt-2" style={{ color: 'var(--muted)', opacity: 0.8 }}>{notif.time}</p>
                     </div>
                     <button 
                       onClick={() => notif.read ? markAsUnread(notif.id) : markAsRead(notif.id)}
-                      className="shrink-0 p-1.5 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors"
+                      className="shrink-0 p-1.5 rounded-lg transition-colors hover:bg-[var(--bg-alt)]"
+                      style={{ color: 'var(--muted)' }}
                       title={notif.read ? "Mark as unread" : "Mark as read"}
                     >
-                      {notif.read ? <Check className="w-4 h-4" /> : <Circle className="w-4 h-4 fill-[#00b259] text-[#00b259]" />}
+                      {notif.read ? (
+                        <Circle className="w-2 h-2" />
+                      ) : (
+                        <div className="w-2 h-2 rounded-full" style={{ background: 'var(--primary)' }}></div>
+                      )}
                     </button>
                   </div>
                 </div>

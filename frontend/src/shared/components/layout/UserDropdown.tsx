@@ -34,41 +34,48 @@ export function UserDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 hover:bg-slate-100 p-1.5 rounded-xl transition-colors"
+        className="flex items-center gap-2 hover:opacity-80 p-1.5 rounded-xl transition-all lift"
       >
         <Avatar src={user.avatarUrl} name={user.name} size="sm" />
-        <div className="hidden md:flex flex-col items-start mr-1">
-          <span className="text-sm font-bold text-slate-900 leading-none">{user.name?.split(' ')[0] || 'User'}</span>
-          <span className="text-[10px] font-semibold text-slate-500 capitalize leading-none mt-1">{user.role?.toLowerCase()}</span>
-        </div>
-        <ChevronDown className="w-4 h-4 text-slate-400 hidden md:block" />
+        <ChevronDown className="w-4 h-4" style={{ color: 'var(--muted)' }} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden">
-          <div className="p-4 border-b border-slate-100 bg-slate-50">
-            <p className="text-sm font-bold text-slate-900 truncate">{user.name}</p>
-            <p className="text-xs font-semibold text-slate-500 truncate">{user.email}</p>
+        <div 
+          className="absolute right-0 top-full mt-2 w-60 rounded-[18px] border shadow-[0_16px_40px_-12px_rgba(15,26,20,0.2)] z-50 overflow-hidden"
+          style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+        >
+          <div className="p-4 border-b flex flex-col items-center justify-center gap-2" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+            <Avatar src={user.avatarUrl} name={user.name} className="w-11 h-11" />
+            <div className="text-center">
+              <p className="text-sm font-display font-bold truncate" style={{ color: 'var(--text)' }}>{user.name}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--muted)' }}>{user.email}</p>
+            </div>
+            <div className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase mt-1" style={{ background: 'var(--bg-alt)', color: 'var(--primary)' }}>
+              {user.role}
+            </div>
           </div>
           <div className="p-2 flex flex-col gap-1">
             <Link 
               href="/profile"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#00b259] transition-colors"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors hover:bg-[var(--bg-alt)]"
+              style={{ color: 'var(--text)' }}
             >
-              <User className="w-4 h-4" /> My Profile
+              <User className="w-4 h-4" style={{ color: 'var(--muted)' }} /> My Profile
             </Link>
             <Link 
               href="/settings"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-[#00b259] transition-colors"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors hover:bg-[var(--bg-alt)]"
+              style={{ color: 'var(--text)' }}
             >
-              <Settings className="w-4 h-4" /> Settings
+              <Settings className="w-4 h-4" style={{ color: 'var(--muted)' }} /> Settings
             </Link>
-            <div className="w-full h-px bg-slate-100 my-1"></div>
+            <div className="w-full h-px my-1" style={{ background: 'var(--border)' }}></div>
             <button 
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-600 hover:bg-red-50 transition-colors"
+              className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-colors"
             >
               <LogOut className="w-4 h-4" /> Sign Out
             </button>

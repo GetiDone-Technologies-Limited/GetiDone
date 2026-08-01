@@ -34,7 +34,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
             {/* Search */}
             <div className="relative w-full max-w-md hidden md:block">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--soft)' }} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--muted)' }} />
               <input
                 type="text"
                 placeholder="Search projects, files, freelancers..."
@@ -46,17 +46,17 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
           <div className="flex items-center gap-3">
             <button className="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift">
-              <HelpCircle className="w-4 h-4" style={{ color: 'var(--muted)' }} />
+              <HelpCircle className="w-5 h-5" style={{ color: 'var(--muted)' }} />
             </button>
             <MessageDropdown />
             <NotificationDropdown />
-            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
+            <div className="w-px h-8 hidden md:block mx-1" style={{ background: 'var(--border)' }} />
             <UserDropdown />
           </div>
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-8" style={{ background: 'var(--bg)' }}>
           <div className="w-full h-full">
             {children}
           </div>

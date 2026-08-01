@@ -31,51 +31,60 @@ export function MessageDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors"
+        className="w-10 h-10 rounded-xl btn-ghost flex items-center justify-center lift relative"
       >
-        <MessageSquare className="h-5 w-5" />
+        <MessageSquare className="h-5 w-5" style={{ color: 'var(--muted)' }} />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#00b259] text-[9px] font-bold text-white border-2 border-white">
+          <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white border-2 border-white" style={{ background: 'var(--primary)' }}>
             {unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h3 className="font-bold text-slate-900">Messages</h3>
-            {unreadCount > 0 && (
-              <button 
-                onClick={markAllAsRead}
-                className="text-xs font-semibold text-[#00b259] hover:text-[#009b4d]"
-              >
-                Mark all as read
-              </button>
-            )}
+        <div 
+          className="absolute right-0 top-full mt-2 w-80 rounded-[18px] border shadow-[0_16px_40px_-12px_rgba(15,26,20,0.2)] z-50 overflow-hidden"
+          style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+        >
+          <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+            <h3 className="font-display font-bold text-base" style={{ color: 'var(--text)' }}>Messages</h3>
+            <Link 
+              href="/messages"
+              onClick={() => setIsOpen(false)}
+              className="text-xs font-semibold hover:opacity-80 transition-opacity"
+              style={{ color: 'var(--primary)' }}
+            >
+              View All
+            </Link>
           </div>
           <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
             {conversations.length === 0 ? (
-              <div className="p-8 text-center text-slate-500 text-sm">No messages</div>
+              <div className="p-8 text-center text-sm" style={{ color: 'var(--muted)' }}>No messages</div>
             ) : (
               conversations.map((conv) => {
                 const isUnread = conv.unreadCount > 0;
                 return (
                   <div 
                     key={conv.id} 
-                    className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors ${isUnread ? 'bg-green-50/30' : ''}`}
+                    className="p-4 border-b hover:bg-[var(--bg-alt)] transition-colors"
+                    style={{ borderColor: 'var(--border)', background: isUnread ? 'rgba(16,185,129,0.05)' : 'transparent' }}
                   >
                     <div className="flex justify-between items-start gap-3">
                       <Link href="/messages" onClick={() => setIsOpen(false)} className="flex-1 flex gap-3">
-                        <Avatar src={conv.participantAvatar} name={conv.participantName} size="sm" className="w-10 h-10 shrink-0" />
+                        <div className="relative">
+                          <Avatar src={conv.participantAvatar} name={conv.participantName} size="sm" className="w-10 h-10 shrink-0" />
+                          {isUnread && (
+                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white" style={{ background: 'var(--primary)' }}></span>
+                          )}
+                        </div>
                         <div>
-                          <p className={`text-sm ${isUnread ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}`}>
+                          <p className="text-sm" style={{ fontWeight: isUnread ? 'bold' : '600', color: 'var(--text)' }}>
                             {conv.participantName}
                           </p>
-                          <p className={`text-xs mt-0.5 line-clamp-1 ${isUnread ? 'font-semibold text-slate-800' : 'text-slate-500'}`}>
+                          <p className="text-xs mt-0.5 line-clamp-1" style={{ fontWeight: isUnread ? '600' : 'normal', color: isUnread ? 'var(--text)' : 'var(--muted)' }}>
                             {conv.lastMessage}
                           </p>
-                          <p className="text-[10px] font-medium text-slate-400 mt-1">{conv.lastMessageTime}</p>
+                          <p className="text-[10px] font-medium mt-1" style={{ color: 'var(--muted)', opacity: 0.8 }}>{conv.lastMessageTime}</p>
                         </div>
                       </Link>
                       <button 
@@ -87,10 +96,15 @@ export function MessageDropdown() {
                             markAsUnread(conv.id);
                           }
                         }}
-                        className="shrink-0 p-1.5 text-slate-400 hover:text-[#00b259] hover:bg-green-50 rounded-lg transition-colors"
+                        className="shrink-0 p-1.5 rounded-lg transition-colors hover:bg-[var(--bg-alt)]"
+                        style={{ color: 'var(--muted)' }}
                         title={isUnread ? "Mark as read" : "Mark as unread"}
                       >
-                        {isUnread ? <Circle className="w-4 h-4 fill-[#00b259] text-[#00b259]" /> : <Check className="w-4 h-4" />}
+                        {isUnread ? (
+                          <div className="w-2 h-2 rounded-full" style={{ background: 'var(--primary)' }}></div>
+                        ) : (
+                          <Circle className="w-2 h-2" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -98,13 +112,13 @@ export function MessageDropdown() {
               })
             )}
           </div>
-          <Link 
-            href="/messages"
-            onClick={() => setIsOpen(false)}
-            className="block p-3 text-center text-sm font-semibold text-slate-600 hover:text-[#00b259] bg-slate-50 border-t border-slate-100 transition-colors"
-          >
-            View all messages
-          </Link>
+          {unreadCount > 0 && (
+            <div className="p-3 bg-[var(--bg-alt)] border-t text-center" style={{ borderColor: 'var(--border)' }}>
+              <button onClick={markAllAsRead} className="text-xs font-semibold" style={{ color: 'var(--primary)' }}>
+                Mark all as read
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
