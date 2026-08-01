@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   DollarSign, Hourglass, Sack, CalendarCheck, Eye, EyeOff,
   ChevronDown, Building2, Download, Plus, Trash2, ArrowUpRight,
-  ArrowDownRight, Check, X, ShieldCheck, FileInvoice
+  ArrowDownRight, Check, X, ShieldCheck, FileText
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -278,7 +278,7 @@ export default function EarningsPage() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-base" style={{ fontFamily: "'Sora', sans-serif" }}>Tax Information</h3>
-                <FileInvoice className="w-4 h-4 text-[var(--soft)]" />
+                <FileText className="w-4 h-4 text-[var(--soft)]" />
               </div>
 
               <div className="p-4 rounded-xl space-y-2 mb-4 bg-[var(--bg-alt)]">
