@@ -5,11 +5,22 @@ import Link from 'next/link';
 import {
   DollarSign, Hourglass, Coins, CalendarCheck, Eye, EyeOff,
   ChevronDown, Building2, Download, Plus, Trash2, ArrowUpRight,
-  ArrowDownRight, Check, X, ShieldCheck, FileText
+  ArrowDownRight, Check, X, ShieldCheck, FileText, CreditCard,
+  Globe, Zap, Wallet, CheckCircle2
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
 type TxnStatus = 'all' | 'deposit' | 'withdrawal';
+type PayoutType = 'bank' | 'stripe' | 'paypal' | 'payoneer' | 'wise' | 'crypto';
+
+interface PayoutMethodItem {
+  id: string;
+  type: PayoutType;
+  label: string;
+  detail: string;
+  isDefault?: boolean;
+  status: 'active' | 'verified' | 'pending';
+}
 
 interface TransactionItem {
   id: number;
@@ -23,11 +34,20 @@ interface TransactionItem {
 
 const initialTransactions: TransactionItem[] = [
   { id: 1, project: 'E-commerce Platform Redesign', client: 'TechNova Inc.', avatar: 'https://picsum.photos/seed/technovalogo/100/100.jpg', date: 'Dec 12, 2024', status: 'deposit', amount: 1500 },
-  { id: 2, project: 'Bank Account Withdrawal', client: 'Chase ****4242', avatar: 'https://picsum.photos/seed/chase/100/100.jpg', date: 'Dec 10, 2024', status: 'withdrawal', amount: 2000 },
+  { id: 2, project: 'Stripe Instant Withdrawal', client: 'Stripe Payout', avatar: 'https://picsum.photos/seed/stripe/100/100.jpg', date: 'Dec 10, 2024', status: 'withdrawal', amount: 2000 },
   { id: 3, project: 'Real-Time Analytics Dashboard', client: 'Frame.io', avatar: 'https://picsum.photos/seed/frameio/100/100.jpg', date: 'Dec 05, 2024', status: 'deposit', amount: 3000 },
   { id: 4, project: 'Backend API Developer', client: 'Innovatech', avatar: 'https://picsum.photos/seed/innovatech/100/100.jpg', date: 'Dec 01, 2024', status: 'deposit', amount: 2800 },
   { id: 5, project: 'PayPal Withdrawal', client: 'd.benson@email.com', avatar: 'https://picsum.photos/seed/paypal/100/100.jpg', date: 'Nov 28, 2024', status: 'withdrawal', amount: 1500 },
   { id: 6, project: 'SEO Specialist for SaaS', client: 'Flutterwave', avatar: 'https://picsum.photos/seed/flutterwave/100/100.jpg', date: 'Nov 20, 2024', status: 'deposit', amount: 1100 }
+];
+
+const initialPayoutMethods: PayoutMethodItem[] = [
+  { id: 'm1', type: 'stripe', label: 'Stripe Connect', detail: 'acct_1N9z8247xP9a', isDefault: true, status: 'active' },
+  { id: 'm2', type: 'bank', label: 'Bank Account (ACH / Wire)', detail: 'Chase ****4242', status: 'verified' },
+  { id: 'm3', type: 'paypal', label: 'PayPal Account', detail: 'd.benson@email.com', status: 'verified' },
+  { id: 'm4', type: 'payoneer', label: 'Payoneer Wallet', detail: 'daniel.b@payoneer.com', status: 'verified' },
+  { id: 'm5', type: 'wise', label: 'Wise (TransferWise)', detail: 'USD Account ****8812', status: 'verified' },
+  { id: 'm6', type: 'crypto', label: 'USDT (TRC20 Wallet)', detail: '0x71C...4f9', status: 'verified' }
 ];
 
 interface ToastState {
@@ -39,12 +59,22 @@ interface ToastState {
 export default function EarningsPage() {
   const { user } = useAuthStore();
   const [txnList, setTxnList] = useState<TransactionItem[]>(initialTransactions);
+  const [payoutMethods, setPayoutMethods] = useState<PayoutMethodItem[]>(initialPayoutMethods);
   const [activeFilter, setActiveFilter] = useState<TxnStatus>('all');
   const [balancesVisible, setBalancesVisible] = useState(true);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isAddPayoutOpen, setIsAddPayoutOpen] = useState(false);
+  
+  // Withdrawal Form State
   const [withdrawAmount, setWithdrawAmount] = useState('');
-  const [withdrawMethod, setWithdrawMethod] = useState('Bank Account (Chase ****4242)');
+  const [selectedPayoutMethodId, setSelectedPayoutMethodId] = useState('m1');
+
+  // Add Payout Method Form State
+  const [selectedPlatform, setSelectedPlatform] = useState<PayoutType>('stripe');
+  const [accountHolder, setAccountHolder] = useState('');
+  const [accountIdentifier, setAccountIdentifier] = useState('');
+  const [cryptoNetwork, setCryptoNetwork] = useState('TRC20');
+
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -57,15 +87,43 @@ export default function EarningsPage() {
   const handleWithdrawSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!withdrawAmount) return;
-    showToast('Withdrawal Initiated', `Your withdrawal of $${withdrawAmount} will arrive in 1-3 business days`);
+    const method = payoutMethods.find(m => m.id === selectedPayoutMethodId);
+    const speed = method?.type === 'stripe' ? 'instant (1-5 mins)' : method?.type === 'crypto' ? 'instant (Blockchain)' : '1-3 business days';
+    
+    showToast('Withdrawal Initiated', `Transfer of $${withdrawAmount} via ${method?.label || 'Payout'} initiated. Arrival: ${speed}.`);
     setIsWithdrawOpen(false);
     setWithdrawAmount('');
   };
 
   const handleAddPayoutSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('Payout Method Added', 'Your new payout method has been verified');
+    const platformNames: Record<PayoutType, string> = {
+      stripe: 'Stripe Express',
+      bank: 'Bank Account',
+      paypal: 'PayPal',
+      payoneer: 'Payoneer Wallet',
+      wise: 'Wise Account',
+      crypto: `Crypto Wallet (${cryptoNetwork})`
+    };
+
+    const newMethod: PayoutMethodItem = {
+      id: `m_${Date.now()}`,
+      type: selectedPlatform,
+      label: platformNames[selectedPlatform],
+      detail: accountIdentifier || `${accountHolder || 'Verified'}`,
+      status: 'active'
+    };
+
+    setPayoutMethods(prev => [newMethod, ...prev]);
+    showToast('Payout Method Added', `${newMethod.label} linked successfully!`);
     setIsAddPayoutOpen(false);
+    setAccountHolder('');
+    setAccountIdentifier('');
+  };
+
+  const removePayoutMethod = (id: string) => {
+    setPayoutMethods(prev => prev.filter(m => m.id !== id));
+    showToast('Removed', 'Payout method has been unlinked');
   };
 
   const filteredTxns = txnList.filter(t => {
@@ -73,6 +131,17 @@ export default function EarningsPage() {
     if (activeFilter === 'withdrawal') return t.status === 'withdrawal';
     return true;
   });
+
+  const getPlatformIcon = (type: PayoutType) => {
+    switch (type) {
+      case 'stripe': return <CreditCard className="w-5 h-5 text-indigo-400" />;
+      case 'bank': return <Building2 className="w-5 h-5 text-slate-300" />;
+      case 'paypal': return <Coins className="w-5 h-5 text-blue-400" />;
+      case 'payoneer': return <Globe className="w-5 h-5 text-orange-400" />;
+      case 'wise': return <Zap className="w-5 h-5 text-lime-400" />;
+      case 'crypto': return <Wallet className="w-5 h-5 text-emerald-400" />;
+    }
+  };
 
   return (
     <div className="space-y-6 pb-8">
@@ -90,7 +159,7 @@ export default function EarningsPage() {
               Payments & Earnings<span style={{ color: 'var(--primary)' }}>.</span>
             </h1>
             <p className="text-sm mt-1.5" style={{ color: 'var(--muted)' }}>
-              Manage your balance, view transaction history, and withdraw funds.
+              Manage your balances, link global payout platforms (Stripe, PayPal, Payoneer, Wise, Crypto), and withdraw instantly.
             </p>
           </div>
 
@@ -119,7 +188,7 @@ export default function EarningsPage() {
             <div className="text-3xl font-extrabold tracking-tight text-emerald-600" style={{ fontFamily: "'Sora', sans-serif" }}>
               {balancesVisible ? '$4,560' : '•••••'}
             </div>
-            <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>Ready for withdrawal</div>
+            <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>Ready for instant withdrawal</div>
           </div>
 
           <div className="gd-card gd-stat-card p-5">
@@ -163,7 +232,7 @@ export default function EarningsPage() {
         </div>
       </section>
 
-      {/* Main Content Grid (Transactions + Payout & Tax Info) */}
+      {/* Main Content Grid */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-up">
         {/* Left Column: Transaction History (2 Cols) */}
         <div className="lg:col-span-2 gd-card flex flex-col overflow-hidden">
@@ -192,13 +261,13 @@ export default function EarningsPage() {
 
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-3 text-[10px] font-bold tracking-widest uppercase border-b" style={{ background: 'var(--bg-alt)', color: 'var(--soft)', borderColor: 'var(--border)' }}>
-            <div className="col-span-6">PROJECT / CLIENT</div>
+            <div className="col-span-6">PROJECT / CLIENT / PLATFORM</div>
             <div className="col-span-3">DATE</div>
             <div className="col-span-3 text-right">AMOUNT</div>
           </div>
 
           {/* Transaction Items List */}
-          <div className="divide-y overflow-y-auto max-h-[480px]" style={{ borderColor: 'var(--border)' }}>
+          <div className="divide-y overflow-y-auto max-h-[540px]" style={{ borderColor: 'var(--border)' }}>
             {filteredTxns.length === 0 ? (
               <div className="p-8 text-center" style={{ color: 'var(--muted)' }}>No transactions found</div>
             ) : (
@@ -229,67 +298,65 @@ export default function EarningsPage() {
           </div>
         </div>
 
-        {/* Right Column: Payout Methods & Tax Information */}
+        {/* Right Column: Global Payout Platforms, Tax Info & Escrow Protection */}
         <div className="space-y-6 flex flex-col">
-          {/* Payout Methods Card */}
+          {/* Payout Platforms Card */}
           <div className="gd-card p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-base" style={{ fontFamily: "'Sora', sans-serif" }}>Payout Methods</h3>
+              <div>
+                <h3 className="font-bold text-base" style={{ fontFamily: "'Sora', sans-serif" }}>Payout Platforms</h3>
+                <p className="text-[11px]" style={{ color: 'var(--muted)' }}>Stripe, Bank, PayPal, Payoneer, Wise, Crypto</p>
+              </div>
               <button
                 onClick={() => setIsAddPayoutOpen(true)}
-                className="text-xs font-bold text-emerald-600 hover:underline"
+                className="btn-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1"
               >
-                Add New
+                <Plus className="w-3.5 h-3.5" />
+                <span>Link Method</span>
               </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="p-4 rounded-xl border flex items-center gap-3 bg-[var(--bg-alt)]" style={{ borderColor: 'var(--border)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-slate-900 text-white font-bold flex-shrink-0">
-                  <Building2 className="w-5 h-5" />
+            <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+              {payoutMethods.map((m) => (
+                <div key={m.id} className="p-3.5 rounded-xl border flex items-center gap-3 bg-[var(--bg-alt)] hover:border-emerald-500/40 transition-colors" style={{ borderColor: 'var(--border)' }}>
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-slate-900 flex-shrink-0">
+                    {getPlatformIcon(m.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-xs truncate" style={{ color: 'var(--text)' }}>{m.label}</div>
+                    <div className="text-[11px] truncate" style={{ color: 'var(--muted)' }}>{m.detail}</div>
+                  </div>
+                  {m.isDefault ? (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-emerald-500/10 text-emerald-600">Default</span>
+                  ) : (
+                    <button
+                      onClick={() => removePayoutMethod(m.id)}
+                      className="text-slate-400 hover:text-red-500 p-1 transition-colors"
+                      title="Unlink Platform"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-xs truncate">Bank Account (USD)</div>
-                  <div className="text-[11px] truncate" style={{ color: 'var(--muted)' }}>Chase ****4242</div>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-emerald-500/10 text-emerald-600">Active</span>
-              </div>
-
-              <div className="p-4 rounded-xl border flex items-center gap-3 bg-[var(--bg-alt)]" style={{ borderColor: 'var(--border)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-500 text-white font-bold flex-shrink-0">
-                  <Coins className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-xs truncate">PayPal</div>
-                  <div className="text-[11px] truncate" style={{ color: 'var(--muted)' }}>d.benson@email.com</div>
-                </div>
-                <button
-                  onClick={() => showToast('Removed', 'PayPal account unlinked')}
-                  className="btn-danger px-2.5 py-1 rounded text-[10px] font-bold"
-                >
-                  Remove
-                </button>
-              </div>
+              ))}
             </div>
           </div>
 
           {/* Tax Information Card */}
-          <div className="gd-card p-6 flex-1 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-base" style={{ fontFamily: "'Sora', sans-serif" }}>Tax Information</h3>
-                <FileText className="w-4 h-4 text-[var(--soft)]" />
-              </div>
+          <div className="gd-card p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-base" style={{ fontFamily: "'Sora', sans-serif" }}>Tax Information</h3>
+              <FileText className="w-4 h-4 text-[var(--soft)]" />
+            </div>
 
-              <div className="p-4 rounded-xl space-y-2 mb-4 bg-[var(--bg-alt)]">
-                <div className="flex items-center justify-between text-xs">
-                  <span style={{ color: 'var(--muted)' }}>VAT / TAX ID</span>
-                  <span className="font-bold">NG-12345678</span>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span style={{ color: 'var(--muted)' }}>WITHHELD THIS YEAR</span>
-                  <span className="font-bold">$2,400</span>
-                </div>
+            <div className="p-4 rounded-xl space-y-2 mb-4 bg-[var(--bg-alt)]">
+              <div className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--muted)' }}>VAT / TAX ID</span>
+                <span className="font-bold">NG-12345678</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--muted)' }}>WITHHELD THIS YEAR</span>
+                <span className="font-bold">$2,400</span>
               </div>
             </div>
 
@@ -338,7 +405,7 @@ export default function EarningsPage() {
                 </div>
                 <div className="text-[11px] font-bold tracking-widest uppercase mb-1" style={{ color: 'var(--primary)' }}>PAYOUT</div>
                 <h2 className="font-extrabold text-2xl" style={{ fontFamily: "'Sora', sans-serif" }}>Withdraw Funds</h2>
-                <p className="text-xs mt-1" style={{ color: 'var(--muted)' }}>Transfer your available balance to your bank or PayPal.</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--muted)' }}>Select any linked payout platform to receive your funds instantly.</p>
               </div>
               <button
                 onClick={() => setIsWithdrawOpen(false)}
@@ -368,22 +435,25 @@ export default function EarningsPage() {
               </div>
 
               <div>
-                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>SELECT PAYOUT METHOD</label>
+                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>SELECT PAYOUT DESTINATION</label>
                 <select
-                  value={withdrawMethod}
-                  onChange={e => setWithdrawMethod(e.target.value)}
+                  value={selectedPayoutMethodId}
+                  onChange={e => setSelectedPayoutMethodId(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none cursor-pointer"
                   style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)', color: 'var(--text)' }}
                 >
-                  <option>Bank Account (Chase ****4242)</option>
-                  <option>PayPal (d.benson@email.com)</option>
+                  {payoutMethods.map(m => (
+                    <option key={m.id} value={m.id}>
+                      {m.label} ({m.detail})
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="p-4 rounded-xl flex items-center gap-3 bg-[var(--bg-alt)]">
                 <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                 <p className="text-xs" style={{ color: 'var(--muted)' }}>
-                  Transfers typically take 1-3 business days to appear in your account.
+                  Stripe & Crypto transfers arrive instantly (1-5 mins). Bank ACH transfers take 1-3 business days.
                 </p>
               </div>
 
@@ -407,7 +477,7 @@ export default function EarningsPage() {
         </div>
       )}
 
-      {/* Add Payout Method Modal */}
+      {/* Add / Link Payout Method Modal */}
       {isAddPayoutOpen && (
         <div
           className="modal-backdrop active"
@@ -420,12 +490,12 @@ export default function EarningsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-emerald-500">
-                    <Building2 className="w-4 h-4 text-white" />
+                    <Globe className="w-4 h-4 text-white" />
                   </div>
                   <div className="getidone-text text-sm dark"><span className="geti">Geti</span><span className="done">Done</span></div>
                 </div>
-                <div className="text-[11px] font-bold tracking-widest uppercase mb-1" style={{ color: 'var(--primary)' }}>NEW METHOD</div>
-                <h2 className="font-extrabold text-2xl" style={{ fontFamily: "'Sora', sans-serif" }}>Add Payout Method</h2>
+                <div className="text-[11px] font-bold tracking-widest uppercase mb-1" style={{ color: 'var(--primary)' }}>GLOBAL PAYOUT PLATFORMS</div>
+                <h2 className="font-extrabold text-2xl" style={{ fontFamily: "'Sora', sans-serif" }}>Link Payout Platform</h2>
               </div>
               <button
                 onClick={() => setIsAddPayoutOpen(false)}
@@ -437,37 +507,133 @@ export default function EarningsPage() {
 
             <form onSubmit={handleAddPayoutSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>ACCOUNT HOLDER NAME</label>
-                <input
-                  type="text"
-                  placeholder="Daniel Benson"
-                  className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none"
-                  style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
-                  required
-                />
+                <label className="text-xs font-bold tracking-wider mb-2 block uppercase" style={{ color: 'var(--muted)' }}>SELECT PLATFORM TYPE</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'stripe', label: 'Stripe', icon: <CreditCard className="w-4 h-4 text-indigo-500" /> },
+                    { id: 'bank', label: 'Bank ACH', icon: <Building2 className="w-4 h-4 text-slate-700" /> },
+                    { id: 'paypal', label: 'PayPal', icon: <Coins className="w-4 h-4 text-blue-500" /> },
+                    { id: 'payoneer', label: 'Payoneer', icon: <Globe className="w-4 h-4 text-orange-500" /> },
+                    { id: 'wise', label: 'Wise', icon: <Zap className="w-4 h-4 text-lime-500" /> },
+                    { id: 'crypto', label: 'Crypto', icon: <Wallet className="w-4 h-4 text-emerald-500" /> }
+                  ].map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setSelectedPlatform(p.id as PayoutType)}
+                      className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
+                        selectedPlatform === p.id
+                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 shadow-sm'
+                          : 'border-[var(--border)] bg-[var(--bg-alt)] text-[var(--muted)] hover:text-[var(--text)]'
+                      }`}
+                    >
+                      {p.icon}
+                      <span>{p.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div>
-                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>ACCOUNT NUMBER</label>
-                <input
-                  type="text"
-                  placeholder="0123456789"
-                  className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none"
-                  style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
-                  required
-                />
-              </div>
+              {/* Dynamic Input Fields based on Platform */}
+              {selectedPlatform === 'stripe' && (
+                <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3">
+                  <div className="flex items-center gap-2 font-bold text-xs text-indigo-600">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Stripe Connect Instant Payouts</span>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Link your Stripe Account to receive direct payouts to your debit card or bank account worldwide within minutes.
+                  </p>
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>STRIPE ACCOUNT ID / EMAIL</label>
+                    <input
+                      type="text"
+                      placeholder="acct_1N9z... or email@domain.com"
+                      value={accountIdentifier}
+                      onChange={e => setAccountIdentifier(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none bg-white"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
-              <div>
-                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>ROUTING NUMBER</label>
-                <input
-                  type="text"
-                  placeholder="987654321"
-                  className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none"
-                  style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
-                  required
-                />
-              </div>
+              {selectedPlatform === 'bank' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>ACCOUNT HOLDER NAME</label>
+                    <input
+                      type="text"
+                      placeholder="Daniel Benson"
+                      value={accountHolder}
+                      onChange={e => setAccountHolder(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none"
+                      style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>ACCOUNT NUMBER / IBAN</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Chase ****4242 or DE89370400440532013000"
+                      value={accountIdentifier}
+                      onChange={e => setAccountIdentifier(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none"
+                      style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+
+              {(selectedPlatform === 'paypal' || selectedPlatform === 'payoneer' || selectedPlatform === 'wise') && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>
+                      {selectedPlatform.toUpperCase()} EMAIL / ID
+                    </label>
+                    <input
+                      type="email"
+                      placeholder={`your.${selectedPlatform}@domain.com`}
+                      value={accountIdentifier}
+                      onChange={e => setAccountIdentifier(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none"
+                      style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedPlatform === 'crypto' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>BLOCKCHAIN NETWORK</label>
+                    <select
+                      value={cryptoNetwork}
+                      onChange={e => setCryptoNetwork(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none bg-[var(--bg-alt)]"
+                    >
+                      <option value="TRC20">USDT (Tron TRC20)</option>
+                      <option value="ERC20">USDT / USDC (Ethereum ERC20)</option>
+                      <option value="SOL">USDC (Solana)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold tracking-wider mb-1 block uppercase" style={{ color: 'var(--muted)' }}>WALLET ADDRESS</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+                      value={accountIdentifier}
+                      onChange={e => setAccountIdentifier(e.target.value)}
+                      className="w-full px-4 py-2 rounded-xl text-sm border focus:outline-none"
+                      style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-3 pt-2">
                 <button
@@ -481,7 +647,7 @@ export default function EarningsPage() {
                   type="submit"
                   className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold"
                 >
-                  Add Method
+                  Link Platform
                 </button>
               </div>
             </form>
