@@ -8,7 +8,7 @@ import {
   Search, HelpCircle, Bell, ChevronDown, MessageSquareDashed, 
   Phone, Video, Info, Smile, Paperclip, Mic, Send, Trash2, 
   X, Users, Star, Plus, CheckCircle, XCircle, Monitor, 
-  MicOff, VideoOff, Play, Pause, Circle
+  MicOff, VideoOff, Play, Pause, Circle, Sparkles, ShieldCheck
 } from 'lucide-react';
 
 // ============ MOCK DATA ============
@@ -19,12 +19,22 @@ const availableMembers = [
   { id: 4, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', selected: false },
 ];
 
+type CustomOfferData = {
+  id: string;
+  title: string;
+  budget: number;
+  days: number;
+  desc: string;
+  status: 'pending' | 'accepted' | 'declined';
+};
+
 type Message = {
   type: 'sent' | 'received';
   text?: string;
   audio?: string;
   duration?: number;
   video?: string;
+  customOffer?: CustomOfferData;
   time: string;
   sender?: string;
 };
@@ -47,16 +57,25 @@ type Conversation = {
 const initialConversations: Conversation[] = [
   {
     id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg',
-    status: 'online', lastMsg: 'Perfect! I just uploaded the final logo files.', time: '12m',
+    status: 'online', lastMsg: 'Custom Offer: Brand Identity Package ($1,200)', time: '12m',
     unread: 2, starred: true, isGroup: false,
     messages: [
       { type: 'received', text: 'Hi John! I just finished the initial concepts for the brand identity.', time: '10:24 AM' },
       { type: 'received', text: 'Would love to get your feedback when you have a moment.', time: '10:24 AM' },
       { type: 'sent', text: 'Hey Sarah! Just looked at them. Concept 2 is really standing out to me.', time: '10:45 AM' },
       { type: 'sent', audio: 'mock-voice-note', duration: 12, time: '10:46 AM' },
-      { type: 'received', text: 'Amazing! I can refine that concept further. Should I proceed with variations?', time: '10:52 AM' },
-      { type: 'sent', text: "Yes, please do. Let's focus on Concept 2.", time: '11:00 AM' },
-      { type: 'received', text: 'Perfect! I just uploaded the final logo files.', time: '11:12 AM' },
+      {
+        type: 'received',
+        customOffer: {
+          id: 'off-1',
+          title: 'Brand Identity Package & Figma Assets',
+          budget: 1200,
+          days: 5,
+          desc: 'Includes 3 logo variations, color palette system, brand guidelines document, and exported vector SVG assets.',
+          status: 'pending'
+        },
+        time: '11:15 AM'
+      }
     ]
   },
   {
@@ -145,6 +164,11 @@ export default function MessagesPage() {
   // Modals & Toast
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [showMsgModal, setShowMsgModal] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [offerTitle, setOfferTitle] = useState('');
+  const [offerBudget, setOfferBudget] = useState<number | ''>(1200);
+  const [offerDays, setOfferDays] = useState<number | ''>(5);
+  const [offerDesc, setOfferDesc] = useState('');
   const [toast, setToast] = useState<{show: boolean; title: string; message: string}>({show: false, title: '', message: ''});
 
   // Derived state
@@ -158,6 +182,60 @@ export default function MessagesPage() {
     if (activeTab === 'groups') return match && c.isGroup;
     return match;
   });
+
+  const handleCreateOffer = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeMockId || !offerTitle || !offerBudget) return;
+
+    const newOfferMsg: Message = {
+      type: 'sent',
+      customOffer: {
+        id: 'off-' + Date.now(),
+        title: offerTitle,
+        budget: Number(offerBudget),
+        days: Number(offerDays) || 3,
+        desc: offerDesc || 'Custom milestone deliverable offer.',
+        status: 'pending'
+      },
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setConversations(prev => prev.map(c => c.id === activeMockId ? {
+      ...c,
+      lastMsg: `Custom Offer: ${offerTitle} ($${offerBudget})`,
+      messages: [...c.messages, newOfferMsg]
+    } : c));
+
+    setShowOfferModal(false);
+    setOfferTitle('');
+    setOfferDesc('');
+    showToast('Custom Offer Sent!', `Your offer for $${offerBudget} was sent to ${activeConv?.name}`);
+  };
+
+  const handleRespondOffer = (msgIdx: number, newStatus: 'accepted' | 'declined') => {
+    if (!activeMockId) return;
+
+    setConversations(prev => prev.map(c => {
+      if (c.id !== activeMockId) return c;
+      const updatedMsgs = [...c.messages];
+      if (updatedMsgs[msgIdx]?.customOffer) {
+        updatedMsgs[msgIdx] = {
+          ...updatedMsgs[msgIdx],
+          customOffer: {
+            ...updatedMsgs[msgIdx].customOffer!,
+            status: newStatus
+          }
+        };
+      }
+      return { ...c, messages: updatedMsgs };
+    }));
+
+    if (newStatus === 'accepted') {
+      showToast('Escrow Funded!', 'Offer accepted and contract funded with Escrow Protection.');
+    } else {
+      showToast('Offer Declined', 'The custom offer has been declined.');
+    }
+  };
 
   // Helpers
   const scrollToBottom = () => {
@@ -472,6 +550,14 @@ export default function MessagesPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowOfferModal(true)}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 hover:bg-emerald-500/20 transition-colors flex items-center gap-1.5"
+                    title="Send Custom Milestone Offer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Custom Offer</span>
+                  </button>
                   <button onClick={() => startCall('audio')} className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--border)] hover:bg-[var(--bg-alt)] transition-colors"><Phone className="w-4 h-4 text-[var(--text)]" /></button>
                   <button onClick={() => startCall('video')} className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--border)] hover:bg-[var(--bg-alt)] transition-colors"><Video className="w-4 h-4 text-[var(--text)]" /></button>
                   <button className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--border)] hover:bg-[var(--bg-alt)] transition-colors"><Info className="w-4 h-4 text-[var(--text)]" /></button>
@@ -489,6 +575,50 @@ export default function MessagesPage() {
                     {m.sender && <div className="text-[10px] font-bold mb-1 ml-1 text-[var(--secondary)]">{m.sender}</div>}
                     
                     <div className={`max-w-[70%] p-3.5 shadow-sm ${m.type === 'sent' ? 'bg-[var(--primary)] text-white rounded-[16px] rounded-br-[4px]' : 'bg-[var(--card)] border border-[var(--border)] text-[var(--text)] rounded-[16px] rounded-bl-[4px]'}`}>
+                      {m.customOffer ? (
+                        <div className="w-full space-y-3 min-w-[280px]">
+                          <div className="flex items-center justify-between border-b pb-2" style={{ borderColor: m.type === 'sent' ? 'rgba(255,255,255,0.2)' : 'var(--border)' }}>
+                            <div className="flex items-center gap-1.5">
+                              <Sparkles className="w-4 h-4 text-emerald-400" />
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider">CUSTOM OFFER</span>
+                            </div>
+                            <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase ${
+                              m.customOffer.status === 'accepted' ? 'bg-emerald-500 text-white' : m.customOffer.status === 'declined' ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'
+                            }`}>
+                              {m.customOffer.status}
+                            </span>
+                          </div>
+
+                          <div>
+                            <h4 className="font-extrabold text-base leading-snug">{m.customOffer.title}</h4>
+                            <p className="text-xs mt-1 leading-relaxed opacity-90">{m.customOffer.desc}</p>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2 border-t text-xs font-bold" style={{ borderColor: m.type === 'sent' ? 'rgba(255,255,255,0.2)' : 'var(--border)' }}>
+                            <span>Budget: ${m.customOffer.budget}</span>
+                            <span>Delivery: {m.customOffer.days} Days</span>
+                          </div>
+
+                          {m.customOffer.status === 'pending' && m.type === 'received' && (
+                            <div className="flex gap-2 pt-2">
+                              <button
+                                onClick={() => handleRespondOffer(i, 'accepted')}
+                                className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-xl text-xs font-extrabold shadow-md transition-colors flex items-center justify-center gap-1.5"
+                              >
+                                <ShieldCheck className="w-4 h-4" />
+                                <span>Accept & Fund Escrow (${m.customOffer.budget})</span>
+                              </button>
+                              <button
+                                onClick={() => handleRespondOffer(i, 'declined')}
+                                className="px-3 py-2 bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-xl text-xs font-bold transition-colors"
+                              >
+                                Decline
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ) : null}
+
                       {m.text && <p className="text-sm whitespace-pre-wrap">{m.text}</p>}
                       
                       {m.audio && (
@@ -716,6 +846,82 @@ export default function MessagesPage() {
               <button onClick={() => setShowMsgModal(false)} className="px-5 py-2 rounded-xl font-bold text-sm hover:bg-[var(--border)] transition-colors">Cancel</button>
               <button onClick={() => { setShowMsgModal(false); showToast('Message Sent', 'Your message is on its way'); }} className="px-5 py-2 rounded-xl font-bold text-sm bg-[var(--primary)] text-white flex items-center gap-2 hover:opacity-90 transition-opacity"><Send className="w-4 h-4"/> Send</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Offer Modal */}
+      {showOfferModal && (
+        <div className="fixed inset-0 z-[1100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[var(--card)] w-full max-w-lg rounded-2xl border border-[var(--border)] overflow-hidden shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[var(--border)]">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-bold">Create Custom Milestone Offer</h3>
+              </div>
+              <button onClick={() => setShowOfferModal(false)} className="text-[var(--muted)] hover:text-[var(--text)]"><X className="w-5 h-5" /></button>
+            </div>
+
+            <form onSubmit={handleCreateOffer} className="p-6 space-y-4">
+              <div>
+                <label className="text-xs font-bold text-[var(--muted)] uppercase mb-1.5 block">OFFER TITLE</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Full Stack E-commerce Integration"
+                  value={offerTitle}
+                  onChange={e => setOfferTitle(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-alt)] outline-none focus:border-emerald-500 text-sm"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-[var(--muted)] uppercase mb-1.5 block">MILESTONE BUDGET ($)</label>
+                  <input
+                    type="number"
+                    placeholder="1200"
+                    value={offerBudget}
+                    onChange={e => setOfferBudget(e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-alt)] outline-none focus:border-emerald-500 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-[var(--muted)] uppercase mb-1.5 block">DELIVERY TIME (DAYS)</label>
+                  <input
+                    type="number"
+                    placeholder="5"
+                    value={offerDays}
+                    onChange={e => setOfferDays(e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-alt)] outline-none focus:border-emerald-500 text-sm"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-[var(--muted)] uppercase mb-1.5 block">SCOPE & DELIVERABLES</label>
+                <textarea
+                  rows={3}
+                  placeholder="Describe key deliverables, acceptance criteria, and what will be completed..."
+                  value={offerDesc}
+                  onChange={e => setOfferDesc(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg-alt)] outline-none focus:border-emerald-500 text-sm resize-none"
+                  required
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3 border-t border-[var(--border)]">
+                <button type="button" onClick={() => setShowOfferModal(false)} className="px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[var(--border)] transition-colors">Cancel</button>
+                <button type="submit" className="btn-primary px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Send Offer</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

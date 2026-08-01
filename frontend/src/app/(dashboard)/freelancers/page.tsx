@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import {
   ChevronRight, Search, SlidersHorizontal, UserPlus, Star, MapPin,
   MessageSquare, DollarSign, Handshake, Bookmark, Users, Check, X,
-  Briefcase
+  Briefcase, Sparkles, Calendar, ShieldCheck
 } from 'lucide-react';
 import { useFreelancers } from '@/features/matching/hooks/useFreelancers';
 
@@ -131,6 +131,11 @@ export default function FreelancersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedHireTalent, setSelectedHireTalent] = useState<FreelancerItem | null>(null);
+  const [showConsultModal, setShowConsultModal] = useState(false);
+  const [selectedConsultTalent, setSelectedConsultTalent] = useState<FreelancerItem | null>(null);
+  const [consultDate, setConsultDate] = useState('');
+  const [consultTime, setConsultTime] = useState('10:00 AM');
+  const [consultDuration, setConsultDuration] = useState<'30' | '60'>('30');
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -149,6 +154,14 @@ export default function FreelancersPage() {
     if (toastTimer.current) clearTimeout(toastTimer.current);
     setToastState({ title, msg, visible: true });
     toastTimer.current = setTimeout(() => setToastState(t => ({ ...t, visible: false })), 3200);
+  };
+
+  const handleBookConsultation = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedConsultTalent || !consultDate) return;
+    const fee = consultDuration === '30' ? Math.round(selectedConsultTalent.rate * 0.6) : selectedConsultTalent.rate;
+    showToast('Consultation Booked!', `Your ${consultDuration}-min strategy session with ${selectedConsultTalent.name} on ${consultDate} ($${fee}) has been scheduled.`);
+    setShowConsultModal(false);
   };
 
   // Combine real API data with fallback
@@ -444,7 +457,19 @@ export default function FreelancersPage() {
                     ${f.rate}<span className="text-xs font-medium" style={{ color: 'var(--muted)' }}>/hr</span>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedConsultTalent(f);
+                      setShowConsultModal(true);
+                    }}
+                    className="btn-ghost px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5"
+                    title="Book 1-on-1 Strategy Consultation"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Consult</span>
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -654,6 +679,120 @@ export default function FreelancersPage() {
                   className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold"
                 >
                   Send Offer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 1-on-1 Consultation Booking Modal */}
+      {showConsultModal && selectedConsultTalent && (
+        <div
+          className="modal-backdrop active"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowConsultModal(false);
+          }}
+        >
+          <div className="modal-content p-7 max-w-lg">
+            <div className="flex items-start justify-between mb-5 pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-6 h-6 rounded-md flex items-center justify-center bg-emerald-500 text-white text-xs font-bold">
+                    <Calendar className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-[10px] font-bold tracking-widest text-emerald-600 uppercase">1-ON-1 CONSULTATION</span>
+                </div>
+                <h2 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  Book Strategy Session
+                </h2>
+                <div className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
+                  With <span className="font-bold text-[var(--text)]">{selectedConsultTalent.name}</span> (${selectedConsultTalent.rate}/hr)
+                </div>
+              </div>
+              <button
+                onClick={() => setShowConsultModal(false)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleBookConsultation} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>SESSION DURATION</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setConsultDuration('30')}
+                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                      consultDuration === '30' ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 font-bold' : 'border-[var(--border)] bg-[var(--bg-alt)] text-[var(--muted)]'
+                    }`}
+                  >
+                    <div className="text-xs font-bold">30 Minutes</div>
+                    <div className="text-base font-extrabold mt-1">${Math.round(selectedConsultTalent.rate * 0.6)}</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setConsultDuration('60')}
+                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                      consultDuration === '60' ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 font-bold' : 'border-[var(--border)] bg-[var(--bg-alt)] text-[var(--muted)]'
+                    }`}
+                  >
+                    <div className="text-xs font-bold">60 Minutes</div>
+                    <div className="text-base font-extrabold mt-1">${selectedConsultTalent.rate}</div>
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>DATE</label>
+                  <input
+                    type="date"
+                    value={consultDate}
+                    onChange={e => setConsultDate(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>PREFERRED TIME</label>
+                  <select
+                    value={consultTime}
+                    onChange={e => setConsultTime(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none cursor-pointer"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                  >
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="02:00 PM">02:00 PM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>100% of consultation fee is credited toward project escrow if you hire within 14 days.</span>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowConsultModal(false)}
+                  className="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Confirm & Schedule</span>
                 </button>
               </div>
             </form>

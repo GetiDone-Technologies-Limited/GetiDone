@@ -11,7 +11,7 @@ import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
   FileText, BarChart2, Users2, Settings, Plus, CheckCircle2, ChevronLeft,
-  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket, LogOut, User
+  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket, LogOut, User, Package
 } from 'lucide-react';
 
 interface SidebarLink {
@@ -29,6 +29,7 @@ const links: SidebarLink[] = [
   { href: '/freelancer', label: 'Dashboard', icon: <Home className="w-5 h-5" />, roles: ['FREELANCER'], section: 'MAIN' },
   
   { href: '/jobs/search', label: 'Find Jobs', icon: <Search className="w-5 h-5" />, roles: ['FREELANCER'], section: 'MAIN' },
+  { href: '/services', label: 'Service Packages', icon: <Package className="w-5 h-5" />, section: 'MAIN' },
   { href: '/proposals', label: 'My Proposals', icon: <FileText className="w-5 h-5" />, badge: 12, roles: ['FREELANCER'], section: 'MAIN' },
   { href: '/freelancer/projects', label: 'Active Projects', icon: <Folder className="w-5 h-5" />, badge: 4, roles: ['FREELANCER'], section: 'MAIN' },
   
