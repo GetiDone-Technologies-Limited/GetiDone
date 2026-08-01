@@ -102,7 +102,7 @@ export default function RegisterPage() {
           <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 max-w-md relative">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-slate-800 overflow-hidden relative">
-                <Image src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah" fill className="object-cover" />
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah" className="w-full h-full object-cover" />
               </div>
               <div>
                 <p className="text-white font-bold">Sarah Jenkins</p>
