@@ -25,6 +25,9 @@ Current SampleAssets → Next.js page mapping:
 | Contracts.html          | frontend/src/app/(dashboard)/contracts/page.tsx          |
 | ClientFreelancer.html   | frontend/src/app/(dashboard)/freelancers/page.tsx         |
 | SavedTalent.html        | frontend/src/app/(dashboard)/saved/page.tsx               |
+| Files.html              | frontend/src/app/(dashboard)/files/page.tsx               |
+| FreelancerProfileClientView.html | frontend/src/app/(dashboard)/freelancers/[id]/page.tsx |
+| ClientProfileFreelancerView.html | frontend/src/app/(dashboard)/profile/page.tsx           |
 
 ## Always Check for Existing Pages Before Updating
 Before writing or modifying any page or route file, always run a directory scan of the target folder.
