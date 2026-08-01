@@ -1,85 +1,66 @@
 'use client';
 
-import { Wallet, Briefcase, Send, Eye, TrendingUp } from 'lucide-react';
+import { DollarSign, Send, FileSignature, Zap } from 'lucide-react';
 import { useDashboardStats } from '@/features/dashboard/hooks/useDashboard';
-import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
-
-interface StatCardProps {
-  title: string;
-  value: string;
-  trend: string;
-  trendUp: boolean;
-  icon: React.ReactNode;
-  iconBgColor: string;
-  iconColor: string;
-}
-
-function StatCard({ title, value, trend, trendUp, icon, iconBgColor, iconColor }: StatCardProps) {
-  return (
-    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow min-h-[140px]">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-inner ${iconBgColor}`}>
-          <div className={iconColor}>{icon}</div>
-        </div>
-      </div>
-      <div>
-        <p className="text-4xl font-black text-slate-900 tracking-tight">{value}</p>
-        <p className="text-sm font-semibold text-slate-500 mb-3 mt-1">{title}</p>
-        <p className={`flex items-center text-xs font-bold ${trendUp ? 'text-[#00b259]' : 'text-red-500'}`}>
-          {trendUp ? <TrendingUp className="w-3.5 h-3.5 mr-1" /> : <TrendingUp className="w-3.5 h-3.5 rotate-180 mr-1" />}
-          {trend} <span className="text-slate-400 font-medium ml-1.5">from last month</span>
-        </p>
-      </div>
-    </div>
-  );
-}
 
 export function StatCardsRow() {
-  const { data: stats, isLoading } = useDashboardStats();
-
-  if (isLoading) {
-    return <div className="h-32 flex items-center justify-center"><LoadingSpinner size="md" /></div>;
-  }
+  const { data: stats } = useDashboardStats();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <StatCard 
-        title="Total Earnings"
-        value={`$${stats?.earnings?.toLocaleString() || 0}`}
-        trend="↑ 18%"
-        trendUp={true}
-        icon={<Wallet className="w-6 h-6" />}
-        iconBgColor="bg-[#00b259]/10"
-        iconColor="text-[#00b259]"
-      />
-      <StatCard 
-        title="Active Projects"
-        value={(stats?.activeProjects || 0).toString()}
-        trend="↑ 2"
-        trendUp={true}
-        icon={<Briefcase className="w-6 h-6" />}
-        iconBgColor="bg-purple-100"
-        iconColor="text-purple-600"
-      />
-      <StatCard 
-        title="Proposals Sent"
-        value={(stats?.proposalsCount || 0).toString()}
-        trend="↑ 6"
-        trendUp={true}
-        icon={<Send className="w-6 h-6" />}
-        iconBgColor="bg-orange-100"
-        iconColor="text-orange-500"
-      />
-      <StatCard 
-        title="Jobs Completed"
-        value={(stats?.jobsCompleted || 0).toString()}
-        trend="↑ 32%"
-        trendUp={true}
-        icon={<Eye className="w-6 h-6" />}
-        iconBgColor="bg-blue-100"
-        iconColor="text-blue-500"
-      />
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 fade-up">
+      <div className="gd-card gd-stat-card p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>EARNINGS (MONTH)</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--primary)' }}>
+            <DollarSign className="w-4 h-4" />
+          </div>
+        </div>
+        <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+          ${stats?.earnings?.toLocaleString() || '4,560'}
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>
+          <span className="font-bold text-emerald-600">+12.4%</span> vs last month
+        </div>
+      </div>
+
+      <div className="gd-card gd-stat-card p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>ACTIVE PROPOSALS</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--warning)' }}>
+            <Send className="w-4 h-4" />
+          </div>
+        </div>
+        <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+          {stats?.proposalsCount || 4}
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>2 awaiting response</div>
+      </div>
+
+      <div className="gd-card gd-stat-card p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>ACTIVE CONTRACTS</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(20,184,166,0.12)', color: 'var(--secondary)' }}>
+            <FileSignature className="w-4 h-4" />
+          </div>
+        </div>
+        <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+          {stats?.activeProjects || 2}
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>1 milestone due soon</div>
+      </div>
+
+      <div className="gd-card gd-stat-card p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>AVAILABLE CONNECTS</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(132,204,22,0.12)', color: 'var(--accent)' }}>
+            <Zap className="w-4 h-4" />
+          </div>
+        </div>
+        <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+          64
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>Resets in 12 days</div>
+      </div>
     </div>
   );
 }
-
