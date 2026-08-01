@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Link from 'next/link';
 import {
   CheckCircle2, MapPin, Clock, DollarSign, Star, Send, MessageSquare,
   Bookmark, MoreHorizontal, Briefcase, Calendar, ShieldCheck, Award,
-  ThumbsUp, Share2, Plus, Building, Users, ExternalLink, X, Check
+  ThumbsUp, Share2, Plus, ExternalLink, X, Check, Edit3, Eye, User
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -17,7 +18,6 @@ interface ToastState {
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState<'overview' | 'portfolio' | 'reviews' | 'employment'>('overview');
-  const [isSaved, setIsSaved] = useState(false);
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -33,14 +33,14 @@ export default function ProfilePage() {
     <div className="space-y-6 pb-8">
       {/* Profile Header Card */}
       <div className="gd-card overflow-hidden fade-up">
-        {/* Cover Photo */}
-        <div className="h-64 sm:h-72 bg-slate-200 relative overflow-hidden">
+        {/* Cover Photo Banner */}
+        <div className="h-64 sm:h-72 bg-slate-900 relative overflow-hidden">
           <img
             src="https://picsum.photos/seed/profilecover/1600/500"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-80"
             alt="Cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
         </div>
 
         {/* Avatar Wrap */}
@@ -58,13 +58,13 @@ export default function ProfilePage() {
         <div className="text-center px-6 pt-4 pb-6">
           <h1 className="text-3xl font-extrabold flex items-center justify-center gap-2" style={{ fontFamily: "'Sora', sans-serif" }}>
             <span>{user?.name || (isClientRole ? 'TechNova Inc.' : 'Daniel Benson')}</span>
-            <CheckCircle2 className="w-6 h-6 text-emerald-500 fill-emerald-500 text-white" />
+            <CheckCircle2 className="w-6 h-6 text-emerald-500 fill-emerald-500/20" />
           </h1>
 
           <p className="text-base mt-1.5 max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
             {isClientRole
               ? 'Pioneering next-generation enterprise SaaS and mobile application solutions.'
-              : 'Senior Full Stack Developer specializing in scalable web applications and agile product design.'}
+              : 'Senior Full Stack Developer specializing in scalable web applications, React ecosystem, and cloud architecture.'}
           </p>
 
           {/* Meta Details */}
@@ -72,40 +72,35 @@ export default function ProfilePage() {
             <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-[var(--soft)]" /> Lagos, Nigeria</span>
             <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-[var(--soft)]" /> Avg Response: &lt; 1hr</span>
             {!isClientRole && (
-              <span className="flex items-center gap-1.5"><DollarSign className="w-4 h-4 text-[var(--soft)]" /> Rate: $85/hr</span>
+              <span className="flex items-center gap-1.5"><DollarSign className="w-4 h-4 text-emerald-600" /> Rate: $85/hr</span>
             )}
             <span className="flex items-center gap-1.5"><Star className="w-4 h-4 fill-amber-400 text-amber-400" /> 4.9 (32 reviews)</span>
           </div>
 
           {/* Actions Bar */}
           <div className="flex flex-wrap justify-center gap-3 mt-6">
-            <button
-              onClick={() => showToast('Action', isClientRole ? 'Opening job post modal' : 'Opening job offer modal')}
+            <Link
+              href="/settings"
               className="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
             >
-              <Send className="w-4 h-4" />
-              <span>{isClientRole ? 'Post a Job' : 'Invite to Job'}</span>
-            </button>
+              <Edit3 className="w-4 h-4" />
+              <span>Edit Profile</span>
+            </Link>
 
             <button
-              onClick={() => showToast('Message', 'Opening chat window')}
+              onClick={() => showToast('Share', 'Profile link copied to clipboard')}
               className="btn-ghost px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>Message</span>
+              <Share2 className="w-4 h-4" />
+              <span>Share Profile</span>
             </button>
 
             <button
-              onClick={() => {
-                setIsSaved(!isSaved);
-                showToast('Shortlist', !isSaved ? 'Added to saved shortlist' : 'Removed from shortlist');
-              }}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all border ${
-                isSaved ? 'bg-amber-500/10 text-amber-600 border-amber-500/30' : 'btn-ghost'
-              }`}
+              onClick={() => showToast('Public View', 'Viewing profile as client sees it')}
+              className="btn-ghost px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"
             >
-              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-amber-500' : ''}`} />
-              <span>{isSaved ? 'Saved' : 'Save'}</span>
+              <Eye className="w-4 h-4" />
+              <span>Preview</span>
             </button>
           </div>
         </div>
@@ -159,7 +154,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Top Skills / Key Metrics Card */}
+          {/* Top Skills Card */}
           <div className="gd-card p-6">
             <h2 className="font-extrabold text-xl mb-4" style={{ fontFamily: "'Sora', sans-serif" }}>
               {isClientRole ? 'Company Stats' : 'Top Skills'}
@@ -206,7 +201,7 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Verifications & Badges Card */}
+          {/* Verifications Card */}
           <div className="gd-card p-6">
             <h2 className="font-extrabold text-xl mb-4" style={{ fontFamily: "'Sora', sans-serif" }}>Verifications</h2>
             <div className="space-y-3">
@@ -227,9 +222,9 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Right Column: Feed Posts / Projects */}
+        {/* Right Column: Work Feed / Timeline */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Post Card 1 */}
+          {/* Milestone Completed Post */}
           <div className="gd-card p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -246,9 +241,6 @@ export default function ProfilePage() {
                   <div className="text-xs" style={{ color: 'var(--muted)' }}>Posted 3 days ago · Milestone Completed</div>
                 </div>
               </div>
-              <button className="p-2 rounded-lg hover:bg-slate-100 text-[var(--soft)]">
-                <MoreHorizontal className="w-4 h-4" />
-              </button>
             </div>
 
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
@@ -271,7 +263,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Post Card 2 */}
+          {/* Client Review Feature Card */}
           <div className="gd-card p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -290,14 +282,14 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-[var(--bg-alt)] border border-l-4 border-l-emerald-500 space-y-2" style={{ borderColor: 'var(--border)' }}>
+            <div className="p-4 rounded-xl bg-[var(--bg-alt)] border-l-4 border-l-emerald-500 space-y-2" style={{ borderTop: '1px solid var(--border)', borderRight: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map(star => (
                   <Star key={star} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
                 <span className="text-xs font-bold ml-2">5.0 Star Rating</span>
               </div>
-              <p className="text-xs italic" style={{ color: 'var(--text)' }}>
+              <p className="text-xs italic leading-relaxed" style={{ color: 'var(--text)' }}>
                 "Daniel is one of the most reliable engineers we have worked with on GetiDone. He built our full React architecture cleanly and handled all API edge cases."
               </p>
               <div className="text-[11px] font-semibold text-[var(--muted)]">— TechNova Product Lead</div>
