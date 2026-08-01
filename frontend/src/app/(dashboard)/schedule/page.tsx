@@ -3,7 +3,8 @@
 import { useState, useRef } from 'react';
 import {
   ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, Clock,
-  Check, X, Link as LinkIcon, AlertCircle, Sparkles, CheckCircle2
+  Check, X, Link as LinkIcon, AlertCircle, Sparkles, CheckCircle2,
+  Globe, RefreshCw, ExternalLink, Download, ShieldCheck, Bell, Radio
 } from 'lucide-react';
 
 /* ==================== TYPES & CONFIG ==================== */
@@ -13,9 +14,10 @@ interface CalendarEvent {
   id: number;
   title: string;
   date: string; // YYYY-MM-DD
-  time: string;
+  time: string; // HH:mm
   type: EventType;
   project?: string;
+  googleSynced?: boolean;
 }
 
 interface ToastState {
@@ -23,6 +25,22 @@ interface ToastState {
   msg: string;
   visible: boolean;
 }
+
+interface TimezoneOption {
+  code: string;
+  label: string;
+  offset: number; // offset in hours relative to UTC
+}
+
+const timezones: TimezoneOption[] = [
+  { code: 'PST', label: 'Pacific Time (UTC-8)', offset: -8 },
+  { code: 'EST', label: 'Eastern Time (UTC-5)', offset: -5 },
+  { code: 'GMT', label: 'Greenwich Mean Time (UTC+0)', offset: 0 },
+  { code: 'CET', label: 'Central European Time (UTC+1)', offset: 1 },
+  { code: 'WAT', label: 'West Africa Time (UTC+1 / Lagos)', offset: 1 },
+  { code: 'JST', label: 'Japan Standard Time (UTC+9)', offset: 9 },
+  { code: 'AEST', label: 'Australian Eastern Time (UTC+10)', offset: 10 },
+];
 
 const eventTypeConfig: Record<EventType, { bg: string; text: string; label: string; dotColor: string }> = {
   meeting: { bg: 'rgba(16,185,129,0.15)', text: 'var(--primary)', label: 'Meeting', dotColor: '#10B981' },
@@ -37,8 +55,24 @@ export default function CalendarPage() {
   const [selectedEventType, setSelectedEventType] = useState<EventType>('meeting');
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Google Calendar & Timezone State
+  const [isGoogleConnected, setIsGoogleConnected] = useState(true);
+  const [lastSyncedTime, setLastSyncedTime] = useState('2 minutes ago');
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [selectedTz, setSelectedTz] = useState<TimezoneOption>(timezones[1]); // Default EST (UTC-5)
+
+  // Sync Preferences
+  const [syncPreferences, setSyncPreferences] = useState({
+    deadlines: true,
+    milestones: true,
+    meetings: true,
+    escrowAlerts: true,
+    autoReminders: true,
+  });
 
   // Form State
   const [eventTitle, setEventTitle] = useState('');
@@ -49,14 +83,14 @@ export default function CalendarPage() {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
-  // Initial Events
+  // Initial Events with Google Sync Status
   const [events, setEvents] = useState<CalendarEvent[]>([
-    { id: 1, title: 'Team Standup', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-12`, time: '09:00', type: 'meeting', project: 'E-commerce Redesign' },
-    { id: 2, title: 'Logo Concepts Review', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-15`, time: '14:30', type: 'milestone', project: 'Brand Identity Design' },
-    { id: 3, title: 'SEO Audit Due', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-18`, time: '17:00', type: 'deadline', project: 'SEO Optimization' },
-    { id: 4, title: 'Client Demo', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-20`, time: '11:00', type: 'meeting', project: 'Mobile App Development' },
-    { id: 5, title: 'Gym Session', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-22`, time: '18:00', type: 'personal' },
-    { id: 6, title: 'API Integration Complete', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-28`, time: '12:00', type: 'milestone', project: 'E-commerce Redesign' },
+    { id: 1, title: 'Team Standup', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-12`, time: '09:00', type: 'meeting', project: 'E-commerce Redesign', googleSynced: true },
+    { id: 2, title: 'Logo Concepts Review', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-15`, time: '14:30', type: 'milestone', project: 'Brand Identity Design', googleSynced: true },
+    { id: 3, title: 'SEO Audit Due', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-18`, time: '17:00', type: 'deadline', project: 'SEO Optimization', googleSynced: true },
+    { id: 4, title: 'Client Demo', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-20`, time: '11:00', type: 'meeting', project: 'Mobile App Development', googleSynced: true },
+    { id: 5, title: 'Gym Session', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-22`, time: '18:00', type: 'personal', googleSynced: false },
+    { id: 6, title: 'API Integration Complete', date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-28`, time: '12:00', type: 'milestone', project: 'E-commerce Redesign', googleSynced: true },
   ]);
 
   const showToast = (title: string, msg: string) => {
@@ -74,6 +108,16 @@ export default function CalendarPage() {
     showToast('Calendar', 'Jumped to today');
   };
 
+  const handleManualGoogleSync = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+      setLastSyncedTime('Just now');
+      setEvents(prev => prev.map(e => ({ ...e, googleSynced: true })));
+      showToast('Google Calendar Synced', `All ${events.length} events synced across ${selectedTz.code} timezone`);
+    }, 1200);
+  };
+
   const handleCreateEvent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventTitle || !eventDate) {
@@ -88,6 +132,7 @@ export default function CalendarPage() {
       time: eventTime || '09:00',
       type: selectedEventType,
       project: eventProject || undefined,
+      googleSynced: isGoogleConnected,
     };
 
     setEvents(prev => [...prev, newEv]);
@@ -96,7 +141,13 @@ export default function CalendarPage() {
     setEventTime('09:00');
     setEventProject('');
     setIsModalOpen(false);
-    showToast('Event Created', `${eventTitle} added to your calendar`);
+
+    showToast(
+      'Event Created',
+      isGoogleConnected
+        ? `${eventTitle} added & synced with Google Calendar (${selectedTz.code})`
+        : `${eventTitle} added to your local calendar`
+    );
 
     // Change month to created event's date
     const d = new Date(eventDate);
@@ -134,17 +185,50 @@ export default function CalendarPage() {
             Calendar & Schedule<span style={{ color: 'var(--primary)' }}>.</span>
           </h1>
           <p className="text-sm mt-1.5" style={{ color: 'var(--muted)' }}>
-            Manage meetings, deadlines, and milestones across projects.
+            Manage meetings, deadlines, and milestones synced with Google Calendar and timezones.
           </p>
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Create Event</span>
-        </button>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Timezone Selector */}
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)]">
+            <Globe className="w-4 h-4 text-[var(--primary)]" />
+            <select
+              value={selectedTz.code}
+              onChange={(e) => {
+                const tz = timezones.find(t => t.code === e.target.value) || timezones[1];
+                setSelectedTz(tz);
+                showToast('Timezone Updated', `Displaying all project deadlines in ${tz.label}`);
+              }}
+              className="bg-transparent text-xs font-bold outline-none cursor-pointer text-[var(--text)]"
+            >
+              {timezones.map(t => (
+                <option key={t.code} value={t.code}>{t.code} ({t.label.split(' ')[0]})</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Google Sync Button */}
+          <button
+            onClick={() => setIsSyncModalOpen(true)}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all border ${
+              isGoogleConnected
+                ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/20'
+                : 'btn-ghost'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-500" />
+            <span>Google Sync: {isGoogleConnected ? 'Active' : 'Off'}</span>
+          </button>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create Event</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Grid Layout */}
@@ -180,6 +264,10 @@ export default function CalendarPage() {
             </div>
 
             <div className="flex items-center gap-3">
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-[var(--bg-alt)] text-[var(--muted)] flex items-center gap-1">
+                <Clock className="w-3 h-3 text-[var(--primary)]" /> Timezone: {selectedTz.code}
+              </span>
+
               <div className="flex bg-[var(--bg-alt)] p-1 rounded-xl">
                 {(['month', 'week', 'day'] as const).map(mode => (
                   <button
@@ -261,13 +349,16 @@ export default function CalendarPage() {
                           key={e.id}
                           onClick={(evt) => {
                             evt.stopPropagation();
-                            showToast(e.title, `${e.date} at ${e.time} · ${e.project || cfg.label}`);
+                            showToast(e.title, `${e.date} at ${e.time} (${selectedTz.code}) · ${e.project || cfg.label}`);
                           }}
                           className="px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 truncate transition-transform hover:scale-[1.02]"
                           style={{ background: cfg.bg, color: cfg.text }}
                         >
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: cfg.dotColor }}></span>
                           <span className="truncate">{e.time} {e.title}</span>
+                          {e.googleSynced && (
+                            <Sparkles className="w-2.5 h-2.5 ml-auto text-emerald-500 flex-shrink-0" title="Synced with Google Calendar" />
+                          )}
                         </div>
                       );
                     })}
@@ -285,6 +376,34 @@ export default function CalendarPage() {
 
         {/* Right: Side Panel */}
         <div className="space-y-6 flex flex-col">
+          {/* Google Sync Status Box */}
+          <div className="gd-card p-5 bg-gradient-to-br from-[#0A0F0D] to-[#131A16] text-white">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                  G
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm" style={{ fontFamily: "'Sora', sans-serif" }}>Google Calendar Sync</h3>
+                  <p className="text-[11px] text-slate-400">Timezone: {selectedTz.label}</p>
+                </div>
+              </div>
+              <button
+                onClick={handleManualGoogleSync}
+                disabled={isSyncing}
+                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all text-emerald-400"
+                title="Sync Now"
+              >
+                <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between text-xs pt-2 border-t border-white/10">
+              <span className="text-slate-400">Status: <span className="text-emerald-400 font-bold">Connected</span></span>
+              <span className="text-slate-400">Last sync: {lastSyncedTime}</span>
+            </div>
+          </div>
+
           {/* Mini Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className="gd-card p-4">
@@ -337,7 +456,7 @@ export default function CalendarPage() {
                     return (
                       <div
                         key={e.id}
-                        onClick={() => showToast(e.title, `${e.date} at ${e.time}`)}
+                        onClick={() => showToast(e.title, `${e.date} at ${e.time} (${selectedTz.code})`)}
                         className="p-3 rounded-xl bg-[var(--bg-alt)] border border-transparent hover:border-[var(--primary)] hover:-translate-y-0.5 transition-all cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -350,10 +469,13 @@ export default function CalendarPage() {
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-bold truncate">{e.title}</div>
+                            <div className="text-sm font-bold truncate flex items-center gap-1.5">
+                              <span>{e.title}</span>
+                              {e.googleSynced && <Sparkles className="w-3 h-3 text-emerald-500 flex-shrink-0" title="Google Synced" />}
+                            </div>
                             <div className="text-[11px] mt-0.5 flex items-center gap-2" style={{ color: 'var(--muted)' }}>
                               <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3 text-[var(--soft)]" /> {e.time}
+                                <Clock className="w-3 h-3 text-[var(--soft)]" /> {e.time} ({selectedTz.code})
                               </span>
                               {e.project && (
                                 <span className="truncate flex items-center gap-1">
@@ -379,6 +501,164 @@ export default function CalendarPage() {
           </div>
         </div>
       </div>
+
+      {/* Google Calendar Sync Settings Modal */}
+      {isSyncModalOpen && (
+        <div
+          className="modal-backdrop active"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsSyncModalOpen(false);
+          }}
+        >
+          <div className="modal-content p-7">
+            <div className="flex items-start justify-between mb-5">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-white bg-emerald-500">
+                    G
+                  </div>
+                  <div className="getidone-text text-sm dark"><span className="geti">Geti</span><span className="done">Done</span></div>
+                </div>
+                <div className="text-[11px] font-bold tracking-widest uppercase mb-1" style={{ color: 'var(--primary)' }}>GOOGLE CALENDAR INTEGRATION</div>
+                <h2 className="font-extrabold text-2xl" style={{ fontFamily: "'Sora', sans-serif" }}>Google Calendar & Timezone Sync</h2>
+                <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>Automatically sync deadlines, milestones, and meetings across timezones.</p>
+              </div>
+              <button
+                onClick={() => setIsSyncModalOpen(false)}
+                className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {/* Connected Account */}
+              <div className="p-4 rounded-2xl bg-[var(--bg-alt)] border border-[var(--border)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center font-bold">
+                    G
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold flex items-center gap-1.5">
+                      <span>john.carter@gmail.com</span>
+                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                    </div>
+                    <div className="text-xs text-[var(--muted)]">Status: Connected & Auto-syncing</div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsGoogleConnected(!isGoogleConnected);
+                    showToast(isGoogleConnected ? 'Disconnected' : 'Connected', isGoogleConnected ? 'Google Calendar sync paused' : 'Google Calendar connected');
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
+                    isGoogleConnected ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' : 'btn-primary'
+                  }`}
+                >
+                  {isGoogleConnected ? 'Disconnect' : 'Connect'}
+                </button>
+              </div>
+
+              {/* Primary Timezone Setting */}
+              <div>
+                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>
+                  PRIMARY SYNC TIMEZONE
+                </label>
+                <div className="relative">
+                  <Globe className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--primary)]" />
+                  <select
+                    value={selectedTz.code}
+                    onChange={(e) => {
+                      const tz = timezones.find(t => t.code === e.target.value) || timezones[1];
+                      setSelectedTz(tz);
+                    }}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm border focus:outline-none cursor-pointer"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                  >
+                    {timezones.map(t => (
+                      <option key={t.code} value={t.code}>{t.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Notification Sync Preferences */}
+              <div>
+                <label className="text-xs font-bold tracking-wider mb-2 block uppercase" style={{ color: 'var(--muted)' }}>
+                  AUTOMATICALLY SYNC TO GOOGLE CALENDAR
+                </label>
+                <div className="space-y-2">
+                  {[
+                    { key: 'deadlines', label: 'Project Deadlines & Deliverable Dates' },
+                    { key: 'milestones', label: 'Milestone Review & Escrow Release Days' },
+                    { key: 'meetings', label: 'Team Standups & Client Video Calls' },
+                    { key: 'autoReminders', label: 'Google Push Notifications (15m before event)' },
+                  ].map(pref => (
+                    <label key={pref.key} className="flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)] cursor-pointer hover:border-[var(--primary)] transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={(syncPreferences as any)[pref.key]}
+                        onChange={(e) => setSyncPreferences(p => ({ ...p, [pref.key]: e.target.checked }))}
+                        className="rounded text-emerald-500 focus:ring-emerald-400 w-4 h-4"
+                      />
+                      <span className="text-xs font-semibold" style={{ color: 'var(--text)' }}>{pref.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Feed Link / ICS Export */}
+              <div className="pt-2">
+                <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>
+                  ICAL / WEBCAL SUBSCRIPTION LINK
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value="webcal://getidone.io/calendar/feed.ics?token=usr_7f8a92"
+                    className="flex-1 px-3 py-2 rounded-xl text-xs font-mono border"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText('webcal://getidone.io/calendar/feed.ics?token=usr_7f8a92');
+                      showToast('Copied!', 'iCal subscription URL copied to clipboard');
+                    }}
+                    className="btn-ghost px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1"
+                  >
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSyncModalOpen(false)}
+                  className="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleManualGoogleSync();
+                    setIsSyncModalOpen(false);
+                  }}
+                  className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  <span>Sync Now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create Event Modal */}
       {isModalOpen && (
@@ -436,7 +716,7 @@ export default function CalendarPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>TIME</label>
+                  <label className="text-xs font-bold tracking-wider mb-1.5 block uppercase" style={{ color: 'var(--muted)' }}>TIME ({selectedTz.code})</label>
                   <input
                     type="time"
                     value={eventTime}
@@ -496,7 +776,7 @@ export default function CalendarPage() {
                   type="submit"
                   className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold"
                 >
-                  Add Event
+                  Add Event & Sync
                 </button>
               </div>
             </form>
