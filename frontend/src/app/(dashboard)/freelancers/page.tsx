@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ChevronRight, Search, SlidersHorizontal, UserPlus, Star, MapPin,
   MessageSquare, DollarSign, Handshake, Bookmark, Users, Check, X,
@@ -122,6 +123,7 @@ const mockFreelancers: FreelancerItem[] = [
 
 /* ==================== MAIN COMPONENT ==================== */
 export default function FreelancersPage() {
+  const router = useRouter();
   const { data: apiFreelancers, isLoading } = useFreelancers();
 
   // Active filter state
@@ -369,7 +371,8 @@ export default function FreelancersPage() {
           filteredFreelancers.map((f) => (
             <div
               key={f.id}
-              className="gd-card p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40"
+              onClick={() => router.push(`/freelancers/${f.id}`)}
+              className="gd-card p-6 flex flex-col justify-between relative overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 cursor-pointer"
             >
               {/* Top Accent Gradient Bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -443,14 +446,20 @@ export default function FreelancersPage() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => showToast('Message', `Opening chat with ${f.name}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      showToast('Message', `Opening chat with ${f.name}`);
+                    }}
                     className="btn-ghost w-9 h-9 rounded-lg flex items-center justify-center text-xs"
                     title="Message"
                   >
                     <MessageSquare className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => setSelectedHireTalent(f)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedHireTalent(f);
+                    }}
                     className="btn-primary px-4 py-2 rounded-lg text-xs font-bold"
                   >
                     Hire
