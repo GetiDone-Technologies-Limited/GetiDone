@@ -23,6 +23,7 @@ Current SampleAssets → Next.js page mapping:
 | Reports.html            | frontend/src/app/(dashboard)/reports/page.tsx             |
 | Calendar.html           | frontend/src/app/(dashboard)/schedule/page.tsx            |
 | Contracts.html          | frontend/src/app/(dashboard)/contracts/page.tsx          |
+| ClientFreelancer.html   | frontend/src/app/(dashboard)/freelancers/page.tsx         |
 
 ## Always Check for Existing Pages Before Updating
 Before writing or modifying any page or route file, always run a directory scan of the target folder.

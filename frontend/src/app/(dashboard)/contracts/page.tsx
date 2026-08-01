@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import {
   FileSignature, Search, Plus, Layers, CheckCircle2, Clock,
-  PenTool, Flag, Tag, Check, X, Download, MessageSquare, Paperplane,
+  PenTool, Flag, Tag, Check, X, Download, MessageSquare, Send,
   ChevronRight, ArrowUpRight
 } from 'lucide-react';
 
@@ -644,7 +644,7 @@ export default function ContractsPage() {
                   }}
                   className="flex-1 btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
                 >
-                  <Paperplane className="w-4 h-4" /> Send for Signature
+                  <Send className="w-4 h-4" /> Send for Signature
                 </button>
               )}
               <button
