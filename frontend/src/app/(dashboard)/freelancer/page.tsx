@@ -152,15 +152,17 @@ export default function FreelancerDashboardPage() {
 
         <div className="gd-card gd-stat-card p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>ACTIVE PROPOSALS</span>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--warning)' }}>
-              <Send className="w-4 h-4" />
+            <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>DONESCORE™ RANK</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-500/10 text-emerald-500">
+              <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
-            4
+          <div className="text-3xl font-extrabold tracking-tight text-emerald-600 flex items-center gap-1.5" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <span>98.4%</span>
           </div>
-          <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>2 awaiting response</div>
+          <div className="text-[11px] mt-1 font-extrabold text-emerald-600 flex items-center gap-1">
+            <span>VERIFIED EXECUTIONER</span>
+          </div>
         </div>
 
         <div className="gd-card gd-stat-card p-5">
@@ -178,15 +180,15 @@ export default function FreelancerDashboardPage() {
 
         <div className="gd-card gd-stat-card p-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>AVAILABLE CONNECTS</span>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(132,204,22,0.12)', color: 'var(--accent)' }}>
-              <Zap className="w-4 h-4" />
+            <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>ACTIVE PROPOSALS</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--warning)' }}>
+              <Send className="w-4 h-4" />
             </div>
           </div>
           <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
-            64
+            4
           </div>
-          <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>Resets in 12 days</div>
+          <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>2 awaiting response</div>
         </div>
       </section>
 
@@ -260,6 +262,80 @@ export default function FreelancerDashboardPage() {
               <span style={{ color: 'var(--muted)' }}>Invitations</span>
               <span className="ml-auto font-bold">8</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DoneScore™ Performance & Telemetry Analysis Widget */}
+      <section className="gd-card p-6 border shadow-sm fade-up" style={{ borderColor: 'rgba(16,185,129,0.3)', background: 'linear-gradient(135deg, var(--card) 0%, rgba(16,185,129,0.03) 100%)' }}>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 flex items-center justify-center">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>DoneScore™ Performance Breakdown</h2>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-white shadow-sm">TOP 2% TIER</span>
+              </div>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
+                Real-time telemetry analysis derived from Playwright QA test suites, Git commits, and milestone timeliness.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <div className="text-2xl font-black text-emerald-500" style={{ fontFamily: "'Sora', sans-serif" }}>98.4 / 100</div>
+              <div className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Verified Rank</div>
+            </div>
+          </div>
+        </div>
+
+        {/* 4 Pillars Breakdown Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-4 rounded-xl border bg-[var(--bg-alt)] space-y-2" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center justify-between text-xs font-extrabold">
+              <span className="text-[var(--text)]">1. QA Test Pass Rate</span>
+              <span className="text-emerald-500 font-bold">99.2%</span>
+            </div>
+            <div className="progress-track h-2">
+              <div className="progress-fill bg-emerald-500" style={{ width: '99.2%' }} />
+            </div>
+            <p className="text-[10px] text-[var(--muted)]">48 / 49 Playwright & Jest sandbox test suites passed on first run</p>
+          </div>
+
+          <div className="p-4 rounded-xl border bg-[var(--bg-alt)] space-y-2" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center justify-between text-xs font-extrabold">
+              <span className="text-[var(--text)]">2. Milestone Timeliness</span>
+              <span className="text-teal-500 font-bold">97.8%</span>
+            </div>
+            <div className="progress-track h-2">
+              <div className="progress-fill bg-teal-500" style={{ width: '97.8%' }} />
+            </div>
+            <p className="text-[10px] text-[var(--muted)]">Avg deliverable submitted 1.4 days before milestone deadline</p>
+          </div>
+
+          <div className="p-4 rounded-xl border bg-[var(--bg-alt)] space-y-2" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center justify-between text-xs font-extrabold">
+              <span className="text-[var(--text)]">3. Git Telemetry Sync</span>
+              <span className="text-cyan-500 font-bold">98.0%</span>
+            </div>
+            <div className="progress-track h-2">
+              <div className="progress-fill bg-cyan-500" style={{ width: '98.0%' }} />
+            </div>
+            <p className="text-[10px] text-[var(--muted)]">Active daily commit logging verified across 14 connected repos</p>
+          </div>
+
+          <div className="p-4 rounded-xl border bg-[var(--bg-alt)] space-y-2" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center justify-between text-xs font-extrabold">
+              <span className="text-[var(--text)]">4. Client Reviews</span>
+              <span className="text-amber-500 font-bold">4.95 / 5</span>
+            </div>
+            <div className="progress-track h-2">
+              <div className="progress-fill bg-amber-500" style={{ width: '99%' }} />
+            </div>
+            <p className="text-[10px] text-[var(--muted)]">24 5-star ratings with 100% recommendation score</p>
           </div>
         </div>
       </section>

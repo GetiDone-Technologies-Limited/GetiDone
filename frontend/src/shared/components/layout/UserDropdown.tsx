@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuthStore } from '@/store/auth.store';
-import { LogOut, User, Settings, ChevronDown } from 'lucide-react';
+import { LogOut, User, Settings, ChevronDown, ShieldCheck } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -51,8 +51,9 @@ export function UserDropdown() {
               <p className="text-sm font-display font-bold truncate" style={{ color: 'var(--text)' }}>{user.name}</p>
               <p className="text-xs truncate" style={{ color: 'var(--muted)' }}>{user.email}</p>
             </div>
-            <div className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase mt-1" style={{ background: 'var(--bg-alt)', color: 'var(--primary)' }}>
-              {user.role}
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+              <ShieldCheck className="w-3 h-3 text-emerald-500" />
+              <span>98.4% DoneScore™</span>
             </div>
           </div>
           <div className="p-2 flex flex-col gap-1">

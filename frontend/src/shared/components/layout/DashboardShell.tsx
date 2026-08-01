@@ -18,12 +18,13 @@ export function DashboardShell({ children }: DashboardShellProps) {
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-16 items-center justify-between px-8 flex-shrink-0" style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }}>
-          <div className="flex items-center flex-1 gap-4">
+        <header className="flex h-16 items-center justify-between px-4 sm:px-8 flex-shrink-0" style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }}>
+          <div className="flex items-center flex-1 gap-3 sm:gap-4">
             <button
               onClick={toggleSidebar}
-              className="rounded-lg p-2 transition-colors lift"
+              className="rounded-lg p-2 transition-colors lift hover:bg-[var(--bg-alt)]"
               style={{ color: 'var(--muted)' }}
+              title="Toggle Menu"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -44,9 +45,9 @@ export function DashboardShell({ children }: DashboardShellProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button className="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift">
-              <HelpCircle className="w-5 h-5" style={{ color: 'var(--muted)' }} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="btn-ghost w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center lift">
+              <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--muted)' }} />
             </button>
             <MessageDropdown />
             <NotificationDropdown />
@@ -56,7 +57,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-8" style={{ background: 'var(--bg)' }}>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8" style={{ background: 'var(--bg)' }}>
           <div className="w-full h-full">
             {children}
           </div>

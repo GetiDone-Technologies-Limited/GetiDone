@@ -76,14 +76,23 @@ export function Sidebar() {
   const toolLinks = visibleLinks.filter(l => l.section === 'TOOLS');
 
   return (
-    <aside className={`relative flex h-full flex-col text-slate-300 transition-all duration-300 z-50 ${sidebarOpen ? 'w-[280px]' : 'w-20 shrink-0'}`} style={{ background: 'radial-gradient(circle at top left, #131A16 0%, #0A0F0D 100%)', borderRight: '1px solid var(--border)' }}>
-      {/* Collapse Toggle Button */}
-      <button 
-        onClick={toggleSidebar}
-        className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-white border border-slate-700 shadow-md hover:bg-primary hover:border-primary transition-colors lift"
-      >
-        <ChevronLeft className={`h-4 w-4 transition-transform duration-300 ${!sidebarOpen ? 'rotate-180' : ''}`} />
-      </button>
+    <>
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div
+          onClick={toggleSidebar}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
+        />
+      )}
+
+      <aside className={`fixed md:relative inset-y-0 left-0 flex h-full flex-col text-slate-300 transition-all duration-300 z-50 ${sidebarOpen ? 'w-[280px] translate-x-0' : 'w-20 -translate-x-full md:translate-x-0 shrink-0'}`} style={{ background: 'radial-gradient(circle at top left, #131A16 0%, #0A0F0D 100%)', borderRight: '1px solid var(--border)' }}>
+        {/* Collapse Toggle Button */}
+        <button 
+          onClick={toggleSidebar}
+          className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-white border border-slate-700 shadow-md hover:bg-primary hover:border-primary transition-colors lift"
+        >
+          <ChevronLeft className={`h-4 w-4 transition-transform duration-300 ${!sidebarOpen ? 'rotate-180' : ''}`} />
+        </button>
       
       {/* Logo Area */}
       <div className={`pt-6 px-6 pb-6 shrink-0 ${!sidebarOpen && 'px-2 flex flex-col items-center'}`}>
@@ -239,9 +248,15 @@ export function Sidebar() {
           {sidebarOpen && (
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-bold text-white">{user?.name || 'Daniel Benson'}</p>
-              <p className="truncate text-xs text-slate-400">
-                {user?.email || 'daniel@example.com'}
-              </p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="truncate text-[11px] text-slate-400">
+                  {user?.email || 'daniel@example.com'}
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 mt-1 cursor-pointer hover:bg-emerald-500/25 transition-colors" title="DoneScore™ Analytics Rank: Verified Executioner">
+                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                <span>98.4% DoneScore™</span>
+              </div>
             </div>
           )}
         </div>
@@ -263,6 +278,7 @@ export function Sidebar() {
 
       <AddFundsModal isOpen={isAddFundsOpen} onClose={() => setIsAddFundsOpen(false)} />
     </aside>
+    </>
   );
 }
 
