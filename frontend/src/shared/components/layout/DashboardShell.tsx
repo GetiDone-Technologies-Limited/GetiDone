@@ -1,8 +1,6 @@
 import { Sidebar } from './Sidebar';
 import { useUIStore } from '@/store/ui.store';
-import { Search, Bell, MessageSquare, ChevronDown } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Search, HelpCircle } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
 import { MessageDropdown } from './MessageDropdown';
 import { UserDropdown } from './UserDropdown';
@@ -16,46 +14,43 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const { toggleSidebar } = useUIStore();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 font-sans">
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
       <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden bg-[#f4f7f6]">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
-          <div className="flex items-center flex-1">
+        <header className="flex h-16 items-center justify-between px-8 flex-shrink-0" style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }}>
+          <div className="flex items-center flex-1 gap-4">
             <button
               onClick={toggleSidebar}
-              className="mr-2 rounded-lg p-2 text-slate-500 hover:bg-slate-100 transition-colors"
+              className="rounded-lg p-2 transition-colors lift"
+              style={{ color: 'var(--muted)' }}
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            
+
             <DashboardNavControls />
-            
+
             {/* Search */}
             <div className="relative w-full max-w-md hidden md:block">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Search className="h-4 w-4 text-slate-400" />
-              </div>
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--soft)' }} />
               <input
                 type="text"
-                placeholder="Search for projects, freelancers..."
-                className="block w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 pl-10 pr-12 text-sm placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                placeholder="Search projects, files, freelancers..."
+                className="search-input w-full pl-11 pr-14 py-2.5 rounded-xl text-sm"
               />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                <div className="flex items-center rounded border border-slate-200 bg-white px-1.5 py-0.5">
-                  <span className="text-[10px] font-semibold text-slate-500">⌘K</span>
-                </div>
-              </div>
+              <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded border" style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}>⌘K</kbd>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Icons */}
+          <div className="flex items-center gap-3">
+            <button className="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift">
+              <HelpCircle className="w-4 h-4" style={{ color: 'var(--muted)' }} />
+            </button>
             <MessageDropdown />
             <NotificationDropdown />
-            <div className="w-px h-8 bg-slate-200 mx-2 hidden md:block"></div>
+            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
             <UserDropdown />
           </div>
         </header>
@@ -70,4 +65,3 @@ export function DashboardShell({ children }: DashboardShellProps) {
     </div>
   );
 }
-

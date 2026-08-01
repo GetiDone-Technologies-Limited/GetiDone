@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Projects — GetiDone</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://z-cdn-media.chatglm.cn/files/ff6aace7-1d03-429f-8d3c-4a7e8d8aed5e.png" type="image/png">
+<style>
+  :root {
+    --bg: #F8FAF9;
+    --bg-alt: #EFF4F1;
+    --sidebar: #0A0F0D;
+    --sidebar-hover: #131A16;
+    --card: #FFFFFF;
+    --primary: #10B981;
+    --primary-dark: #059669;
+    --primary-light: #34D399;
+    --secondary: #14B8A6;
+    --accent: #84CC16;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --text: #0F1A14;
+    --muted: #5A6B62;
+    --soft: #94A39A;
+    --border: #E2EAE5;
+    --sidebar-text: #7A8A82;
+  }
+  
+  * { -webkit-font-smoothing: antialiased; }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden; /* Prevent body scroll */
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.07) 0%, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .font-display { font-family: 'Sora', sans-serif; }
+  
+  .getidone-text {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .getidone-text .geti { color: #FFFFFF; }
+  .getidone-text .done { color: #10B981; }
+  .getidone-text.dark .geti { color: #5A6B62; }
+  
+  /* Layout wrapper */
+  .app-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background: var(--sidebar);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.14) 0%, transparent 50%),
+      linear-gradient(180deg, #0A0F0D 0%, #060A08 100%);
+    position: relative;
+    width: 250px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent);
+  }
+  
+  .nav-item {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  .nav-item:hover {
+    background: var(--sidebar-hover);
+    color: #FFFFFF;
+    transform: translateX(2px);
+  }
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+    color: #FFFFFF;
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 3px;
+    background: var(--primary);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 12px var(--primary);
+  }
+  .nav-item.active i { color: var(--primary); }
+  
+  /* Main Area */
+  .main-area {
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .stat-mini {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-mini::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle, var(--glow, rgba(16, 185, 129, 0.15)) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .stat-mini:hover::after { opacity: 1; }
+  .stat-mini:hover {
+    transform: translateY(-2px);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 12px 40px -12px rgba(15, 26, 20, 0.12);
+  }
+  
+  /* Project card */
+  .project-card {
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -16px rgba(15, 26, 20, 0.18);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .project-card:hover::before { transform: scaleX(1); }
+  
+  /* List view */
+  .project-row {
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .project-row:hover {
+    background: var(--bg-alt);
+    transform: translateX(4px);
+  }
+  
+  /* Progress */
+  .progress-track {
+    background: var(--bg-alt);
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    position: relative;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* Buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.5); }
+  .btn-primary > * { position: relative; z-index: 1; }
+  
+  .btn-ghost {
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  
+  /* Filter chips */
+  .filter-chip {
+    cursor: pointer;
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .filter-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .filter-chip.active {
+    background: var(--sidebar);
+    color: white;
+    border-color: var(--sidebar);
+  }
+  .filter-chip.active .chip-count {
+    background: var(--primary);
+    color: white;
+  }
+  .chip-count {
+    background: var(--bg-alt);
+    color: var(--muted);
+    padding: 1px 7px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  
+  /* View toggle */
+  .view-toggle {
+    display: flex;
+    background: var(--bg-alt);
+    border-radius: 10px;
+    padding: 3px;
+  }
+  .view-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .view-btn.active {
+    background: var(--card);
+    color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  
+  /* Select */
+  .select-wrap {
+    position: relative;
+  }
+  .select-wrap select {
+    appearance: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 8px 36px 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .select-wrap select:hover {
+    border-color: var(--primary);
+  }
+  .select-wrap::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 10px;
+    pointer-events: none;
+  }
+  
+  /* Search */
+  .search-input {
+    background: var(--bg-alt);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .search-input:focus {
+    background: var(--card);
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  }
+  
+  /* Avatar */
+  .avatar-stack > * + * { margin-left: -8px; }
+  .avatar {
+    border: 2px solid var(--card);
+    border-radius: 50%;
+    background: var(--bg-alt);
+  }
+  
+  /* Status pills */
+  .status-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .status-pill .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  
+  /* Live dot */
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    position: relative;
+  }
+  .live-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--success);
+    opacity: 0.4;
+    animation: live-pulse 1.8s infinite;
+  }
+  @keyframes live-pulse {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  
+  /* Notif dot */
+  .notif-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 2px solid var(--card);
+  }
+  .notif-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--primary);
+    opacity: 0.4;
+    animation: live-pulse 1.8s infinite;
+  }
+  
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 8, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-content {
+    background: var(--card);
+    border-radius: 24px;
+    max-width: 540px;
+    width: calc(100% - 32px);
+    max-height: 88vh;
+    overflow-y: auto;
+    transform: scale(0.94) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 30px 80px -20px rgba(15, 26, 20, 0.4);
+  }
+  .modal-backdrop.active .modal-content {
+    transform: scale(1) translateY(0);
+  }
+  
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--sidebar);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px -12px rgba(15, 26, 20, 0.4);
+    z-index: 200;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 360px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+  .toast.show { transform: translateX(0); }
+  .toast-icon {
+    width: 32px; height: 32px;
+    background: var(--primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--soft); }
+  
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .fade-in { animation: fadeIn 0.4s ease both; }
+  
+  /* Lift */
+  .lift { transition: transform 0.2s; }
+  .lift:hover { transform: translateY(-1px); }
+  
+  /* Checkbox */
+  .checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    flex-shrink: 0;
+  }
+  .checkbox:hover { border-color: var(--primary); }
+  .checkbox.checked {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  .checkbox.checked::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 10px;
+  }
+  
+  /* Pagination */
+  .page-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .page-btn:hover:not(.disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .page-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  /* Bulk action bar */
+  .bulk-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--sidebar);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px -12px rgba(15, 26, 20, 0.5);
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .bulk-bar.show {
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  /* Category icon */
+  .cat-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  
+  /* List view table */
+  .list-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--soft);
+    text-transform: uppercase;
+    padding: 0 16px;
+  }
+
+  /* Responsive padding */
+  @media (max-width: 1024px) {
+    .main-area { padding: 24px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-area { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar py-6 px-4 z-20">
+    <div class="px-3 mb-8 flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #10B981, #34D399); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+        <i class="fa-solid fa-arrow-up text-white text-sm font-bold"></i>
+      </div>
+      <div>
+        <div class="getidone-text text-lg leading-none">
+          <span class="geti">Geti</span><span class="done">Done</span>
+        </div>
+        <div class="text-[10px] tracking-widest" style="color: var(--sidebar-text);">CLIENT SPACE</div>
+      </div>
+    </div>
+
+    <button onclick="openModal('postJobModal')" class="btn-primary mx-2 mb-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+      <i class="fa-solid fa-plus text-xs"></i>
+      <span>Post a New Job</span>
+    </button>
+
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2" style="color: var(--sidebar-text);">MAIN</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='dashboard.html'">
+        <i class="fa-solid fa-grip w-4 text-center"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);">
+        <i class="fa-solid fa-folder-open w-4 text-center"></i>
+        <span>My Projects</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(16,185,129,0.15); color: var(--primary);">12</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Messages', 'You have 3 unread conversations')">
+        <i class="fa-solid fa-comment-dots w-4 text-center"></i>
+        <span>Messages</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(20,184,166,0.15); color: var(--secondary);">3</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Payments', 'Opening payment history')">
+        <i class="fa-solid fa-credit-card w-4 text-center"></i>
+        <span>Payments</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Team', 'Manage your team members')">
+        <i class="fa-solid fa-users w-4 text-center"></i>
+        <span>Team</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Reports', 'Generating analytics report')">
+        <i class="fa-solid fa-chart-line w-4 text-center"></i>
+        <span>Reports</span>
+      </a>
+
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2 mt-6" style="color: var(--sidebar-text);">TOOLS</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Calendar', 'Opening your calendar')">
+        <i class="fa-solid fa-calendar-days w-4 text-center"></i>
+        <span>Calendar</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Files', 'Browse your file library')">
+        <i class="fa-solid fa-folder w-4 text-center"></i>
+        <span>Files</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Settings', 'Account settings opened')">
+        <i class="fa-solid fa-gear w-4 text-center"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 mx-2 p-4 rounded-2xl relative overflow-hidden" style="background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(132,204,22,0.08)); border: 1px solid rgba(16,185,129,0.2);">
+      <div class="flex items-center gap-2 mb-1.5">
+        <i class="fa-solid fa-crown text-xs" style="color: var(--accent);"></i>
+        <span class="text-[11px] font-bold tracking-wider text-white">UPGRADE TO PRO</span>
+      </div>
+      <p class="text-[11px] leading-relaxed mb-3" style="color: var(--sidebar-text);">Unlock unlimited projects & priority support.</p>
+      <button onclick="showToast('Upgrade', 'Redirecting to upgrade page')" class="w-full py-2 rounded-lg text-[11px] font-bold text-white" style="background: var(--primary);">Upgrade Now</button>
+    </div>
+
+    <div class="mt-4 px-2 flex items-center gap-3 cursor-pointer hover:bg-white/5 p-2 rounded-lg transition" onclick="showToast('Profile', 'Opening your profile')">
+      <img src="https://picsum.photos/seed/johnavatar/100/100.jpg" class="w-9 h-9 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-white truncate">John Carter</div>
+        <div class="text-[11px] truncate" style="color: var(--sidebar-text);">john@getidone.io</div>
+      </div>
+      <i class="fa-solid fa-chevron-right text-xs" style="color: var(--sidebar-text);"></i>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main-area">
+    
+    <!-- Top bar -->
+    <header class="flex items-center justify-between mb-8 fade-up">
+      <div class="relative flex-1 max-w-xl">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-sm" style="color: var(--soft);"></i>
+        <input type="text" id="globalSearch" placeholder="Search projects, files, freelancers..." class="search-input w-full pl-11 pr-4 py-2.5 rounded-xl text-sm">
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded border" style="border-color: var(--border); color: var(--muted);">⌘K</kbd>
+      </div>
+      <div class="flex items-center gap-3 ml-6">
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift" onclick="showToast('Help Center', 'Opening help resources')">
+          <i class="fa-regular fa-circle-question text-sm"></i>
+        </button>
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift relative" onclick="showToast('Notifications', 'You have 5 new notifications')">
+          <i class="fa-regular fa-bell text-sm"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="w-px h-8" style="background: var(--border);"></div>
+        <button class="flex items-center gap-2 px-3 py-1.5 rounded-xl lift" onclick="showToast('Profile', 'John Carter — Premium Client')">
+          <img src="https://picsum.photos/seed/johnavatar/100/100.jpg" class="w-8 h-8 rounded-full object-cover">
+          <i class="fa-solid fa-chevron-down text-[10px]" style="color: var(--muted);"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="mb-6 fade-up" style="animation-delay: 0.05s;">
+      <div class="flex items-end justify-between flex-wrap gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-2 text-xs" style="color: var(--muted);">
+            <a onclick="window.location.href='dashboard.html'" class="cursor-pointer hover:text-emerald-600 transition">Dashboard</a>
+            <i class="fa-solid fa-chevron-right text-[8px]"></i>
+            <span style="color: var(--text); font-weight: 600;">My Projects</span>
+          </div>
+          <h1 class="font-display font-extrabold text-4xl tracking-tight">My Projects<span style="color: var(--primary);">.</span></h1>
+          <p class="text-sm mt-1.5" style="color: var(--muted);">Manage and track all your ongoing and completed work in one place.</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-ghost px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 lift" onclick="showToast('Import', 'Opening import dialog')">
+            <i class="fa-solid fa-file-import text-xs"></i>
+            Import
+          </button>
+          <button onclick="openModal('postJobModal')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>New Project</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Mini Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card stat-mini p-4" style="--glow: rgba(16,185,129,0.18);" onclick="filterByStatus('active')">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold tracking-wider" style="color: var(--muted);">ACTIVE</span>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(16,185,129,0.12); color: var(--primary);">
+              <i class="fa-solid fa-rocket text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-display font-extrabold">12</div>
+          <div class="text-[11px] mt-0.5" style="color: var(--soft);">In progress now</div>
+        </div>
+        <div class="card stat-mini p-4" style="--glow: rgba(245,158,11,0.18);" onclick="filterByStatus('review')">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold tracking-wider" style="color: var(--muted);">REVIEW</span>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(245,158,11,0.12); color: var(--warning);">
+              <i class="fa-solid fa-clipboard-check text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-display font-extrabold">5</div>
+          <div class="text-[11px] mt-0.5" style="color: var(--soft);">Awaiting feedback</div>
+        </div>
+        <div class="card stat-mini p-4" style="--glow: rgba(132,204,22,0.18);" onclick="filterByStatus('completed')">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold tracking-wider" style="color: var(--muted);">COMPLETED</span>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(132,204,22,0.12); color: var(--accent);">
+              <i class="fa-solid fa-check-double text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-display font-extrabold">8</div>
+          <div class="text-[11px] mt-0.5" style="color: var(--soft);">Successfully delivered</div>
+        </div>
+        <div class="card stat-mini p-4" style="--glow: rgba(20,184,166,0.18);" onclick="showToast('Total Budget', '$28,600 allocated across all projects')">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold tracking-wider" style="color: var(--muted);">TOTAL BUDGET</span>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(20,184,166,0.12); color: var(--secondary);">
+              <i class="fa-solid fa-sack-dollar text-xs"></i>
+            </div>
+          </div>
+          <div class="text-2xl font-display font-extrabold">$28,600</div>
+          <div class="text-[11px] mt-0.5" style="color: var(--soft);">$18,560 spent so far</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter Bar -->
+    <section class="mb-6 fade-up" style="animation-delay: 0.1s;">
+      <div class="filter-bar flex items-center justify-between gap-4 mb-4 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button class="filter-chip active" data-status="all" onclick="filterByStatus('all', this)">
+            <i class="fa-solid fa-layer-group text-[10px]"></i>
+            All Projects
+            <span class="chip-count">12</span>
+          </button>
+          <button class="filter-chip" data-status="active" onclick="filterByStatus('active', this)">
+            <span class="w-2 h-2 rounded-full" style="background: var(--primary);"></span>
+            Active
+            <span class="chip-count">12</span>
+          </button>
+          <button class="filter-chip" data-status="review" onclick="filterByStatus('review', this)">
+            <span class="w-2 h-2 rounded-full" style="background: var(--warning);"></span>
+            In Review
+            <span class="chip-count">5</span>
+          </button>
+          <button class="filter-chip" data-status="hold" onclick="filterByStatus('hold', this)">
+            <span class="w-2 h-2 rounded-full" style="background: var(--soft);"></span>
+            On Hold
+            <span class="chip-count">2</span>
+          </button>
+          <button class="filter-chip" data-status="completed" onclick="filterByStatus('completed', this)">
+            <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
+            Completed
+            <span class="chip-count">8</span>
+          </button>
+        </div>
+        
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="select-wrap">
+            <select id="categoryFilter" onchange="applyFilters()">
+              <option value="all">All Categories</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Design">Design</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Mobile">Mobile</option>
+            </select>
+          </div>
+          <div class="select-wrap">
+            <select id="sortBy" onchange="applyFilters()">
+              <option value="recent">Recently Updated</option>
+              <option value="deadline">Deadline (Soonest)</option>
+              <option value="budget-high">Budget (High to Low)</option>
+              <option value="budget-low">Budget (Low to High)</option>
+              <option value="progress">Progress (High to Low)</option>
+            </select>
+          </div>
+          <div class="view-toggle">
+            <div class="view-btn active" onclick="setView('grid', this)" title="Grid View">
+              <i class="fa-solid fa-grip"></i>
+            </div>
+            <div class="view-btn" onclick="setView('list', this)" title="List View">
+              <i class="fa-solid fa-list"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Selected count -->
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <div class="relative flex-1 min-w-[200px] max-w-sm">
+          <i class="fa-solid fa-filter absolute left-4 top-1/2 -translate-y-1/2 text-xs" style="color: var(--soft);"></i>
+          <input type="text" id="projectSearch" placeholder="Search by project name..." class="search-input w-full pl-11 pr-4 py-2 rounded-xl text-sm" oninput="applyFilters()">
+        </div>
+        <div class="flex items-center gap-3 text-xs" style="color: var(--muted);">
+          <span><span id="resultCount">12</span> projects found</span>
+          <div class="w-px h-4" style="background: var(--border);"></div>
+          <button class="hover:text-emerald-600 transition flex items-center gap-1" onclick="clearFilters()">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Container -->
+    <section class="flex-1 mb-6 fade-up" style="animation-delay: 0.15s;">
+      <div id="projectsContainer"></div>
+    </section>
+
+    <!-- Pagination -->
+    <section id="paginationSection" class="flex items-center justify-between pt-4 mb-2 fade-up" style="border-top: 1px solid var(--border);">
+      <div class="text-xs" style="color: var(--muted);">
+        Showing <span class="font-bold" style="color: var(--text);" id="showingStart">1</span>–<span class="font-bold" style="color: var(--text);" id="showingEnd">8</span> of <span class="font-bold" style="color: var(--text);" id="showingTotal">12</span> projects
+      </div>
+      <div class="flex items-center gap-1.5">
+        <div class="page-btn disabled" onclick="prevPage()">
+          <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        </div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn" onclick="showToast('Page 2', 'Loading page 2...')">2</div>
+        <div class="page-btn" onclick="showToast('Page 3', 'Loading page 3...')">3</div>
+        <div class="page-btn" onclick="nextPage()">
+          <i class="fa-solid fa-chevron-right text-[10px]"></i>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Post Job Modal -->
+<div class="modal-backdrop" id="postJobModal" onclick="if(event.target===this)closeModal('postJobModal')">
+  <div class="modal-content p-7">
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #10B981, #34D399);">
+            <i class="fa-solid fa-arrow-up text-white text-xs font-bold"></i>
+          </div>
+          <div class="getidone-text text-sm dark">
+            <span class="geti">Geti</span><span class="done">Done</span>
+          </div>
+        </div>
+        <div class="text-[11px] font-bold tracking-widest mb-1" style="color: var(--primary);">NEW PROJECT</div>
+        <h2 class="font-display font-extrabold text-2xl">Post a New Job</h2>
+        <p class="text-sm mt-1" style="color: var(--muted);">Tell us what you need — we'll match you with the right talent.</p>
+      </div>
+      <button onclick="closeModal('postJobModal')" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form onsubmit="event.preventDefault(); closeModal('postJobModal'); showToast('Project Created!', 'Your new project is now live and visible to freelancers');" class="space-y-4">
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">PROJECT TITLE</label>
+        <input type="text" placeholder="e.g. E-commerce Website Redesign" class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none focus:border-emerald-400" style="border-color: var(--border); background: var(--bg-alt);" required>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">CATEGORY</label>
+          <select class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none" style="border-color: var(--border); background: var(--bg-alt);">
+            <option>Web Development</option>
+            <option>Design</option>
+            <option>Marketing</option>
+            <option>Mobile</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">BUDGET</label>
+          <input type="text" placeholder="$5,000" class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none" style="border-color: var(--border); background: var(--bg-alt);">
+        </div>
+      </div>
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">DESCRIPTION</label>
+        <textarea rows="3" placeholder="Describe your project goals, scope, and deliverables..." class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none resize-none" style="border-color: var(--border); background: var(--bg-alt);" required></textarea>
+      </div>
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">DEADLINE</label>
+        <input type="date" class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none" style="border-color: var(--border); background: var(--bg-alt);">
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal('postJobModal')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold">Save Draft</button>
+        <button type="submit" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold">Publish Job</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Project Detail Modal -->
+<div class="modal-backdrop" id="projectModal" onclick="if(event.target===this)closeModal('projectModal')">
+  <div class="modal-content p-7">
+    <div id="projectModalContent"></div>
+  </div>
+</div>
+
+<!-- Bulk Action Bar -->
+<div class="bulk-bar" id="bulkBar">
+  <span class="text-sm font-bold"><span id="selectedCount">0</span> selected</span>
+  <div class="w-px h-6" style="background: rgba(255,255,255,0.1);"></div>
+  <button class="text-xs font-semibold flex items-center gap-1.5 hover:text-emerald-400 transition" onclick="showToast('Archive', 'Projects archived')">
+    <i class="fa-solid fa-box-archive text-[10px]"></i> Archive
+  </button>
+  <button class="text-xs font-semibold flex items-center gap-1.5 hover:text-emerald-400 transition" onclick="showToast('Export', 'Exporting selected projects')">
+    <i class="fa-solid fa-download text-[10px]"></i> Export
+  </button>
+  <button class="text-xs font-semibold flex items-center gap-1.5 hover:text-red-400 transition" onclick="showToast('Delete', 'Projects deleted')">
+    <i class="fa-solid fa-trash text-[10px]"></i> Delete
+  </button>
+  <div class="w-px h-6" style="background: rgba(255,255,255,0.1);"></div>
+  <button class="text-xs font-semibold hover:text-white transition" onclick="clearSelection()">Cancel</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon">
+    <i class="fa-solid fa-check text-white text-xs"></i>
+  </div>
+  <div>
+    <div class="text-sm font-bold" id="toastTitle">Success</div>
+    <div class="text-xs" id="toastMsg" style="color: var(--sidebar-text);">Action completed</div>
+  </div>
+</div>
+
+<script>
+  // ============ PROJECT DATA ============
+  const projects = [
+    {
+      id: 1,
+      title: 'E-commerce Website Redesign',
+      category: 'Web Development',
+      progress: 75,
+      budget: 4500,
+      spent: 3375,
+      deadline: 'Dec 15, 2024',
+      daysLeft: 6,
+      status: 'active',
+      team: ['marcus', 'sarah', 'alex'],
+      description: 'Complete redesign of the storefront with new product pages, checkout flow, and mobile optimization.',
+      milestones: 5,
+      milestonesDone: 3,
+      lastUpdate: '2 hours ago',
+      proposals: 12
+    },
+    {
+      id: 2,
+      title: 'Mobile App Development',
+      category: 'Mobile',
+      progress: 45,
+      budget: 8200,
+      spent: 3690,
+      deadline: 'Jan 20, 2025',
+      daysLeft: 42,
+      status: 'active',
+      team: ['marcus', 'jenny'],
+      description: 'Cross-platform mobile app with offline support, push notifications, and biometric authentication.',
+      milestones: 5,
+      milestonesDone: 2,
+      lastUpdate: '5 hours ago',
+      proposals: 8
+    },
+    {
+      id: 3,
+      title: 'Brand Identity Design',
+      category: 'Design',
+      progress: 90,
+      budget: 2800,
+      spent: 2520,
+      deadline: 'Nov 30, 2024',
+      daysLeft: -9,
+      status: 'review',
+      team: ['sarah'],
+      description: 'New brand identity including logo, color palette, typography, and brand guidelines document.',
+      milestones: 5,
+      milestonesDone: 4,
+      lastUpdate: '1 day ago',
+      proposals: 15
+    },
+    {
+      id: 4,
+      title: 'SEO Optimization',
+      category: 'Marketing',
+      progress: 30,
+      budget: 1500,
+      spent: 450,
+      deadline: 'Feb 10, 2025',
+      daysLeft: 63,
+      status: 'active',
+      team: ['alex', 'jenny'],
+      description: 'Technical SEO audit, keyword research, on-page optimization, and content strategy for 6 months.',
+      milestones: 5,
+      milestonesDone: 1,
+      lastUpdate: '3 hours ago',
+      proposals: 6
+    },
+    {
+      id: 5,
+      title: 'Content Strategy & Blog',
+      category: 'Marketing',
+      progress: 60,
+      budget: 3200,
+      spent: 1920,
+      deadline: 'Jan 5, 2025',
+      daysLeft: 27,
+      status: 'active',
+      team: ['jenny', 'alex'],
+      description: 'Comprehensive content strategy, editorial calendar, and 20 SEO-optimized blog posts.',
+      milestones: 6,
+      milestonesDone: 4,
+      lastUpdate: '1 hour ago',
+      proposals: 9
+    },
+    {
+      id: 6,
+      title: 'Logo & Visual Assets',
+      category: 'Design',
+      progress: 100,
+      budget: 1200,
+      spent: 1200,
+      deadline: 'Oct 15, 2024',
+      daysLeft: -55,
+      status: 'completed',
+      team: ['sarah'],
+      description: 'Logo design, icon set, and complete visual asset library for digital and print use.',
+      milestones: 4,
+      milestonesDone: 4,
+      lastUpdate: '1 month ago',
+      proposals: 18
+    },
+    {
+      id: 7,
+      title: 'API Integration & Backend',
+      category: 'Web Development',
+      progress: 55,
+      budget: 5800,
+      spent: 3190,
+      deadline: 'Dec 28, 2024',
+      daysLeft: 19,
+      status: 'active',
+      team: ['marcus', 'alex'],
+      description: 'RESTful API development, third-party integrations, and database optimization for scalability.',
+      milestones: 7,
+      milestonesDone: 4,
+      lastUpdate: '30 minutes ago',
+      proposals: 7
+    },
+    {
+      id: 8,
+      title: 'Social Media Campaign',
+      category: 'Marketing',
+      progress: 40,
+      budget: 2400,
+      spent: 960,
+      deadline: 'Jan 15, 2025',
+      daysLeft: 37,
+      status: 'hold',
+      team: ['jenny'],
+      description: 'Multi-platform social media campaign with content creation, scheduling, and performance analytics.',
+      milestones: 5,
+      milestonesDone: 2,
+      lastUpdate: '3 days ago',
+      proposals: 11
+    }
+  ];
+
+  // ============ STATE ============
+  let currentFilter = 'all';
+  let currentView = 'grid';
+  let selectedProjects = new Set();
+  
+  // ============ RENDER PROJECTS ============
+  function applyFilters() {
+    const search = document.getElementById('projectSearch').value.toLowerCase();
+    const category = document.getElementById('categoryFilter').value;
+    const sort = document.getElementById('sortBy').value;
+    
+    let filtered = projects.filter(p => {
+      const matchStatus = currentFilter === 'all' || p.status === currentFilter;
+      const matchSearch = p.title.toLowerCase().includes(search) || p.category.toLowerCase().includes(search);
+      const matchCategory = category === 'all' || p.category === category;
+      return matchStatus && matchSearch && matchCategory;
+    });
+    
+    // Sort
+    filtered.sort((a, b) => {
+      switch(sort) {
+        case 'deadline': return new Date(a.deadline) - new Date(b.deadline);
+        case 'budget-high': return b.budget - a.budget;
+        case 'budget-low': return a.budget - b.budget;
+        case 'progress': return b.progress - a.progress;
+        default: return 0; // recent
+      }
+    });
+    
+    document.getElementById('resultCount').textContent = filtered.length;
+    document.getElementById('showingEnd').textContent = filtered.length;
+    document.getElementById('showingTotal').textContent = filtered.length;
+    
+    renderProjects(filtered);
+  }
+  
+  function renderProjects(list) {
+    const container = document.getElementById('projectsContainer');
+    
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="card empty-state" style="padding: 60px 20px; text-align: center;">
+          <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center" style="background: var(--bg-alt);">
+            <i class="fa-solid fa-folder-open text-2xl" style="color: var(--soft);"></i>
+          </div>
+          <h3 class="font-display font-bold text-lg mb-1">No projects found</h3>
+          <p class="text-sm mb-5" style="color: var(--muted);">Try adjusting your filters or create a new project to get started.</p>
+          <button onclick="openModal('postJobModal')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold inline-flex items-center gap-2">
+            <i class="fa-solid fa-plus text-xs"></i> New Project
+          </button>
+        </div>
+      `;
+      return;
+    }
+    
+    if (currentView === 'grid') {
+      container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">${list.map((p, i) => renderGridCard(p, i)).join('')}</div>`;
+    } else {
+      container.innerHTML = renderListView(list);
+    }
+  }
+  
+  function renderGridCard(p, i) {
+    const statusConfig = {
+      active: { bg: 'rgba(16,185,129,0.12)', text: 'var(--primary)', label: 'Active' },
+      review: { bg: 'rgba(245,158,11,0.12)', text: 'var(--warning)', label: 'In Review' },
+      hold: { bg: 'rgba(148,163,154,0.15)', text: 'var(--muted)', label: 'On Hold' },
+      completed: { bg: 'rgba(132,204,22,0.12)', text: 'var(--accent)', label: 'Completed' }
+    };
+    const sc = statusConfig[p.status];
+    const progColor = p.progress >= 75 ? 'var(--accent)' : p.progress >= 50 ? 'var(--primary)' : 'var(--warning)';
+    const catIcon = p.category === 'Design' ? 'palette' : p.category === 'Marketing' ? 'bullhorn' : p.category === 'Mobile' ? 'mobile-screen' : 'code';
+    const isSelected = selectedProjects.has(p.id);
+    
+    return `
+      <div class="project-card card p-5 fade-up" style="animation-delay: ${i * 0.05}s;" onclick="openProject(${p.id})">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="checkbox ${isSelected ? 'checked' : ''}" onclick="event.stopPropagation(); toggleSelect(${p.id}, this)"></div>
+            <div class="cat-icon" style="background: linear-gradient(135deg, ${progColor}22, ${progColor}11); color: ${progColor};">
+              <i class="fa-solid fa-${catIcon}"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-[10px] font-bold tracking-wider truncate" style="color: var(--muted);">${p.category.toUpperCase()}</div>
+              <div class="font-display font-bold text-base leading-tight truncate">${p.title}</div>
+            </div>
+          </div>
+          <button onclick="event.stopPropagation(); showProjectMenu(${p.id})" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 transition flex-shrink-0">
+            <i class="fa-solid fa-ellipsis text-xs" style="color: var(--soft);"></i>
+          </button>
+        </div>
+
+        <p class="text-xs leading-relaxed mb-4 flex-1" style="color: var(--muted);">${p.description}</p>
+
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-bold tracking-wider" style="color: var(--muted);">PROGRESS</span>
+            <span class="text-xs font-bold" style="color: ${progColor};">${p.progress}%</span>
+          </div>
+          <div class="progress-track h-2">
+            <div class="progress-fill" style="width: ${p.progress}%; background: linear-gradient(90deg, ${progColor}, ${progColor}cc);"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div>
+            <div class="text-[10px] font-bold tracking-wider mb-0.5" style="color: var(--muted);">BUDGET</div>
+            <div class="text-sm font-bold whitespace-nowrap">$${p.spent.toLocaleString()} <span class="text-[11px] font-medium" style="color: var(--soft);">/ $${p.budget.toLocaleString()}</span></div>
+          </div>
+          <div>
+            <div class="text-[10px] font-bold tracking-wider mb-0.5" style="color: var(--muted);">DEADLINE</div>
+            <div class="text-sm font-bold whitespace-nowrap">${p.deadline}</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-bold tracking-wider mb-0.5" style="color: var(--muted);">MILESTONES</div>
+            <div class="text-sm font-bold">${p.milestonesDone}/${p.milestones} <span class="text-[11px] font-medium" style="color: var(--soft);">done</span></div>
+          </div>
+          <div>
+            <div class="text-[10px] font-bold tracking-wider mb-0.5" style="color: var(--muted);">PROPOSALS</div>
+            <div class="text-sm font-bold">${p.proposals} <span class="text-[11px] font-medium" style="color: var(--soft);">received</span></div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 mt-auto" style="border-top: 1px solid var(--border);">
+          <div class="flex avatar-stack">
+            ${p.team.map(t => `<img src="https://picsum.photos/seed/${t}/100/100.jpg" class="avatar w-7 h-7" title="${t}">`).join('')}
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="status-pill" style="background: ${sc.bg}; color: ${sc.text};">
+              <span class="dot"></span>${sc.label}
+            </span>
+            <span class="text-[11px] font-semibold whitespace-nowrap" style="color: ${p.daysLeft < 0 ? 'var(--danger)' : 'var(--muted)'};">${p.daysLeft < 0 ? `${Math.abs(p.daysLeft)}d overdue` : `${p.daysLeft}d left`}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  function renderListView(list) {
+    return `
+      <div class="card overflow-hidden">
+        <div class="grid grid-cols-12 gap-4 py-3 list-header" style="border-bottom: 1px solid var(--border); background: var(--bg-alt);">
+          <div class="col-span-4">Project</div>
+          <div class="col-span-2">Status</div>
+          <div class="col-span-2">Progress</div>
+          <div class="col-span-1">Budget</div>
+          <div class="col-span-2">Deadline</div>
+          <div class="col-span-1">Team</div>
+        </div>
+        ${list.map((p, i) => {
+          const statusConfig = {
+            active: { bg: 'rgba(16,185,129,0.12)', text: 'var(--primary)', label: 'Active' },
+            review: { bg: 'rgba(245,158,11,0.12)', text: 'var(--warning)', label: 'In Review' },
+            hold: { bg: 'rgba(148,163,154,0.15)', text: 'var(--muted)', label: 'On Hold' },
+            completed: { bg: 'rgba(132,204,22,0.12)', text: 'var(--accent)', label: 'Completed' }
+          };
+          const sc = statusConfig[p.status];
+          const progColor = p.progress >= 75 ? 'var(--accent)' : p.progress >= 50 ? 'var(--primary)' : 'var(--warning)';
+          const catIcon = p.category === 'Design' ? 'palette' : p.category === 'Marketing' ? 'bullhorn' : p.category === 'Mobile' ? 'mobile-screen' : 'code';
+          const isSelected = selectedProjects.has(p.id);
+          
+          return `
+            <div class="project-row grid grid-cols-12 gap-4 py-4 px-4 items-center fade-in" style="animation-delay: ${i * 0.03}s; border-bottom: 1px solid var(--border);" onclick="openProject(${p.id})">
+              <div class="col-span-4 flex items-center gap-3 min-w-0">
+                <div class="checkbox ${isSelected ? 'checked' : ''}" onclick="event.stopPropagation(); toggleSelect(${p.id}, this)"></div>
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: ${progColor}22; color: ${progColor};">
+                  <i class="fa-solid fa-${catIcon} text-sm"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="font-display font-bold text-sm truncate">${p.title}</div>
+                  <div class="text-[10px] font-semibold tracking-wider" style="color: var(--muted);">${p.category.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="col-span-2">
+                <span class="status-pill" style="background: ${sc.bg}; color: ${sc.text};">
+                  <span class="dot"></span>${sc.label}
+                </span>
+              </div>
+              <div class="col-span-2">
+                <div class="flex items-center gap-2">
+                  <div class="progress-track h-1.5 flex-1">
+                    <div class="progress-fill" style="width: ${p.progress}%; background: ${progColor};"></div>
+                  </div>
+                  <span class="text-xs font-bold" style="color: ${progColor};">${p.progress}%</span>
+                </div>
+              </div>
+              <div class="col-span-1">
+                <div class="text-sm font-bold whitespace-nowrap">$${(p.budget/1000).toFixed(1)}k</div>
+              </div>
+              <div class="col-span-2">
+                <div class="text-sm font-semibold whitespace-nowrap">${p.deadline}</div>
+                <div class="text-[10px] whitespace-nowrap" style="color: ${p.daysLeft < 0 ? 'var(--danger)' : 'var(--soft)'};">${p.daysLeft < 0 ? `${Math.abs(p.daysLeft)}d overdue` : `${p.daysLeft}d left`}</div>
+              </div>
+              <div class="col-span-1">
+                <div class="flex avatar-stack">
+                  ${p.team.slice(0, 2).map(t => `<img src="https://picsum.photos/seed/${t}/100/100.jpg" class="avatar w-6 h-6">`).join('')}
+                  ${p.team.length > 2 ? `<div class="avatar w-6 h-6 flex items-center justify-center text-[9px] font-bold" style="background: var(--bg-alt); color: var(--muted);">+${p.team.length - 2}</div>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  // ============ FILTERS ============
+  function filterByStatus(status, el) {
+    currentFilter = status;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    if (el) el.classList.add('active');
+    else document.querySelector(`[data-status="${status}"]`).classList.add('active');
+    applyFilters();
+  }
+  
+  function clearFilters() {
+    currentFilter = 'all';
+    document.getElementById('projectSearch').value = '';
+    document.getElementById('categoryFilter').value = 'all';
+    document.getElementById('sortBy').value = 'recent';
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-status="all"]').classList.add('active');
+    applyFilters();
+    showToast('Filters Reset', 'Showing all projects');
+  }
+  
+  function setView(view, el) {
+    currentView = view;
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters();
+  }
+  
+  // ============ SELECTION ============
+  function toggleSelect(id, el) {
+    if (selectedProjects.has(id)) {
+      selectedProjects.delete(id);
+      el.classList.remove('checked');
+    } else {
+      selectedProjects.add(id);
+      el.classList.add('checked');
+    }
+    updateBulkBar();
+  }
+  
+  function updateBulkBar() {
+    const bar = document.getElementById('bulkBar');
+    document.getElementById('selectedCount').textContent = selectedProjects.size;
+    if (selectedProjects.size > 0) bar.classList.add('show');
+    else bar.classList.remove('show');
+  }
+  
+  function clearSelection() {
+    selectedProjects.clear();
+    document.querySelectorAll('.checkbox.checked').forEach(c => c.classList.remove('checked'));
+    updateBulkBar();
+  }
+  
+  // ============ MODALS ============
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  function openProject(id) {
+    const p = projects.find(x => x.id === id);
+    const sc = p.status === 'active' ? { bg: 'rgba(16,185,129,0.12)', text: 'var(--primary)', label: 'Active' } :
+               p.status === 'review' ? { bg: 'rgba(245,158,11,0.12)', text: 'var(--warning)', label: 'In Review' } :
+               p.status === 'completed' ? { bg: 'rgba(132,204,22,0.12)', text: 'var(--accent)', label: 'Completed' } :
+               { bg: 'rgba(148,163,154,0.15)', text: 'var(--muted)', label: 'On Hold' };
+
+    document.getElementById('projectModalContent').innerHTML = `
+      <div class="flex items-start justify-between mb-5">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <span class="status-pill" style="background: ${sc.bg}; color: ${sc.text};">
+              <span class="dot"></span>${sc.label}
+            </span>
+            <span class="text-[11px] font-bold tracking-wider" style="color: var(--muted);">${p.category.toUpperCase()}</span>
+          </div>
+          <h2 class="font-display font-extrabold text-2xl">${p.title}</h2>
+          <p class="text-sm mt-2" style="color: var(--muted);">${p.description}</p>
+        </div>
+        <button onclick="closeModal('projectModal')" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 flex-shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-5">
+        <div class="p-3 rounded-xl" style="background: var(--bg-alt);">
+          <div class="text-[10px] font-bold tracking-wider mb-1" style="color: var(--muted);">BUDGET</div>
+          <div class="font-display font-bold text-lg">$${p.budget.toLocaleString()}</div>
+          <div class="text-[11px]" style="color: var(--soft);">$${p.spent.toLocaleString()} spent</div>
+        </div>
+        <div class="p-3 rounded-xl" style="background: var(--bg-alt);">
+          <div class="text-[10px] font-bold tracking-wider mb-1" style="color: var(--muted);">DEADLINE</div>
+          <div class="font-display font-bold text-lg">${p.deadline.split(',')[0]}</div>
+          <div class="text-[11px]" style="color: ${p.daysLeft < 0 ? 'var(--danger)' : 'var(--soft)'};">${p.daysLeft < 0 ? Math.abs(p.daysLeft) + 'd overdue' : p.daysLeft + 'd remaining'}</div>
+        </div>
+        <div class="p-3 rounded-xl" style="background: var(--bg-alt);">
+          <div class="text-[10px] font-bold tracking-wider mb-1" style="color: var(--muted);">PROGRESS</div>
+          <div class="font-display font-bold text-lg">${p.progress}%</div>
+          <div class="text-[11px]" style="color: var(--soft);">${p.milestonesDone}/${p.milestones} milestones</div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <h4 class="font-display font-bold text-sm mb-3">Team Members</h4>
+        <div class="flex gap-2 flex-wrap">
+          ${p.team.map(t => `
+            <div class="flex items-center gap-2 p-2 pr-3 rounded-full" style="background: var(--bg-alt);">
+              <img src="https://picsum.photos/seed/${t}/100/100.jpg" class="w-7 h-7 rounded-full">
+              <span class="text-xs font-semibold capitalize">${t}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="mb-5 p-4 rounded-xl" style="background: var(--bg-alt);">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold" style="color: var(--muted);">LAST UPDATED</span>
+          <span class="text-xs font-semibold">${p.lastUpdate}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold" style="color: var(--muted);">PROPOSALS RECEIVED</span>
+          <span class="text-xs font-semibold">${p.proposals} freelancers</span>
+        </div>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button onclick="closeModal('projectModal'); showToast('Message', 'Opening conversation with team')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-comment text-xs"></i> Message Team
+        </button>
+        <button onclick="closeModal('projectModal'); showToast('Project Opened', 'Loading full project workspace')" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          Open Project <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+    `;
+    openModal('projectModal');
+  }
+  
+  function showProjectMenu(id) {
+    showToast('Project Menu', 'Options for project #' + id);
+  }
+
+  // ============ TOAST ============
+  let toastTimer;
+  function showToast(title, msg) {
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMsg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  // ============ PAGINATION ============
+  function prevPage() { showToast('Pagination', 'Loading previous page'); }
+  function nextPage() { showToast('Pagination', 'Loading next page'); }
+
+  // ============ INIT ============
+  applyFilters();
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+      document.body.style.overflow = '';
+      clearSelection();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      document.getElementById('globalSearch').focus();
+    }
+  });
+</script>
+</body>
+</html>

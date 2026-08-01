@@ -1,28 +1,33 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Sora, Manrope } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 
-const inter = Inter({ variable: '--font-inter', subsets: ['latin'] });
-const spaceGrotesk = Space_Grotesk({ variable: '--font-space-grotesk', subsets: ['latin'] });
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
+  weight: ['300', '400', '600', '700', '800'],
+  display: 'swap',
+});
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: { default: 'GetiDone — Hire talent, get it done', template: '%s | GetiDone' },
-  description:
-    'GetiDone is the trusted platform connecting clients with verified freelancers. Post jobs, get matched by AI, and pay securely with escrow.',
-  openGraph: {
-    siteName: 'GetiDone',
-    type: 'website',
-  },
+  title: 'GetiDone — Get It Done, Verified',
+  description: 'GetiDone is the next-generation freelance platform that replaces marketplaces with verified execution.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>
+    <html lang="en" className={`${sora.variable} ${manrope.variable}`} suppressHydrationWarning>
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
   );
 }
-

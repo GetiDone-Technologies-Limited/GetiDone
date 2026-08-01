@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Files — GetiDone</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://z-cdn-media.chatglm.cn/files/ff6aace7-1d03-429f-8d3c-4a7e8d8aed5e.png" type="image/png">
+<style>
+  :root {
+    --bg: #F8FAF9;
+    --bg-alt: #EFF4F1;
+    --sidebar: #0A0F0D;
+    --sidebar-hover: #131A16;
+    --card: #FFFFFF;
+    --primary: #10B981;
+    --primary-dark: #059669;
+    --primary-light: #34D399;
+    --secondary: #14B8A6;
+    --accent: #84CC16;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --text: #0F1A14;
+    --muted: #5A6B62;
+    --soft: #94A39A;
+    --border: #E2EAE5;
+    --sidebar-text: #7A8A82;
+  }
+  
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.07) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+  }
+  
+  .font-display { font-family: 'Sora', sans-serif; }
+  .getidone-text { font-family: 'Sora', sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+  .getidone-text .geti { color: #FFFFFF; }
+  .getidone-text .done { color: #10B981; }
+  .getidone-text.dark .geti { color: #5A6B62; }
+  
+  .app-wrapper { display: flex; height: 100vh; width: 100%; position: relative; z-index: 1; }
+  
+  .sidebar {
+    background: var(--sidebar); background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.14) 0%, transparent 50%), linear-gradient(180deg, #0A0F0D 0%, #060A08 100%);
+    position: relative; width: 250px; flex-shrink: 0; display: flex; flex-direction: column; height: 100vh;
+  }
+  .sidebar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent); }
+  
+  .nav-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+  .nav-item:hover { background: var(--sidebar-hover); color: #FFFFFF; transform: translateX(2px); }
+  .nav-item.active { background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%); color: #FFFFFF; }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; background: var(--primary); border-radius: 0 4px 4px 0; box-shadow: 0 0 12px var(--primary); }
+  .nav-item.active i { color: var(--primary); }
+  
+  .main-area { flex: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; padding: 24px 32px; }
+  
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; transition: all 0.3s; position: relative; overflow: hidden; }
+  .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); opacity: 0; transition: opacity 0.3s; }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.5); }
+  .btn-primary > * { position: relative; z-index: 1; }
+  
+  .btn-ghost { background: var(--card); border: 1px solid var(--border); transition: all 0.2s; color: var(--text); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+  
+  .lift { transition: transform 0.2s; }
+  .lift:hover { transform: translateY(-1px); }
+  .search-input { background: var(--bg-alt); border: 1px solid transparent; transition: all 0.2s; }
+  .search-input:focus { background: var(--card); border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+
+  /* File Page Specifics */
+  .files-container { flex: 1; display: flex; gap: 24px; min-height: 0; margin-top: 16px; }
+  .files-main { flex: 2; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .files-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  
+  .file-card { cursor: pointer; transition: all 0.3s; position: relative; }
+  .file-card:hover { transform: translateY(-3px); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 12px 30px -12px rgba(15, 26, 20, 0.15); }
+  .file-card .file-menu-btn { opacity: 0; transition: opacity 0.2s; }
+  .file-card:hover .file-menu-btn { opacity: 1; }
+  
+  .file-icon-lg { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 12px; }
+  
+  .view-toggle { display: flex; background: var(--bg-alt); border-radius: 10px; padding: 3px; }
+  .view-btn { padding: 6px 12px; border-radius: 8px; cursor: pointer; color: var(--muted); transition: all 0.2s; font-size: 13px; }
+  .view-btn.active { background: var(--card); color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+
+  .file-row { cursor: pointer; transition: all 0.2s; }
+  .file-row:hover { background: var(--bg-alt); transform: translateX(4px); }
+
+  /* Storage Circle */
+  .storage-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--primary) 0% 42%, var(--secondary) 42% 54%, var(--warning) 54% 68%, var(--bg-alt) 68% 100%); display: flex; align-items: center; justify-content: center; position: relative; }
+  .storage-circle::before { content: ''; position: absolute; inset: 10px; background: var(--card); border-radius: 50%; }
+  .storage-text { position: relative; z-index: 1; text-align: center; }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(6, 10, 8, 0.6); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+  .modal-content { background: var(--card); border-radius: 24px; max-width: 540px; width: calc(100% - 32px); max-height: 88vh; overflow-y: auto; transform: scale(0.94) translateY(20px); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 30px 80px -20px rgba(15, 26, 20, 0.4); }
+  .modal-backdrop.active .modal-content { transform: scale(1) translateY(0); }
+  
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--sidebar); color: white; padding: 14px 20px; border-radius: 14px; box-shadow: 0 16px 40px -12px rgba(15, 26, 20, 0.4); z-index: 200; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; gap: 12px; max-width: 360px; border: 1px solid rgba(16, 185, 129, 0.2); }
+  .toast.show { transform: translateX(0); }
+  .toast-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--soft); }
+  
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .fade-in { animation: fadeIn 0.3s ease both; }
+
+  .drop-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 40px; text-align: center; transition: all 0.3s; cursor: pointer; background: var(--bg-alt); }
+  .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar py-6 px-4 z-20">
+    <div class="px-3 mb-8 flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #10B981, #34D399); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+        <i class="fa-solid fa-arrow-up text-white text-sm font-bold"></i>
+      </div>
+      <div>
+        <div class="getidone-text text-lg leading-none">
+          <span class="geti">Geti</span><span class="done">Done</span>
+        </div>
+        <div class="text-[10px] tracking-widest" style="color: var(--sidebar-text);">CLIENT SPACE</div>
+      </div>
+    </div>
+
+    <button onclick="openModal('uploadModal')" class="btn-primary mx-2 mb-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+      <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+      <span>Upload File</span>
+    </button>
+
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2" style="color: var(--sidebar-text);">MAIN</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='dashboard.html'">
+        <i class="fa-solid fa-grip w-4 text-center"></i><span>Dashboard</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='projects.html'">
+        <i class="fa-solid fa-folder-open w-4 text-center"></i><span>My Projects</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(16,185,129,0.15); color: var(--primary);">12</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='messages.html'">
+        <i class="fa-solid fa-comment-dots w-4 text-center"></i><span>Messages</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(20,184,166,0.15); color: var(--secondary);">3</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='payments.html'">
+        <i class="fa-solid fa-credit-card w-4 text-center"></i><span>Payments</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='teams.html'">
+        <i class="fa-solid fa-users w-4 text-center"></i><span>Teams & PODs</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='reports.html'">
+        <i class="fa-solid fa-chart-line w-4 text-center"></i><span>Reports</span>
+      </a>
+
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2 mt-6" style="color: var(--sidebar-text);">TOOLS</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='calendar.html'">
+        <i class="fa-solid fa-calendar-days w-4 text-center"></i><span>Calendar</span>
+      </a>
+      <a class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);">
+        <i class="fa-solid fa-folder w-4 text-center"></i><span>Files</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="showToast('Settings', 'Account settings opened')">
+        <i class="fa-solid fa-gear w-4 text-center"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 mx-2 p-4 rounded-2xl relative overflow-hidden" style="background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(132,204,22,0.08)); border: 1px solid rgba(16,185,129,0.2);">
+      <div class="flex items-center gap-2 mb-1.5">
+        <i class="fa-solid fa-crown text-xs" style="color: var(--accent);"></i>
+        <span class="text-[11px] font-bold tracking-wider text-white">UPGRADE TO PRO</span>
+      </div>
+      <p class="text-[11px] leading-relaxed mb-3" style="color: var(--sidebar-text);">Unlock unlimited projects & priority support.</p>
+      <button onclick="showToast('Upgrade', 'Redirecting to upgrade page')" class="w-full py-2 rounded-lg text-[11px] font-bold text-white" style="background: var(--primary);">Upgrade Now</button>
+    </div>
+
+    <div class="mt-4 px-2 flex items-center gap-3 cursor-pointer hover:bg-white/5 p-2 rounded-lg transition" onclick="showToast('Profile', 'Opening your profile')">
+      <img src="https://picsum.photos/seed/johnavatar/100/100.jpg" class="w-9 h-9 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-white truncate">John Carter</div>
+        <div class="text-[11px] truncate" style="color: var(--sidebar-text);">john@getidone.io</div>
+      </div>
+      <i class="fa-solid fa-chevron-right text-xs" style="color: var(--sidebar-text);"></i>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main-area">
+    
+    <!-- Top bar -->
+    <header class="flex items-center justify-between mb-4 fade-up">
+      <div class="relative flex-1 max-w-xl">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-sm" style="color: var(--soft);"></i>
+        <input type="text" id="fileSearch" placeholder="Search files and folders..." class="search-input w-full pl-11 pr-4 py-2.5 rounded-xl text-sm" oninput="renderFiles()">
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded border" style="border-color: var(--border); color: var(--muted);">⌘K</kbd>
+      </div>
+      <div class="flex items-center gap-3 ml-6">
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift" onclick="showToast('Help Center', 'Opening help resources')">
+          <i class="fa-regular fa-circle-question text-sm"></i>
+        </button>
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift relative" onclick="showToast('Notifications', 'You have 5 new notifications')">
+          <i class="fa-regular fa-bell text-sm"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style="background: var(--primary); border: 2px solid var(--card);"></span>
+        </button>
+        <div class="w-px h-8" style="background: var(--border);"></div>
+        <button class="flex items-center gap-2 px-3 py-1.5 rounded-xl lift" onclick="showToast('Profile', 'John Carter — Premium Client')">
+          <img src="https://picsum.photos/seed/johnavatar/100/100.jpg" class="w-8 h-8 rounded-full object-cover">
+          <i class="fa-solid fa-chevron-down text-[10px]" style="color: var(--muted);"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="mb-4 fade-up" style="animation-delay: 0.05s;">
+      <div class="flex items-end justify-between flex-wrap gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2 text-xs" style="color: var(--muted);">
+            <a onclick="window.location.href='dashboard.html'" class="cursor-pointer hover:text-emerald-600 transition">Dashboard</a>
+            <i class="fa-solid fa-chevron-right text-[8px]"></i>
+            <span style="color: var(--text); font-weight: 600;">Files</span>
+          </div>
+          <h1 class="font-display font-extrabold text-4xl tracking-tight">Files & Assets<span style="color: var(--primary);">.</span></h1>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn-ghost px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 lift" onclick="openModal('folderModal')">
+            <i class="fa-solid fa-folder-plus text-xs"></i>
+            New Folder
+          </button>
+          <button onclick="openModal('uploadModal')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+            <span>Upload File</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Files Layout -->
+    <div class="files-container fade-up" style="animation-delay: 0.1s;">
+      
+      <!-- Main Files Area -->
+      <div class="files-main">
+        <div class="files-header">
+          <div class="flex items-center gap-4">
+            <h2 class="font-display font-bold text-xl">All Files</h2>
+            <span class="text-xs font-semibold px-2 py-1 rounded-md" style="background: var(--bg-alt); color: var(--muted);">18 items</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="view-toggle">
+              <div class="view-btn active" onclick="setView('grid', this)" title="Grid View"><i class="fa-solid fa-grip"></i></div>
+              <div class="view-btn" onclick="setView('list', this)" title="List View"><i class="fa-solid fa-list"></i></div>
+            </div>
+            <div class="relative">
+              <select id="sortFiles" onchange="renderFiles()" class="appearance-none bg-bg-alt border border-transparent text-sm font-semibold rounded-lg pl-4 pr-9 py-2 cursor-pointer focus:outline-none" style="background-color: var(--bg-alt);">
+                <option value="recent">Recently Updated</option>
+                <option value="name">Name (A-Z)</option>
+                <option value="size">Size (Largest)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] pointer-events-none" style="color: var(--muted);"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6">
+          <div id="filesContainer"></div>
+        </div>
+      </div>
+
+      <!-- Side Panel -->
+      <div class="w-80 flex flex-col gap-6 overflow-y-auto">
+        
+        <!-- Storage Card -->
+        <div class="card p-6 flex flex-col items-center">
+          <h3 class="font-display font-bold text-base mb-4 self-start">Storage</h3>
+          <div class="storage-circle mb-4">
+            <div class="storage-text">
+              <div class="text-2xl font-display font-extrabold">4.2<span class="text-sm">GB</span></div>
+              <div class="text-[10px] font-bold tracking-widest" style="color: var(--muted);">OF 10GB USED</div>
+            </div>
+          </div>
+          <div class="w-full space-y-2.5">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="w-3 h-3 rounded-sm" style="background: var(--primary);"></span>
+              <span class="flex-1" style="color: var(--muted);">Documents</span>
+              <span class="font-bold">2.1 GB</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="w-3 h-3 rounded-sm" style="background: var(--secondary);"></span>
+              <span class="flex-1" style="color: var(--muted);">Images</span>
+              <span class="font-bold">1.4 GB</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="w-3 h-3 rounded-sm" style="background: var(--warning);"></span>
+              <span class="flex-1" style="color: var(--muted);">Videos</span>
+              <span class="font-bold">0.7 GB</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="w-3 h-3 rounded-sm" style="background: var(--bg-alt); border: 1px solid var(--border);"></span>
+              <span class="flex-1" style="color: var(--muted);">Free Space</span>
+              <span class="font-bold">5.8 GB</span>
+            </div>
+          </div>
+          <button class="w-full mt-5 btn-ghost py-2.5 rounded-xl text-xs font-bold">Upgrade Storage</button>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card p-5 flex-1">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-bold text-base">Recent Activity</h3>
+            <button class="text-[11px] font-semibold lift" style="color: var(--primary);" onclick="showToast('Activity', 'Viewing all activity')">View All</button>
+          </div>
+          <div class="relative">
+            <div class="absolute left-[18px] top-2 bottom-2 w-px" style="background: var(--border);"></div>
+            <div class="space-y-1">
+              <div class="activity-item flex gap-3 p-2 rounded-xl cursor-pointer hover:bg-gray-50" onclick="showToast('File Opened', 'Project_Brief.pdf')">
+                <div class="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 2px solid var(--primary);">
+                  <i class="fa-solid fa-file-pdf text-xs" style="color: var(--primary);"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <div class="text-xs"><span class="font-bold">You</span> uploaded <span class="font-semibold">Project_Brief.pdf</span></div>
+                  <div class="text-[10px] mt-1" style="color: var(--soft);">10 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item flex gap-3 p-2 rounded-xl cursor-pointer hover:bg-gray-50" onclick="showToast('File Shared', 'Logo_Final.png')">
+                <div class="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 2px solid var(--secondary);">
+                  <i class="fa-solid fa-share-nodes text-xs" style="color: var(--secondary);"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <div class="text-xs"><span class="font-bold">Sarah Kim</span> shared <span class="font-semibold">Logo_Final.png</span></div>
+                  <div class="text-[10px] mt-1" style="color: var(--soft);">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item flex gap-3 p-2 rounded-xl cursor-pointer hover:bg-gray-50" onclick="showToast('File Deleted', 'Old_Mockups.zip')">
+                <div class="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 2px solid var(--danger);">
+                  <i class="fa-solid fa-trash text-xs" style="color: var(--danger);"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <div class="text-xs"><span class="font-bold">You</span> deleted <span class="font-semibold">Old_Mockups.zip</span></div>
+                  <div class="text-[10px] mt-1" style="color: var(--soft);">Yesterday</div>
+                </div>
+              </div>
+              <div class="activity-item flex gap-3 p-2 rounded-xl cursor-pointer hover:bg-gray-50" onclick="showToast('File Opened', 'App_Demo.mp4')">
+                <div class="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 2px solid var(--warning);">
+                  <i class="fa-solid fa-file-video text-xs" style="color: var(--warning);"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <div class="text-xs"><span class="font-bold">Marcus Lee</span> viewed <span class="font-semibold">App_Demo.mp4</span></div>
+                  <div class="text-[10px] mt-1" style="color: var(--soft);">2 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Upload Modal -->
+<div class="modal-backdrop" id="uploadModal" onclick="if(event.target===this)closeModal('uploadModal')">
+  <div class="modal-content p-7">
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #10B981, #34D399);">
+            <i class="fa-solid fa-arrow-up text-white text-xs font-bold"></i>
+          </div>
+          <div class="getidone-text text-sm dark"><span class="geti">Geti</span><span class="done">Done</span></div>
+        </div>
+        <div class="text-[11px] font-bold tracking-widest mb-1" style="color: var(--primary);">FILE UPLOAD</div>
+        <h2 class="font-display font-extrabold text-2xl">Upload Files</h2>
+      </div>
+      <button onclick="closeModal('uploadModal')" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <i class="fa-solid fa-cloud-arrow-up text-4xl mb-3" style="color: var(--primary);"></i>
+      <h3 class="font-display font-bold text-base mb-1">Drag & Drop files here</h3>
+      <p class="text-xs" style="color: var(--muted);">or click to browse from your computer</p>
+      <input type="file" id="fileInput" class="hidden" multiple onchange="handleFileSelect(this)">
+    </div>
+
+    <div id="uploadList" class="mt-4 space-y-2"></div>
+
+    <div class="flex gap-3 pt-6 mt-4" style="border-top: 1px solid var(--border);">
+      <button type="button" onclick="closeModal('uploadModal')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold">Cancel</button>
+      <button type="button" onclick="confirmUpload()" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold">Upload Files</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Folder Modal -->
+<div class="modal-backdrop" id="folderModal" onclick="if(event.target===this)closeModal('folderModal')">
+  <div class="modal-content p-7">
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #10B981, #34D399);">
+            <i class="fa-solid fa-arrow-up text-white text-xs font-bold"></i>
+          </div>
+          <div class="getidone-text text-sm dark"><span class="geti">Geti</span><span class="done">Done</span></div>
+        </div>
+        <div class="text-[11px] font-bold tracking-widest mb-1" style="color: var(--primary);">ORGANIZE</div>
+        <h2 class="font-display font-extrabold text-2xl">Create New Folder</h2>
+      </div>
+      <button onclick="closeModal('folderModal')" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">FOLDER NAME</label>
+        <input type="text" id="folderNameInput" placeholder="e.g. Q4 Marketing Assets" class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none focus:border-emerald-400" style="border-color: var(--border); background: var(--bg-alt);">
+      </div>
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">LINK TO PROJECT (OPTIONAL)</label>
+        <div class="relative">
+          <select id="folderProject" class="w-full px-4 py-2.5 rounded-xl text-sm border focus:outline-none appearance-none cursor-pointer" style="border-color: var(--border); background: var(--bg-alt);">
+            <option value="">None</option>
+            <option value="E-commerce Redesign">E-commerce Website Redesign</option>
+            <option value="Mobile App Development">Mobile App Development</option>
+            <option value="Brand Identity Design">Brand Identity Design</option>
+            <option value="SEO Optimization">SEO Optimization</option>
+          </select>
+          <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs pointer-events-none" style="color: var(--muted);"></i>
+        </div>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal('folderModal')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold">Cancel</button>
+        <button type="button" onclick="createFolder()" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold">Create Folder</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- File Details Modal -->
+<div class="modal-backdrop" id="fileDetailsModal" onclick="if(event.target===this)closeModal('fileDetailsModal')">
+  <div class="modal-content p-7">
+    <div id="fileDetailsContent"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="fa-solid fa-check text-white text-xs"></i></div>
+  <div>
+    <div class="text-sm font-bold" id="toastTitle">Success</div>
+    <div class="text-xs" id="toastMsg" style="color: var(--sidebar-text);">Action completed</div>
+  </div>
+</div>
+
+<script>
+  const fileTypes = {
+    pdf: { icon: 'fa-file-pdf', color: 'var(--danger)', bg: 'rgba(239,68,68,0.1)' },
+    jpg: { icon: 'fa-file-image', color: 'var(--secondary)', bg: 'rgba(20,184,166,0.1)' },
+    png: { icon: 'fa-file-image', color: 'var(--secondary)', bg: 'rgba(20,184,166,0.1)' },
+    mp4: { icon: 'fa-file-video', color: 'var(--warning)', bg: 'rgba(245,158,11,0.1)' },
+    docx: { icon: 'fa-file-word', color: 'var(--primary)', bg: 'rgba(16,185,129,0.1)' },
+    xlsx: { icon: 'fa-file-excel', color: 'var(--accent)', bg: 'rgba(132,204,22,0.1)' },
+    zip: { icon: 'fa-file-zipper', color: 'var(--muted)', bg: 'rgba(90,107,98,0.1)' },
+    fig: { icon: 'fa-pen-ruler', color: '#A855F7', bg: 'rgba(168,85,247,0.1)' }
+  };
+
+  let files = [
+    { id: 1, name: 'Project_Brief.pdf', type: 'pdf', size: '2.4 MB', modified: 'Dec 12, 2024', owner: 'You', project: 'E-commerce Redesign' },
+    { id: 2, name: 'Logo_Final.png', type: 'png', size: '1.1 MB', modified: 'Dec 10, 2024', owner: 'Sarah Kim', project: 'Brand Identity Design' },
+    { id: 3, name: 'Wireframes.fig', type: 'fig', size: '5.8 MB', modified: 'Dec 09, 2024', owner: 'Marcus Lee', project: 'Mobile App Development' },
+    { id: 4, name: 'Q3_Report.xlsx', type: 'xlsx', size: '840 KB', modified: 'Dec 05, 2024', owner: 'You', project: 'SEO Optimization' },
+    { id: 5, name: 'App_Demo.mp4', type: 'mp4', size: '24.2 MB', modified: 'Dec 01, 2024', owner: 'Marcus Lee', project: 'Mobile App Development' },
+    { id: 6, name: 'Contract_Signed.docx', type: 'docx', size: '320 KB', modified: 'Nov 28, 2024', owner: 'You', project: 'General' },
+    { id: 7, name: 'Brand_Assets.zip', type: 'zip', size: '45.1 MB', modified: 'Nov 20, 2024', owner: 'Sarah Kim', project: 'Brand Identity Design' }
+  ];
+
+  let currentView = 'grid';
+
+  function renderFiles() {
+    const searchVal = document.getElementById('fileSearch').value.toLowerCase();
+    const sortVal = document.getElementById('sortFiles').value;
+    const container = document.getElementById('filesContainer');
+    
+    let filtered = files.filter(f => f.name.toLowerCase().includes(searchVal));
+    
+    if (sortVal === 'name') {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortVal === 'size') {
+      filtered.sort((a, b) => parseFloat(b.size) - parseFloat(a.size));
+    } else {
+      filtered.sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="text-center py-16"><i class="fa-solid fa-folder-open text-4xl mb-3" style="color: var(--soft);"></i><p class="text-sm font-semibold" style="color: var(--muted);">No files found</p></div>`;
+      return;
+    }
+
+    if (currentView === 'grid') {
+      container.innerHTML = `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">${filtered.map((f, i) => {
+        const ft = fileTypes[f.type];
+        return `
+          <div class="file-card card p-4 fade-in" style="animation-delay: ${i * 0.03}s;" onclick="viewFileDetails(${f.id})">
+            <div class="flex items-start justify-between">
+              <div class="file-icon-lg" style="background: ${ft.bg}; color: ${ft.color};">
+                <i class="fa-solid ${ft.icon}"></i>
+              </div>
+              <button class="file-menu-btn w-7 h-7 rounded-md flex items-center justify-center hover:bg-gray-100" onclick="event.stopPropagation(); showToast('Menu', 'File options')">
+                <i class="fa-solid fa-ellipsis text-xs" style="color: var(--soft);"></i>
+              </button>
+            </div>
+            <h3 class="font-bold text-sm truncate mb-1">${f.name}</h3>
+            <p class="text-[11px]" style="color: var(--muted);">${f.size} · ${f.modified}</p>
+          </div>
+        `;
+      }).join('')}</div>`;
+    } else {
+      container.innerHTML = `
+        <div class="overflow-hidden">
+          <div class="grid grid-cols-12 gap-4 py-3 text-[10px] font-bold tracking-widest" style="color: var(--soft); border-bottom: 1px solid var(--border);">
+            <div class="col-span-6">NAME</div>
+            <div class="col-span-2">OWNER</div>
+            <div class="col-span-2">MODIFIED</div>
+            <div class="col-span-2 text-right">SIZE</div>
+          </div>
+          ${filtered.map((f, i) => {
+            const ft = fileTypes[f.type];
+            return `
+              <div class="file-row grid grid-cols-12 gap-4 py-3 items-center fade-in" style="animation-delay: ${i * 0.03}s; border-bottom: 1px solid var(--border);" onclick="viewFileDetails(${f.id})">
+                <div class="col-span-6 flex items-center gap-3 min-w-0">
+                  <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: ${ft.bg}; color: ${ft.color};">
+                    <i class="fa-solid ${ft.icon} text-sm"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-sm truncate">${f.name}</div>
+                    <div class="text-[10px] truncate" style="color: var(--muted);">${f.project}</div>
+                  </div>
+                </div>
+                <div class="col-span-2 text-sm">${f.owner}</div>
+                <div class="col-span-2 text-sm">${f.modified}</div>
+                <div class="col-span-2 text-right text-sm font-semibold">${f.size}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+  }
+
+  function setView(view, el) {
+    currentView = view;
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    renderFiles();
+  }
+
+  function handleFileSelect(input) {
+    const list = document.getElementById('uploadList');
+    list.innerHTML = '';
+    for (const file of input.files) {
+      const ft = file.name.split('.').pop().toLowerCase();
+      const config = fileTypes[ft] || { icon: 'fa-file', color: 'var(--muted)', bg: 'rgba(90,107,98,0.1)' };
+      const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+      list.innerHTML += `
+        <div class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--bg-alt);">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: ${config.bg}; color: ${config.color};">
+            <i class="fa-solid ${config.icon} text-sm"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold truncate">${file.name}</div>
+            <div class="text-[11px]" style="color: var(--muted);">${size}</div>
+          </div>
+          <i class="fa-solid fa-circle-check text-sm" style="color: var(--success);"></i>
+        </div>
+      `;
+    }
+  }
+
+  function confirmUpload() {
+    closeModal('uploadModal');
+    showToast('Upload Complete', 'Your files have been successfully uploaded');
+    document.getElementById('uploadList').innerHTML = '';
+    document.getElementById('fileInput').value = '';
+  }
+
+  function createFolder() {
+    const name = document.getElementById('folderNameInput').value.trim();
+    if (!name) { showToast('Error', 'Please enter a folder name'); return; }
+    
+    closeModal('folderModal');
+    showToast('Folder Created', `${name} has been added to your files`);
+    document.getElementById('folderNameInput').value = '';
+    document.getElementById('folderProject').value = '';
+  }
+
+  function viewFileDetails(id) {
+    const f = files.find(x => x.id === id);
+    if (!f) return;
+    const ft = fileTypes[f.type];
+
+    document.getElementById('fileDetailsContent').innerHTML = `
+      <div class="flex items-start justify-between mb-5">
+        <div class="flex items-center gap-4">
+          <div class="file-icon-lg mb-0" style="background: ${ft.bg}; color: ${ft.color}; width: 60px; height: 60px; font-size: 26px;">
+            <i class="fa-solid ${ft.icon}"></i>
+          </div>
+          <div>
+            <h2 class="font-display font-extrabold text-xl truncate">${f.name}</h2>
+            <p class="text-sm" style="color: var(--muted);">${f.size} · Uploaded by ${f.owner}</p>
+          </div>
+        </div>
+        <button onclick="closeModal('fileDetailsModal')" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2 mb-5 p-4 rounded-xl border" style="border-color: var(--border);">
+        <div class="flex justify-between text-sm"><span style="color: var(--muted);">Project</span><span class="font-semibold">${f.project}</span></div>
+        <div class="flex justify-between text-sm"><span style="color: var(--muted);">Last Modified</span><span class="font-semibold">${f.modified}</span></div>
+        <div class="flex justify-between text-sm"><span style="color: var(--muted);">File Type</span><span class="font-bold uppercase">${f.type}</span></div>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button onclick="closeModal('fileDetailsModal'); showToast('Download', 'Downloading ${f.name}')" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download text-xs"></i> Download
+        </button>
+        <button onclick="closeModal('fileDetailsModal'); showToast('Share', 'Link copied to clipboard')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-share-nodes text-xs"></i> Share
+        </button>
+      </div>
+    `;
+    openModal('fileDetailsModal');
+  }
+
+  // Drag & Drop visual handling
+  const dropZone = document.getElementById('dropZone');
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+  });
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+  });
+  dropZone.addEventListener('drop', (e) => {
+    const input = document.getElementById('fileInput');
+    input.files = e.dataTransfer.files;
+    handleFileSelect(input);
+  });
+
+  // Standard Functions
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  let toastTimer;
+  function showToast(title, msg) {
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMsg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  // Init
+  renderFiles();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

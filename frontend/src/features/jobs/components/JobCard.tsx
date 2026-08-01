@@ -1,9 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import type { Job } from '../types/jobs.types';
 import { Badge } from '@/shared/components/ui/Badge';
 import { Avatar } from '@/shared/components/ui/Avatar';
 import { formatCurrency, formatRelativeTime } from '@/shared/lib/utils';
-import { ShieldCheck, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { ShieldCheck, MapPin, Clock, ArrowRight, Users } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/Tabs';
 
 interface JobCardProps {
   job: Job;
@@ -11,13 +14,11 @@ interface JobCardProps {
 
 export function JobCard({ job }: JobCardProps) {
   return (
-    <Link
-      href={`/jobs/${job.id}`}
-      className="group flex flex-col bg-white rounded-3xl p-6 shadow-sm border border-slate-200 transition-all duration-300 hover:shadow-xl hover:border-[#00b259]/30 hover:-translate-y-1 relative overflow-hidden"
-    >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00b259]/5 to-transparent rounded-bl-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div className="group flex flex-col bg-white rounded-3xl p-6 shadow-sm border border-slate-200 transition-all duration-300 hover:shadow-xl hover:border-[#00b259]/30 hover:-translate-y-1 relative overflow-hidden h-[340px]">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#00b259]/5 to-transparent rounded-bl-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 
-      <div className="flex justify-between items-start mb-4 relative z-10 gap-4">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-4 relative z-10 gap-4 shrink-0">
         <div className="flex gap-3 sm:gap-4 items-center min-w-0 flex-1">
           {job.client && (
             <div className="shrink-0">
@@ -44,38 +45,57 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </div>
 
-      <p className="text-[14px] text-slate-600 leading-relaxed line-clamp-2 mb-5 relative z-10 flex-grow">
-        {job.description}
-      </p>
+      {/* Tabs Area */}
+      <Tabs defaultValue="overview" className="flex-1 min-h-0 flex flex-col relative z-10">
+        <TabsList className="mb-2 shrink-0 border-slate-100">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="details">Details</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="pr-2 text-[13px] text-slate-600 leading-relaxed font-medium">
+          {job.description}
+        </TabsContent>
+        
+        <TabsContent value="skills" className="pr-2">
+          <div className="flex flex-wrap gap-2">
+            {job.skills?.map((s) => (
+              <span key={s.id} className="bg-slate-50 text-slate-600 text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-200">
+                {s.name}
+              </span>
+            ))}
+            {(!job.skills || job.skills.length === 0) && (
+              <p className="text-sm font-semibold text-slate-400 italic">No specific skills listed.</p>
+            )}
+          </div>
+        </TabsContent>
 
-      <div className="flex flex-wrap gap-2 mb-6 relative z-10">
-        {job.skills?.slice(0, 4).map((s) => (
-          <span key={s.id} className="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-200">
-            {s.name}
-          </span>
-        ))}
-        {job.skills?.length > 4 && (
-           <span className="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-200">
-             +{job.skills.length - 4} more
-           </span>
-        )}
-      </div>
-
-      <div className="pt-5 mt-auto border-t border-slate-100 flex items-center justify-between relative z-10">
-        <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
-          <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-slate-400" /> {formatRelativeTime(job.createdAt)}</span>
-          <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-slate-400" /> Remote</span>
+        <TabsContent value="details" className="pr-2 space-y-3">
+          <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>Posted {formatRelativeTime(job.createdAt)}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>Remote (Worldwide)</span>
+          </div>
           {job._count?.applications !== undefined && (
-             <span className="flex items-center gap-1.5">
-               <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-               {job._count.applications} Proposal{job._count.applications !== 1 ? 's' : ''}
-             </span>
+            <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <Users className="w-4 h-4 text-slate-400 shrink-0" />
+              <span>{job._count.applications} Proposal{job._count.applications !== 1 ? 's' : ''} Received</span>
+            </div>
           )}
-        </div>
-        <button className="flex items-center gap-1.5 text-sm font-bold text-[#00b259] group-hover:translate-x-1 transition-transform">
-          View Details <ArrowRight className="w-4 h-4" />
-        </button>
+        </TabsContent>
+      </Tabs>
+
+      {/* Footer */}
+      <div className="pt-4 mt-auto border-t border-slate-100 flex items-center justify-end relative z-10 shrink-0">
+        <Link href={`/jobs/${job.id}`}>
+          <button className="flex items-center justify-center gap-1.5 w-full sm:w-auto px-5 py-2.5 bg-slate-900 text-white hover:bg-[#00b259] text-sm font-bold rounded-xl shadow-sm group-hover:bg-[#00b259] transition-colors">
+            View Details <ArrowRight className="w-4 h-4" />
+          </button>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
