@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   FolderOpen, Eye, PieChart, Mail, Plus, Search, ChevronDown,
-  ExternalLink, Github, Edit2, Trash2, Check, X, Code, Image as ImageIcon
+  ExternalLink, Code2, Edit2, Trash2, Check, X, Code, Image as ImageIcon
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -337,7 +337,7 @@ export default function PortfolioPage() {
                       className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center transition-transform hover:scale-110 shadow-lg"
                       title="Source Code"
                     >
-                      <Github className="w-4 h-4" />
+                      <Code2 className="w-4 h-4" />
                     </a>
                   )}
                 </div>
