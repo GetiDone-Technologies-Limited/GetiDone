@@ -27,6 +27,7 @@ Current SampleAssets → Next.js page mapping:
 | ClientFreelancer.html   | frontend/src/app/(dashboard)/freelancers/page.tsx         |
 | SavedTalent.html        | frontend/src/app/(dashboard)/saved/page.tsx               |
 | Files.html              | frontend/src/app/(dashboard)/files/page.tsx               |
+| FindJobs.html           | frontend/src/app/(dashboard)/jobs/page.tsx                |
 | Frontpage.html          | frontend/src/app/page.tsx                                 |
 | FreelancerProfileClientView.html | frontend/src/app/(dashboard)/freelancers/[id]/page.tsx |
 | ClientProfileFreelancerView.html | frontend/src/app/(dashboard)/profile/page.tsx           |
