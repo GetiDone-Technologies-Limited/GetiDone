@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Plus, Search, Download, TrendingUp, Clock, CheckDouble, Wallet,
+  Plus, Search, Download, TrendingUp, Clock, CheckCheck, Wallet,
   Eye, EyeOff, MoreHorizontal, FileText, ArrowRight, X
 } from 'lucide-react';
 import { useGlobalPaymentHistory } from '@/features/payment/hooks/useGlobalPaymentHistory';
@@ -31,7 +31,7 @@ export default function PaymentsPage() {
   const stats = [
     { label: 'TOTAL SPENT', value: '$18,560', sub: '+12.4% vs last month', subColor: 'text-emerald-500', icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10', glow: 'rgba(16, 185, 129, 0.15)' },
     { label: 'PENDING', value: '$3,250', sub: '3 invoices awaiting payment', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10', glow: 'rgba(245, 158, 11, 0.15)' },
-    { label: 'RELEASED THIS MONTH', value: '$15,310', sub: '45 total transactions', icon: CheckDouble, color: 'text-teal-500', bg: 'bg-teal-500/10', glow: 'rgba(20, 184, 166, 0.15)' },
+    { label: 'RELEASED THIS MONTH', value: '$15,310', sub: '45 total transactions', icon: CheckCheck, color: 'text-teal-500', bg: 'bg-teal-500/10', glow: 'rgba(20, 184, 166, 0.15)' },
     { label: 'ESCROW BALANCE', value: '$5,120', sub: 'Escrow & available funds', icon: Wallet, color: 'text-lime-500', bg: 'bg-lime-500/10', glow: 'rgba(132, 204, 22, 0.15)', toggleable: true }
   ];
 
