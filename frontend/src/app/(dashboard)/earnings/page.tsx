@@ -301,6 +301,21 @@ export default function EarningsPage() {
               <span>Download 1099 Form</span>
             </button>
           </div>
+
+          {/* Escrow & Payment Protection Banner */}
+          <div className="p-5 rounded-2xl relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #0A0F0D 0%, #131A16 100%)', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <div className="flex items-center gap-2 mb-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-bold tracking-wider text-emerald-400 uppercase">GETIDONE ESCROW PROTECTION</span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed mb-3">
+              All project funds are deposited into verified Escrow before work begins. Your payouts are 100% guaranteed upon milestone approval.
+            </p>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-400">
+              <Check className="w-3.5 h-3.5" />
+              <span>Zero Transaction Fee Payouts</span>
+            </div>
+          </div>
         </div>
       </section>
 

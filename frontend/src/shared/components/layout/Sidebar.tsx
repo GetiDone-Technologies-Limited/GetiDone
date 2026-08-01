@@ -35,7 +35,8 @@ const links: SidebarLink[] = [
   { href: '/projects', label: 'My Projects', icon: <Folder className="w-5 h-5" />, roles: ['CLIENT'], section: 'MAIN' },
   
   { href: '/messages', label: 'Messages', icon: <MessageSquare className="w-5 h-5" />, badge: 8, section: 'MAIN' },
-  { href: '/payments', label: 'Payments', icon: <CreditCard className="w-5 h-5" />, section: 'MAIN' },
+  { href: '/payments', label: 'Payments', icon: <CreditCard className="w-5 h-5" />, roles: ['CLIENT'], section: 'MAIN' },
+  { href: '/earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" />, roles: ['FREELANCER'], section: 'MAIN' },
   { href: '/contracts', label: 'Contracts', icon: <FileText className="w-5 h-5" />, section: 'MAIN' },
   
   { href: '/freelancers', label: 'Freelancers', icon: <Users className="w-5 h-5" />, roles: ['CLIENT'], section: 'MAIN' },
@@ -47,7 +48,6 @@ const links: SidebarLink[] = [
   { href: '/saved', label: 'Saved Talents', icon: <Star className="w-5 h-5" />, roles: ['CLIENT'], section: 'TOOLS' },
   { href: '/portfolio', label: 'Portfolio', icon: <ImageIcon className="w-5 h-5" />, roles: ['FREELANCER'], section: 'TOOLS' },
   { href: '/reviews', label: 'Reviews', icon: <Star className="w-5 h-5" />, badge: 23, roles: ['FREELANCER'], section: 'TOOLS' },
-  { href: '/earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" />, roles: ['FREELANCER'], section: 'TOOLS' },
   { href: '/settings', label: 'Settings', icon: <Settings className="w-5 h-5" />, section: 'TOOLS' },
 ];
 
