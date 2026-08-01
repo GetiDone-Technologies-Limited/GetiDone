@@ -275,12 +275,42 @@ export default function LandingPage() {
   // Infographic Journey Switcher State
   const [infographicTrack, setInfographicTrack] = useState<'client' | 'freelancer'>('client');
 
+  // FAQ Accordion State
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
   // Consultation Modal State
   const [showConsultModal, setShowConsultModal] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState<typeof featuredExecutioners[0] | null>(null);
   const [consultDate, setConsultDate] = useState('');
   const [consultTime, setConsultTime] = useState('10:00 AM');
   const [consultDuration, setConsultDuration] = useState<'30' | '60'>('30');
+
+  const faqs = [
+    {
+      q: 'How does GetiDone’s Verified Execution Model work?',
+      a: 'GetiDone replaces traditional unverified claim-based proposals with objective code telemetry and automated test gates. When freelancers push code to GitHub or complete a milestone, automated Playwright/Jest test suites run in sandbox environments to verify deliverables objectively before Escrow funds are released.'
+    },
+    {
+      q: 'What are Fixed-Price Service Packages ("GetiPacks")?',
+      a: 'Inspired by Fiverr, Service Packages allow freelancers to publish pre-packaged, fixed-price deliverables across 3 tiers (Basic, Standard, Premium). Clients can order instantly with 1-click Escrow funding without waiting for proposals.'
+    },
+    {
+      q: 'How does the 1-on-1 Strategy Consultation fee credit work?',
+      a: 'Clients can book a 30-min or 60-min discovery call directly on a freelancer’s profile to review PRDs and architecture specs. 100% of the consultation fee is automatically credited as an escrow deposit if you hire that freelancer or POD within 14 days.'
+    },
+    {
+      q: 'How are Escrow Payments protected?',
+      a: 'When you order a service package or accept a milestone proposal, funds are deposited into a secure Escrow balance. Funds are released only after you review and approve the verified deliverable or test suites pass.'
+    },
+    {
+      q: 'What is a Done Score™ and how is it calculated?',
+      a: 'A Done Score (0–100%) is an objective rating assigned to freelancers based on active Git commit frequency, automated test pass rates, milestone timeliness, and client reviews.'
+    },
+    {
+      q: 'Can I send or accept custom offers inside messages?',
+      a: 'Yes! Freelancers can send interactive Custom Offer Cards directly within direct message chats (/messages) with custom scope, budget, and delivery timeline. Clients can accept and fund escrow in 1 click.'
+    }
+  ];
 
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -342,20 +372,19 @@ export default function LandingPage() {
             <span style={{ color: 'var(--text)' }}>Geti</span><span style={{ color: 'var(--primary)' }}>Done</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-sm font-semibold" style={{ color: 'var(--muted)' }}>
-            <a href="#guide" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
-              <Compass className="w-4 h-4 text-emerald-500" />
-              <span>How to Navigate</span>
-            </a>
-            <Link href="/services" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
-              <Package className="w-4 h-4 text-emerald-500" />
+          <div className="hidden lg:flex items-center gap-7 text-sm font-semibold" style={{ color: 'var(--muted)' }}>
+            <Link href="/about" className="hover:text-emerald-500 transition-colors">About Us</Link>
+            <Link href="/our-services" className="hover:text-emerald-500 transition-colors">Our Services</Link>
+            <Link href="/how-it-works" className="hover:text-emerald-500 transition-colors">How It Works</Link>
+            <Link href="/services" className="hover:text-emerald-500 transition-colors flex items-center gap-1">
+              <Package className="w-3.5 h-3.5 text-emerald-500" />
               <span>Service Packages</span>
             </Link>
-            <Link href="/freelancers" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
-              <Users className="w-4 h-4 text-teal-500" />
+            <Link href="/freelancers" className="hover:text-emerald-500 transition-colors flex items-center gap-1">
+              <Users className="w-3.5 h-3.5 text-teal-500" />
               <span>Find Talent</span>
             </Link>
-            <a href="#categories" className="hover:text-emerald-500 transition-colors">Categories</a>
+            <a href="#faq" className="hover:text-emerald-500 transition-colors">FAQ</a>
           </div>
 
           <div className="flex items-center gap-4">
@@ -892,6 +921,54 @@ export default function LandingPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive FAQ Section */}
+      <section id="faq" className="py-24 px-6 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}>
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center space-y-3">
+            <div className="inline-block px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style={{ background: 'var(--card)', borderColor: 'var(--border)', color: 'var(--primary)' }}>
+              FREQUENTLY ASKED QUESTIONS
+            </div>
+            <h2 className="font-extrabold text-3xl sm:text-4xl" style={{ fontFamily: "'Sora', sans-serif" }}>
+              Got Questions? We Have Answers<span className="text-emerald-500">.</span>
+            </h2>
+            <p className="text-sm" style={{ color: 'var(--muted)' }}>
+              Everything you need to know about GetiDone&apos;s verified execution model, service packages, and escrow protection.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="gd-card overflow-hidden transition-all duration-300 border"
+                  style={{ borderColor: isOpen ? 'rgba(16,185,129,0.4)' : 'var(--border)' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4 font-extrabold text-base cursor-pointer"
+                    style={{ fontFamily: "'Sora', sans-serif", color: 'var(--text)' }}
+                  >
+                    <span>{faq.q}</span>
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${isOpen ? 'bg-emerald-500 text-white rotate-180' : 'bg-[var(--bg-alt)] text-[var(--muted)]'}`}>
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-6 pb-6 pt-0 text-sm leading-relaxed border-t border-dashed" style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}>
+                      <p className="pt-4">{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
