@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { useGlobalPaymentHistory } from '@/features/payment/hooks/useGlobalPaymentHistory';
 
+import { useUIStore } from '@/store/ui.store';
+
 const mockTransactions = [
   { id: 't1', project: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', role: 'Brand Designer', amount: 1250, date: 'Dec 8, 2025', status: 'Released', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg' },
   { id: 't2', project: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', role: 'Lead Developer', amount: 1600, date: 'Dec 7, 2025', status: 'Pending', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg' },
@@ -19,8 +21,8 @@ const mockTransactions = [
 
 export default function PaymentsPage() {
   const { data: apiPayments, isLoading } = useGlobalPaymentHistory();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [activeTab, setActiveTab] = useState('All');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredTransactions = activeTab === 'All' 
@@ -94,7 +96,7 @@ export default function PaymentsPage() {
                 {stat.toggleable && !balancesVisible ? '•••••' : stat.value}
               </div>
               {stat.toggleable && (
-                <button onClick={(e) => { e.stopPropagation(); setBalancesVisible(!balancesVisible); }} className="text-slate-400 hover:text-emerald-500 transition-colors p-1 hover:scale-110">
+                <button onClick={(e) => { e.stopPropagation(); toggleBalancesVisible(); }} className="text-slate-400 hover:text-emerald-500 transition-colors p-1 hover:scale-110">
                   {balancesVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4 text-emerald-500" />}
                 </button>
               )}

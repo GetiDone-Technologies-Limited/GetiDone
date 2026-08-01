@@ -8,6 +8,7 @@ import {
   Tag, ShieldCheck
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 
 type ProjectStatus = 'active' | 'review' | 'completed';
 
@@ -107,10 +108,10 @@ interface ToastState {
 }
 
 export default function FreelancerActiveProjectsPage() {
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [projectsList, setProjectsList] = useState<FreelancerProject[]>(initialProjects);
   const [activeFilter, setActiveFilter] = useState<'all' | ProjectStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [selectedProject, setSelectedProject] = useState<FreelancerProject | null>(null);
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -227,7 +228,7 @@ export default function FreelancerActiveProjectsPage() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>TOTAL EARNED</span>
               <button
-                onClick={() => setBalancesVisible(!balancesVisible)}
+                onClick={toggleBalancesVisible}
                 className="p-1 rounded text-slate-400 hover:text-emerald-500 transition-colors"
                 title={balancesVisible ? 'Hide Balances' : 'Show Balances'}
               >

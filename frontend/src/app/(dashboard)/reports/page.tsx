@@ -13,6 +13,8 @@ import {
 } from 'recharts';
 
 /* ==================== TYPES & MOCK DATA ==================== */
+import { useUIStore } from '@/store/ui.store';
+
 interface ToastState {
   title: string;
   msg: string;
@@ -51,8 +53,8 @@ const topClientsData = [
 ];
 
 export default function ReportsPage() {
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | 'ytd'>('30d');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<'pdf' | 'excel' | 'csv'>('pdf');
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
@@ -123,7 +125,7 @@ export default function ReportsPage() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>TOTAL EARNED</span>
               <button
-                onClick={() => setBalancesVisible(!balancesVisible)}
+                onClick={toggleBalancesVisible}
                 className="text-[var(--muted)] hover:text-[var(--primary)] transition-all p-1"
                 title="Hide/Show Balances"
               >

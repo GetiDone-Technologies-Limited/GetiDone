@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 import {
   User, Shield, Bell, DollarSign, Globe, Check, Plus, Trash2,
   Lock, Building2, ChevronRight, Upload, X, Eye, EyeOff,
@@ -28,8 +29,8 @@ const initialPayoutMethods: PayoutMethod[] = [
 
 export default function SettingsPage() {
   const { user } = useAuthStore();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [activeSection, setActiveSection] = useState('general');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
   const [payoutMethods, setPayoutMethods] = useState<PayoutMethod[]>(initialPayoutMethods);
   const [newPayoutType, setNewPayoutType] = useState<'bank' | 'paypal' | 'mobile'>('bank');
@@ -381,7 +382,7 @@ export default function SettingsPage() {
               Icon={DollarSign} iconBg="rgba(20,184,166,0.12)" iconColor="var(--secondary)"
               extraAction={
                 <button
-                  onClick={() => setBalancesVisible(!balancesVisible)}
+                  onClick={toggleBalancesVisible}
                   className="p-2 text-slate-400 hover:text-emerald-500 transition-colors"
                   title={balancesVisible ? 'Hide Account Details' : 'Show Account Details'}
                 >

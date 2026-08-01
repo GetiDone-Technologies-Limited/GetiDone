@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import {
-  DollarSign, Send, FileText, Zap, Search, Eye, ArrowUpRight,
+  DollarSign, Send, FileText, Zap, Search, Eye, EyeOff, ArrowUpRight,
   CheckCircle2, MessageSquare, Clock, Plus, X, Check, TrendingUp,
   FileSignature, ChevronRight, Award, ShieldCheck
 } from 'lucide-react';
@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 
 /* ==================== MOCK CHART DATA ==================== */
 const earningsTrendData = [
@@ -79,6 +80,7 @@ const recommendedJobs: JobProposal[] = [
 
 export default function FreelancerDashboardPage() {
   const { user } = useAuthStore();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [selectedJob, setSelectedJob] = useState<JobProposal | null>(null);
   const [proposalRate, setProposalRate] = useState<number | ''>(75);
   const [proposalDays, setProposalDays] = useState<number | ''>(30);
@@ -132,12 +134,16 @@ export default function FreelancerDashboardPage() {
         <div className="gd-card gd-stat-card p-5">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>EARNINGS (MONTH)</span>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--primary)' }}>
-              <DollarSign className="w-4 h-4" />
-            </div>
+            <button
+              onClick={toggleBalancesVisible}
+              className="p-1 rounded text-slate-400 hover:text-emerald-500 transition-colors"
+              title={balancesVisible ? 'Hide Balances' : 'Show Balances'}
+            >
+              {balancesVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4 text-emerald-500" />}
+            </button>
           </div>
           <div className="text-3xl font-extrabold tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
-            $4,560
+            {balancesVisible ? '$4,560' : '•••••'}
           </div>
           <div className="text-[11px] mt-1" style={{ color: 'var(--soft)' }}>
             <span className="font-bold text-emerald-600">+12.4%</span> vs last month

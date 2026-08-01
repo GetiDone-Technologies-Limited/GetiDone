@@ -8,6 +8,7 @@ import {
   MessageSquare, UploadCloud, ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 
 type ContractStatus = 'active' | 'pending' | 'completed';
 type ContractType = 'fixed' | 'hourly';
@@ -109,10 +110,10 @@ interface ToastState {
 
 export default function ContractsPage() {
   const { user } = useAuthStore();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [contractsList, setContractsList] = useState<ContractItem[]>(initialContracts);
   const [activeFilter, setActiveFilter] = useState<'all' | ContractStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [selectedContract, setSelectedContract] = useState<ContractItem | null>(null);
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -211,7 +212,7 @@ export default function ContractsPage() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>IN ESCROW</span>
               <button
-                onClick={() => setBalancesVisible(!balancesVisible)}
+                onClick={toggleBalancesVisible}
                 className="p-1 text-slate-400 hover:text-emerald-500 transition-colors"
                 title={balancesVisible ? 'Hide Balances' : 'Show Balances'}
               >

@@ -9,6 +9,7 @@ import {
   Globe, Zap, Wallet, CheckCircle2
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 
 type TxnStatus = 'all' | 'deposit' | 'withdrawal';
 type PayoutType = 'bank' | 'stripe' | 'paypal' | 'payoneer' | 'wise' | 'crypto';
@@ -58,10 +59,10 @@ interface ToastState {
 
 export default function EarningsPage() {
   const { user } = useAuthStore();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const [txnList, setTxnList] = useState<TransactionItem[]>(initialTransactions);
   const [payoutMethods, setPayoutMethods] = useState<PayoutMethodItem[]>(initialPayoutMethods);
   const [activeFilter, setActiveFilter] = useState<TxnStatus>('all');
-  const [balancesVisible, setBalancesVisible] = useState(true);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isAddPayoutOpen, setIsAddPayoutOpen] = useState(false);
   
@@ -176,9 +177,9 @@ export default function EarningsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="gd-card gd-stat-card p-5">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>AVAILABLE</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase" style={{ color: 'var(--muted)' }}>NET EARNINGS</span>
               <button
-                onClick={() => setBalancesVisible(!balancesVisible)}
+                onClick={toggleBalancesVisible}
                 className="p-1 text-slate-400 hover:text-emerald-500 transition-colors"
                 title={balancesVisible ? 'Hide Balances' : 'Show Balances'}
               >

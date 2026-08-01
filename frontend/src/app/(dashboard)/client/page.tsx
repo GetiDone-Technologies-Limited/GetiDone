@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useAuthStore } from '@/store/auth.store';
+import { useUIStore } from '@/store/ui.store';
 import { useDashboardStats, useMyProjects } from '@/features/dashboard/hooks/useDashboard';
 import { LoadingSpinner } from '@/shared/components/feedback/LoadingSpinner';
 import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
@@ -10,7 +11,7 @@ import {
   Rocket, ClipboardCheck, Wallet, ArrowUpRight, Plus, 
   ArrowDownToLine, Palette, Search, Smartphone, Code,
   UserPlus, FileSignature, Video, Check, DollarSign,
-  MessageSquare, Flag, User, MessageCircle, X, MoreVertical
+  MessageSquare, Flag, User, MessageCircle, X, MoreVertical, Eye, EyeOff
 } from 'lucide-react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -82,6 +83,7 @@ const GhostButton = ({ children, onClick, className = '', type = 'button' }: any
 
 export default function ClientDashboardPage() {
   const { user } = useAuthStore();
+  const { balancesVisible, toggleBalancesVisible } = useUIStore();
   const firstName = user?.name ? user.name.split(' ')[0] : 'Client';
   const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
   const [isPostJobModalOpen, setIsPostJobModalOpen] = useState(false);
@@ -347,9 +349,14 @@ export default function ClientDashboardPage() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(132,204,22,0.12)', color: 'var(--accent)' }}>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               </div>
-              <span className="text-[11px] font-bold px-2 py-1 rounded-md" style={{ background: 'rgba(132,204,22,0.12)', color: 'var(--accent)' }}>+12.4%</span>
+              <div className="flex items-center gap-2">
+                <button onClick={(e) => { e.stopPropagation(); toggleBalancesVisible(); }} className="text-slate-400 hover:text-emerald-500 transition-colors p-1" title={balancesVisible ? 'Hide Balances' : 'Show Balances'}>
+                  {balancesVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4 text-emerald-500" />}
+                </button>
+                <span className="text-[11px] font-bold px-2 py-1 rounded-md" style={{ background: 'rgba(132,204,22,0.12)', color: 'var(--accent)' }}>+12.4%</span>
+              </div>
             </div>
-            <div className="text-3xl font-display font-extrabold relative z-10 text-slate-900">${stats?.totalSpent?.toLocaleString() || '18,560'}</div>
+            <div className="text-3xl font-display font-extrabold relative z-10 text-slate-900">{balancesVisible ? `$${stats?.totalSpent?.toLocaleString() || '18,560'}` : '•••••'}</div>
             <div className="text-xs font-semibold mt-1 relative z-10" style={{ color: 'var(--muted)' }}>Total Spending</div>
           </div>
         </section>
