@@ -7,7 +7,9 @@ import {
   Zap, ArrowRight, Plus, PlayCircle, Star, Brain, ShieldCheck,
   TrendingUp, Headset, FileEdit, Wand2, Handshake, CheckCheck,
   Sun, Moon, ChevronRight, Check, Search, Package, Users, Calendar,
-  Code, Layout, Cpu, Megaphone, Smartphone, Server, Sparkles, X
+  Code, Layout, Cpu, Megaphone, Smartphone, Server, Sparkles, X,
+  GitBranch, Terminal, Lock, DollarSign, Layers, Compass, CheckCircle2,
+  HelpCircle, ArrowDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -144,6 +146,117 @@ const featuredExecutioners = [
   }
 ];
 
+// Visual Infographic Steps Data
+const clientSteps = [
+  {
+    step: '01',
+    title: 'Scope or Select Package',
+    subtitle: 'Post custom requirements or pick a 3-tier fixed Service Package (/services)',
+    icon: Package,
+    accent: 'from-emerald-500 to-teal-500',
+    mockup: {
+      tag: 'PACKAGES & JOBS',
+      headline: 'Next.js 15 SaaS Build',
+      badge: '3 Tiers Available',
+      meta: 'Basic $450 · Standard $950 · Premium $1,800'
+    }
+  },
+  {
+    step: '02',
+    title: 'AI Match & 1-on-1 Strategy',
+    subtitle: 'AI pairs you with 95%+ Done Score talent, or book a 30-min Blueprint Session',
+    icon: Wand2,
+    accent: 'from-teal-500 to-cyan-500',
+    mockup: {
+      tag: 'INSTANT MATCH',
+      headline: 'Daniel Benson (98% Done Score)',
+      badge: 'TOP 3% VETTED',
+      meta: '1-on-1 Strategy Call Available (100% Fee Credit)'
+    }
+  },
+  {
+    step: '03',
+    title: 'Fund QA-Gated Escrow',
+    subtitle: 'Deposit funds safely into Escrow. Code commits & test runs update live on dashboard',
+    icon: Lock,
+    accent: 'from-cyan-500 to-blue-500',
+    mockup: {
+      tag: 'ESCROW PROTECTED',
+      headline: 'Milestone 1 Funded: $950',
+      badge: 'TEST SUITE PASS: 100%',
+      meta: 'GitHub Telemetry Active · 14 Commits Logged'
+    }
+  },
+  {
+    step: '04',
+    title: 'Approve & Release Funds',
+    subtitle: 'Review sandbox preview, approve verified deliverable, & release payment instantly',
+    icon: CheckCircle2,
+    accent: 'from-emerald-400 to-lime-400',
+    mockup: {
+      tag: 'INSTANT RELEASE',
+      headline: 'Escrow Funds Released',
+      badge: 'COMPLETED & VERIFIED',
+      meta: 'Done Score Updated +0.4 pts · 5-Star Rating'
+    }
+  }
+];
+
+const freelancerSteps = [
+  {
+    step: '01',
+    title: 'Build Profile & Packages',
+    subtitle: 'Set your hourly rate, list skills, and publish 3-tier Service Packages with QA specs',
+    icon: FileEdit,
+    accent: 'from-purple-500 to-indigo-500',
+    mockup: {
+      tag: 'GIG CATALOG',
+      headline: 'Published 3 Service Packages',
+      badge: 'ACTIVE PACKAGES',
+      meta: 'Starting at $350 · 24h Express Add-on'
+    }
+  },
+  {
+    step: '02',
+    title: 'Receive Custom Offers & Invites',
+    subtitle: 'Clients send direct job invites or request Custom Offers inside chat (/messages)',
+    icon: Sparkles,
+    accent: 'from-indigo-500 to-blue-500',
+    mockup: {
+      tag: 'IN-CHAT OFFERS',
+      headline: 'Custom Offer: $1,200 (5 Days)',
+      badge: 'PENDING ACCEPTANCE',
+      meta: 'Direct client conversation in /messages'
+    }
+  },
+  {
+    step: '03',
+    title: 'Sync Telemetry & Execute',
+    subtitle: 'Push commits to Git. Automated test suites run in sandbox environment to verify code',
+    icon: GitBranch,
+    accent: 'from-blue-500 to-teal-500',
+    mockup: {
+      tag: 'ACTIVE TELEMETRY',
+      headline: 'Git Commit Push: main branch',
+      badge: 'BUILD SUCCESS',
+      meta: 'Playwright E2E & Jest Unit Tests 100% Green'
+    }
+  },
+  {
+    step: '04',
+    title: 'Instant Escrow Payout',
+    subtitle: 'Milestone completes, funds land directly in your wallet balance with zero hold period',
+    icon: DollarSign,
+    accent: 'from-emerald-500 to-lime-500',
+    mockup: {
+      tag: 'INSTANT PAYOUT',
+      headline: '$1,200 Added to Earnings',
+      badge: 'FUNDS AVAILABLE',
+      meta: '0% Hold Time · High Done Score Bonus'
+    }
+  }
+];
+
 interface ToastState {
   title: string;
   msg: string;
@@ -158,6 +271,9 @@ export default function LandingPage() {
   // Search State
   const [searchMode, setSearchMode] = useState<'talent' | 'services'>('services');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Infographic Journey Switcher State
+  const [infographicTrack, setInfographicTrack] = useState<'client' | 'freelancer'>('client');
 
   // Consultation Modal State
   const [showConsultModal, setShowConsultModal] = useState(false);
@@ -215,6 +331,8 @@ export default function LandingPage() {
     setShowConsultModal(false);
   };
 
+  const activeSteps = infographicTrack === 'client' ? clientSteps : freelancerSteps;
+
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       {/* Navbar */}
@@ -225,6 +343,10 @@ export default function LandingPage() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold" style={{ color: 'var(--muted)' }}>
+            <a href="#guide" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
+              <Compass className="w-4 h-4 text-emerald-500" />
+              <span>How to Navigate</span>
+            </a>
             <Link href="/services" className="hover:text-emerald-500 transition-colors flex items-center gap-1.5">
               <Package className="w-4 h-4 text-emerald-500" />
               <span>Service Packages</span>
@@ -234,7 +356,6 @@ export default function LandingPage() {
               <span>Find Talent</span>
             </Link>
             <a href="#categories" className="hover:text-emerald-500 transition-colors">Categories</a>
-            <a href="#guarantee" className="hover:text-emerald-500 transition-colors">Verified Model</a>
           </div>
 
           <div className="flex items-center gap-4">
@@ -276,10 +397,9 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section with Interactive Dual Search Bar */}
+      {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
-          {/* Left Text & Interactive Search */}
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-xs font-bold tracking-wider uppercase border" style={{ background: 'rgba(16,185,129,0.1)', borderColor: 'rgba(16,185,129,0.2)', color: 'var(--primary)' }}>
               <Zap className="w-3.5 h-3.5" />
@@ -294,7 +414,7 @@ export default function LandingPage() {
               GetiDone combines Fiverr&apos;s instant 1-click service packages with Upwork&apos;s elite talent discovery—backed by 0-risk automated test gates and Escrow protection.
             </p>
 
-            {/* Interactive Search Bar (Fiverr / Upwork Dual Mode) */}
+            {/* Interactive Search Bar (Dual Mode) */}
             <div className="gd-card p-3 border shadow-xl mb-8" style={{ background: 'var(--card)' }}>
               <div className="flex items-center gap-2 mb-2 p-1 rounded-xl bg-[var(--bg-alt)]">
                 <button
@@ -392,7 +512,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Floating Hired Badge */}
             <div className="absolute -bottom-6 -right-6 px-6 py-4 rounded-2xl bg-emerald-500 text-white shadow-xl z-20">
               <div className="text-xs font-bold uppercase tracking-wider opacity-90">Verified Escrow</div>
               <div className="text-2xl font-extrabold" style={{ fontFamily: "'Sora', sans-serif" }}>100% Safe</div>
@@ -401,7 +520,166 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Popular Categories Ribbon Grid (Fiverr & Upwork Hybrid) */}
+      {/* ========================================================================= */}
+      {/* AESTHETIC MASTERPIECE: INTERACTIVE PLATFORM NAVIGATION INFOGRAPHIC */}
+      {/* ========================================================================= */}
+      <section id="guide" className="py-24 px-6 relative overflow-hidden bg-slate-950 text-white">
+        {/* Glow Effects Background */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto relative z-10 space-y-16">
+          {/* Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <Compass className="w-4 h-4" />
+              <span>PLATFORM NAVIGATION INFOGRAPHIC</span>
+            </div>
+            <h2 className="font-extrabold text-4xl sm:text-5xl tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+              How to Navigate GetiDone<span className="text-emerald-400">.</span>
+            </h2>
+            <p className="text-base text-slate-400 leading-relaxed">
+              Step-by-step visual blueprint illustrating how Clients and Freelancers seamlessly collaborate, verify code, and execute milestones on GetiDone.
+            </p>
+
+            {/* Interactive Track Switcher */}
+            <div className="pt-4 flex justify-center">
+              <div className="inline-flex p-1.5 rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl">
+                <button
+                  type="button"
+                  onClick={() => setInfographicTrack('client')}
+                  className={`px-6 py-3 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer ${
+                    infographicTrack === 'client'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Users className="w-4 h-4" />
+                  <span>Client (Buyer) Journey</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setInfographicTrack('freelancer')}
+                  className={`px-6 py-3 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all cursor-pointer ${
+                    infographicTrack === 'freelancer'
+                      ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/25'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Code className="w-4 h-4" />
+                  <span>Freelancer (Seller) Journey</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-Step Connected Infographic Flow */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+            {activeSteps.map((s, idx) => {
+              const IconComp = s.icon;
+              return (
+                <div
+                  key={s.step}
+                  className="group relative bg-slate-900/90 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-2 shadow-2xl backdrop-blur-xl"
+                >
+                  {/* Step Connector Arrow (visible on desktop between items) */}
+                  {idx < 3 && (
+                    <div className="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 z-20 text-emerald-400">
+                      <ChevronRight className="w-7 h-7 animate-pulse" />
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
+                    {/* Top Step Badge & Icon */}
+                    <div className="flex items-center justify-between">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-br ${s.accent} text-white font-extrabold shadow-lg`}>
+                        <IconComp className="w-6 h-6" />
+                      </div>
+                      <span className="font-extrabold text-2xl tracking-tight opacity-20 text-slate-400 font-[Sora]">
+                        STEP {s.step}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-extrabold text-xl mb-1.5 text-white group-hover:text-emerald-400 transition-colors" style={{ fontFamily: "'Sora', sans-serif" }}>
+                        {s.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        {s.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Visual UI Mockup Card inside Infographic Step */}
+                    <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                      <div className="flex items-center justify-between text-[9px] font-extrabold tracking-widest text-emerald-400 uppercase">
+                        <span>{s.mockup.tag}</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      </div>
+                      <div className="font-bold text-xs text-slate-200">{s.mockup.headline}</div>
+                      <div className="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        {s.mockup.badge}
+                      </div>
+                      <div className="text-[10px] text-slate-400 pt-1 font-mono">{s.mockup.meta}</div>
+                    </div>
+                  </div>
+
+                  {/* Footer Action Link */}
+                  <div className="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between text-xs font-bold text-emerald-400">
+                    <span>Explore Step</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Masterpiece Architecture Pipeline Visual Banner */}
+          <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl" />
+            <div className="relative z-10 grid lg:grid-cols-5 gap-6 items-center text-center lg:text-left">
+              <div className="lg:col-span-2 space-y-2">
+                <div className="text-xs font-extrabold uppercase tracking-widest text-emerald-400">AUTOMATED ENGINE TELEMETRY</div>
+                <h3 className="font-extrabold text-2xl sm:text-3xl" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  Verified Execution Pipeline
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  How GetiDone replaces traditional claim-based bidding with objective code telemetry and 0-risk QA test gates.
+                </p>
+              </div>
+
+              {/* 3 Pipeline Flow Stages */}
+              <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                    <Terminal className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-extrabold text-slate-200">1. Git & IDE Sync</div>
+                  <div className="text-[10px] text-slate-400">Active commit & telemetry logging</div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center mx-auto">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-extrabold text-slate-200">2. QA Test Gate</div>
+                  <div className="text-[10px] text-slate-400">Playwright & Jest test pass</div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto">
+                    <DollarSign className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-extrabold text-slate-200">3. Escrow Release</div>
+                  <div className="text-[10px] text-slate-400">Instant payout to wallet balance</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories Section */}
       <section id="categories" className="py-20 px-6 border-t border-b" style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-12">
@@ -532,7 +810,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Top Verified Executioners (Upwork Style Talent Spotlight) */}
+      {/* Top Verified Executioners */}
       <section className="py-20 px-6 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between mb-12">
@@ -614,55 +892,6 @@ export default function LandingPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Verified Execution Guarantee (GetiDone Core Differentiator) */}
-      <section id="guarantee" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-1 rounded-full mb-3 text-xs font-bold uppercase tracking-wider border" style={{ background: 'rgba(16,185,129,0.1)', borderColor: 'rgba(16,185,129,0.2)', color: 'var(--primary)' }}>
-              WHY GETIDONE IS DIFFERENT
-            </div>
-            <h2 className="font-extrabold text-3xl sm:text-4xl mb-4" style={{ fontFamily: "'Sora', sans-serif", color: 'var(--text)' }}>
-              0% Risk Verified Execution Model
-            </h2>
-            <p className="text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
-              Unverified promises cost time and money. GetiDone introduces objective automated QA test gates and escrow telemetry.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="gd-card p-8 space-y-4" style={{ background: 'var(--bg-alt)' }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-emerald-500 text-white font-bold">
-                <Brain className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>Done Score™ Algorithm</h3>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Freelancer ranks are derived from active Git telemetry, automated test suite pass rates, and verified milestone delivery accuracy.
-              </p>
-            </div>
-
-            <div className="gd-card p-8 space-y-4" style={{ background: 'var(--bg-alt)' }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal-500 text-white font-bold">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>QA-Gated Escrow</h3>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Milestone funds are held securely in Escrow and released only when deliverables pass defined acceptance criteria and automated test suites.
-              </p>
-            </div>
-
-            <div className="gd-card p-8 space-y-4" style={{ background: 'var(--bg-alt)' }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-lime-500 text-white font-bold">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>Micro-POD Squads</h3>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Assemble multi-role execution teams (Lead Dev, UI/UX Designer, QA Specialist) in 1-click for end-to-end enterprise product delivery.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -859,7 +1088,7 @@ export default function LandingPage() {
           <div>
             <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Resources</h4>
             <ul className="space-y-2">
-              <li><Link href="/settings" className="hover:text-emerald-400 transition-colors">Help & Support</Link></li>
+              <li><a href="#guide" className="hover:text-emerald-400 transition-colors">Navigation Infographic</a></li>
               <li><Link href="/contracts" className="hover:text-emerald-400 transition-colors">Trust & Safety</Link></li>
               <li><Link href="/files" className="hover:text-emerald-400 transition-colors">Privacy Policy</Link></li>
             </ul>
