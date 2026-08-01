@@ -224,10 +224,10 @@ export default function ReportsPage() {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.04)" />
                 <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} tickFormatter={(val) => `$${val / 1000}k`} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} tickFormatter={(val) => balancesVisible ? `$${val / 1000}k` : '••'} />
                 <RechartsTooltip
                   contentStyle={{ backgroundColor: '#0A0F0D', border: 'none', borderRadius: '8px', color: '#FFF' }}
-                  formatter={(val: any) => [`$${val.toLocaleString()}`, '']}
+                  formatter={(val: any) => [balancesVisible ? `$${val.toLocaleString()}` : '•••••', '']}
                 />
                 <Area type="monotone" dataKey="earned" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#earnedGradient)" />
                 <Line type="monotone" dataKey="escrow" stroke="#84CC16" strokeWidth={2} strokeDasharray="5 5" dot={false} />
@@ -294,10 +294,10 @@ export default function ReportsPage() {
               <BarChart data={categoryEarningsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.04)" />
                 <XAxis dataKey="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} tickFormatter={(val) => `$${val / 1000}k`} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#5A6B62' }} tickFormatter={(val) => balancesVisible ? `$${val / 1000}k` : '••'} />
                 <RechartsTooltip
                   contentStyle={{ backgroundColor: '#0A0F0D', border: 'none', borderRadius: '8px', color: '#FFF' }}
-                  formatter={(val: any) => [`$${val.toLocaleString()}`, '']}
+                  formatter={(val: any) => [balancesVisible ? `$${val.toLocaleString()}` : '•••••', '']}
                 />
                 <Bar dataKey="earned" fill="#10B981" radius={[6, 6, 0, 0]} barSize={24} />
               </BarChart>
