@@ -21,6 +21,8 @@ Current SampleAssets → Next.js page mapping:
 | TeamPODs.html           | frontend/src/app/(dashboard)/team/page.tsx                |
 | Settings.html           | frontend/src/app/(dashboard)/settings/page.tsx            |
 | Reports.html            | frontend/src/app/(dashboard)/reports/page.tsx             |
+| Calendar.html           | frontend/src/app/(dashboard)/schedule/page.tsx            |
+| Contracts.html          | frontend/src/app/(dashboard)/contracts/page.tsx          |
 
 ## Always Check for Existing Pages Before Updating
 Before writing or modifying any page or route file, always run a directory scan of the target folder.
