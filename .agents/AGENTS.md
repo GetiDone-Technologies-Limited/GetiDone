@@ -15,6 +15,7 @@ Current SampleAssets → Next.js page mapping:
 | SampleAssets File       | Target (Next.js)                                          |
 |-------------------------|-----------------------------------------------------------|
 | ClientDashboard.html    | frontend/src/app/(dashboard)/client/page.tsx              |
+| FreelancerDashboard.html| frontend/src/app/(dashboard)/freelancer/page.tsx          |
 | Messages.html           | frontend/src/app/(dashboard)/messages/page.tsx            |
 | MyProjects.html         | frontend/src/app/(dashboard)/projects/page.tsx            |
 | Payments.html           | frontend/src/app/(dashboard)/payments/page.tsx            |
