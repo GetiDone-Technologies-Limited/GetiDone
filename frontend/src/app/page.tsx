@@ -12,6 +12,7 @@ import {
   HelpCircle, ArrowDown, ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { useTheme } from 'next-themes';
 
 // ==================== MOCK FEATURED DATA ====================
 const featuredCategories = [
@@ -326,16 +327,10 @@ export default function LandingPage() {
     }
   }, []);
 
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
   const toggleTheme = () => {
-    const nextDark = !isDarkMode;
-    setIsDarkMode(nextDark);
-    if (nextDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   const showToast = (title: string, msg: string) => {
@@ -427,7 +422,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden gd-ambient-bg gd-animated-grid">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-xs font-bold tracking-wider uppercase border" style={{ background: 'rgba(16,185,129,0.1)', borderColor: 'rgba(16,185,129,0.2)', color: 'var(--primary)' }}>
@@ -436,7 +431,7 @@ export default function LandingPage() {
             </div>
 
             <h1 className="font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.1] mb-6" style={{ fontFamily: "'Sora', sans-serif", color: 'var(--text)' }}>
-              Hire Vetted Executioners. <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-lime-500 bg-clip-text text-transparent">Or Buy Fixed Packages.</span>
+              Hire Vetted Executioners. <span className="gd-gradient-text-animated">Or Buy Fixed Packages.</span>
             </h1>
 
             <p className="text-base sm:text-lg mb-8 max-w-lg leading-relaxed" style={{ color: 'var(--muted)' }}>
@@ -552,7 +547,7 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       {/* AESTHETIC MASTERPIECE: INTERACTIVE PLATFORM NAVIGATION INFOGRAPHIC */}
       {/* ========================================================================= */}
-      <section id="guide" className="py-24 px-6 relative overflow-hidden bg-slate-950 text-white">
+      <section id="guide" className="py-24 px-6 relative overflow-hidden bg-slate-950 text-white gd-ambient-bg gd-animated-grid">
         {/* Glow Effects Background */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />

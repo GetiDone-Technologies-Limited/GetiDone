@@ -444,11 +444,11 @@ export default function MessagesPage() {
           </button>
           <div className="w-px h-8" style={{ backgroundColor: 'var(--border)' }}></div>
           <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-transform hover:-translate-y-px">
-            {user?.photoURL ? (
-              <img src={user.photoURL} className="w-8 h-8 rounded-full object-cover" alt="Profile" />
+            {user?.avatarUrl ? (
+              <img src={user.avatarUrl} className="w-8 h-8 rounded-full object-cover" alt="Profile" />
             ) : (
               <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
-                {user?.displayName?.[0] || 'U'}
+                {user?.name?.[0] || 'U'}
               </div>
             )}
             <ChevronDown className="w-3 h-3 text-[var(--muted)]" />

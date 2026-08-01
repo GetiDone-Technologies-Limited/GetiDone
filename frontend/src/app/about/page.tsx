@@ -7,6 +7,7 @@ import {
   TrendingUp, Award, Globe, Heart, Sparkles, Code, Star
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { ThemeToggle } from '@/shared/components/common/ThemeToggle';
 
 const values = [
   {
@@ -83,7 +84,8 @@ export default function AboutPage() {
             <Link href="/freelancers" className="hover:text-emerald-500 transition-colors">Find Talent</Link>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             {user ? (
               <Link href={user.role === 'CLIENT' ? '/client' : '/freelancer'} className="btn-primary text-sm px-4 py-2.5 rounded-xl font-bold flex items-center gap-2">
                 <span>Dashboard</span>

@@ -221,7 +221,7 @@ export default function FreelancerDashboardPage() {
                 <YAxis tickLine={false} axisLine={false} tick={{ fill: 'var(--muted)', fontSize: 12 }} tickFormatter={val => `$${val}`} />
                 <Tooltip
                   contentStyle={{ background: '#0A0F0D', border: '1px solid #10B981', borderRadius: 12, color: 'white', fontSize: 12 }}
-                  formatter={(val: number) => [`$${val}`, 'Earned']}
+                  formatter={(val: any) => [`$${val}`, 'Earned']}
                 />
                 <Area type="monotone" dataKey="earnings" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorEarnings)" />
               </AreaChart>

@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import {
   ChevronRight, Search, Plus, Upload, FolderPlus, Grid, List,
   FileText, Image as ImageIcon, Video, FileSpreadsheet, Archive,
-  Figma, ChevronDown, Clock, Trash2, Share2, Download, Eye,
+  FileCode, ChevronDown, Clock, Trash2, Share2, Download, Eye,
   X, Check, Sparkles, Folder, HelpCircle, Bell
 } from 'lucide-react';
 
@@ -30,7 +30,7 @@ interface ToastState {
 const fileTypeConfig: Record<FileType, { icon: React.ReactNode; color: string; bg: string }> = {
   pdf: { icon: <FileText className="w-6 h-6 text-red-500" />, color: 'var(--danger)', bg: 'rgba(239,68,68,0.1)' },
   png: { icon: <ImageIcon className="w-6 h-6 text-teal-500" />, color: 'var(--secondary)', bg: 'rgba(20,184,166,0.1)' },
-  fig: { icon: <Figma className="w-6 h-6 text-purple-500" />, color: '#A855F7', bg: 'rgba(168,85,247,0.1)' },
+  fig: { icon: <FileCode className="w-6 h-6 text-purple-500" />, color: '#A855F7', bg: 'rgba(168,85,247,0.1)' },
   xlsx: { icon: <FileSpreadsheet className="w-6 h-6 text-lime-600" />, color: 'var(--accent)', bg: 'rgba(132,204,22,0.1)' },
   mp4: { icon: <Video className="w-6 h-6 text-amber-500" />, color: 'var(--warning)', bg: 'rgba(245,158,11,0.1)' },
   docx: { icon: <FileText className="w-6 h-6 text-emerald-500" />, color: 'var(--primary)', bg: 'rgba(16,185,129,0.1)' },

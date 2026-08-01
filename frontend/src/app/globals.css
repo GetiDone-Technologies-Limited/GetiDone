@@ -76,19 +76,81 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display), 'Sora', sans-serif;
 }
 
-/* ==================
-   BACKGROUND TEXTURE
-   ================== */
-.gd-bg-gradient::before {
+/* ==========================================================================
+   DYNAMIC AMBIENT BACKGROUND ANIMATIONS & MESH
+   ========================================================================== */
+@keyframes gd-orbit-glow-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.15); }
+  66% { transform: translate(-40px, 50px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes gd-orbit-glow-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-80px, 30px) scale(0.85); }
+  66% { transform: translate(50px, -60px) scale(1.2); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes gd-grid-float {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+@keyframes gd-shimmer-text {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gd-ambient-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.gd-ambient-bg::before {
   content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.07) 0%, transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(132, 204, 22, 0.03) 0%, transparent 50%);
+  position: absolute;
+  top: -10%;
+  left: 10%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+  filter: blur(90px);
   pointer-events: none;
   z-index: 0;
+  animation: gd-orbit-glow-1 18s infinite ease-in-out;
+}
+
+.gd-ambient-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: 10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.12) 0%, transparent 70%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  animation: gd-orbit-glow-2 22s infinite ease-in-out;
+}
+
+.gd-animated-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+  animation: gd-grid-float 20s linear infinite;
+}
+
+.gd-gradient-text-animated {
+  background: linear-gradient(135deg, #10B981 0%, #14B8A6 33%, #84CC16 66%, #10B981 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gd-shimmer-text 6s ease infinite;
 }
 
 /* ==================

@@ -1,10 +1,12 @@
 import { Sidebar } from './Sidebar';
 import { useUIStore } from '@/store/ui.store';
-import { Search, HelpCircle } from 'lucide-react';
+import { Search, HelpCircle, Sun, Moon } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
 import { MessageDropdown } from './MessageDropdown';
 import { UserDropdown } from './UserDropdown';
 import { DashboardNavControls } from './DashboardNavControls';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -12,6 +14,12 @@ interface DashboardShellProps {
 
 export function DashboardShell({ children }: DashboardShellProps) {
   const { toggleSidebar } = useUIStore();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
@@ -46,6 +54,17 @@ export function DashboardShell({ children }: DashboardShellProps) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              className="btn-ghost w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center lift"
+              title={mounted && resolvedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {mounted && resolvedTheme === 'dark' ? (
+                <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 dark:text-slate-300" />
+              )}
+            </button>
             <button className="btn-ghost w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center lift">
               <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--muted)' }} />
             </button>

@@ -19,10 +19,10 @@ import {
 } from 'recharts';
 
 const mockProjects = [
-  { id: 'p1', title: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', status: 'In Progress', progress: 72, budget: 2500, due: 'Dec 20, 2025', category: 'Web Design' },
-  { id: 'p2', title: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', status: 'In Review', progress: 90, budget: 3200, due: 'Dec 18, 2025', category: 'Mobile' },
-  { id: 'p3', title: 'Brand Identity Package', freelancer: 'Alex Chen', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', status: 'In Progress', progress: 45, budget: 1800, due: 'Jan 5, 2026', category: 'Branding' },
-  { id: 'p4', title: 'SEO Optimization Campaign', freelancer: 'Jenny Diaz', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', status: 'On Hold', progress: 30, budget: 1200, due: 'Jan 15, 2026', category: 'Marketing' },
+  { id: 'p1', title: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', status: 'In Progress', progress: 72, budget: 2500, due: 'Dec 20, 2025', category: 'Web Design', isReal: false },
+  { id: 'p2', title: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', status: 'In Review', progress: 90, budget: 3200, due: 'Dec 18, 2025', category: 'Mobile', isReal: false },
+  { id: 'p3', title: 'Brand Identity Package', freelancer: 'Alex Chen', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', status: 'In Progress', progress: 45, budget: 1800, due: 'Jan 5, 2026', category: 'Branding', isReal: false },
+  { id: 'p4', title: 'SEO Optimization Campaign', freelancer: 'Jenny Diaz', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', status: 'On Hold', progress: 30, budget: 1200, due: 'Jan 15, 2026', category: 'Marketing', isReal: false },
 ];
 
 const mockSpendingData = [
