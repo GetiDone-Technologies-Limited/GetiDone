@@ -24,6 +24,7 @@ Current SampleAssets → Next.js page mapping:
 | TeamPODs.html           | frontend/src/app/(dashboard)/team/page.tsx                |
 | Settings.html           | frontend/src/app/(dashboard)/settings/page.tsx            |
 | Reports.html            | frontend/src/app/(dashboard)/reports/page.tsx             |
+| ReportFreelancer.html   | frontend/src/app/(dashboard)/reports/page.tsx             |
 | Calendar.html           | frontend/src/app/(dashboard)/schedule/page.tsx            |
 | ActiveProjects.html     | frontend/src/app/(dashboard)/freelancer/projects/page.tsx |
 | Contracts.html          | frontend/src/app/(dashboard)/contracts/page.tsx          |
