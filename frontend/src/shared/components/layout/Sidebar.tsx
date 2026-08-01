@@ -94,7 +94,9 @@ export function Sidebar() {
                 </span>
                 <span className="text-xl font-bold text-white tracking-tight">Geti<span style={{ color: 'var(--primary)' }}>Done</span></span>
               </div>
-              <span className="text-[10px] font-bold text-slate-500 tracking-widest pl-10">CLIENT SPACE</span>
+              <span className="text-[10px] font-bold text-slate-500 tracking-widest pl-10">
+                {user?.role === 'FREELANCER' || pathname.startsWith('/freelancer') ? 'FREELANCER SPACE' : 'CLIENT SPACE'}
+              </span>
             </div>
           ) : (
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary-light to-primary-dark text-white text-xl font-black shadow-lg shadow-primary/20">
