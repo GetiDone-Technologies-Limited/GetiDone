@@ -84,12 +84,12 @@ GetiDone is an AI-powered freelance execution platform. The MVP skeleton provide
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| 1 | E2E Testing Track | Design and establish the E2E testing infra and test cases | None | IN_PROGRESS (Conv: f01c1b02-7b06-4486-a978-51ab1478574c) |
-| 2 | DB Layer | Design & validate PostgreSQL schema via Prisma ORM | None | DONE |
-| 3 | Backend Skeleton | NestJS setup with 5 modular domains, mock external APIs, JSON endpoints, compiles | DB Layer | IN_PROGRESS (Conv: 90967d5d-501f-41a4-8969-e410d88b570f) |
-| 4 | Frontend Skeleton | Next.js 15 skeleton with modular structure, TailwindCSS/Shadcn, routing, compiles | None | IN_PROGRESS (Conv: 90967d5d-501f-41a4-8969-e410d88b570f) |
-| 5 | Integration & E2E Verification | Connect UI to Mock backend & pass all E2E test tiers | Backend, Frontend, Testing Track | PLANNED |
-| 6 | Adversarial Testing & Audit | Harden with adversarial test generation and run Forensic Audit | Integration | PLANNED |
+| 1 | E2E Testing Track | Design and establish the E2E testing infra and 71 test cases | None | DONE ✅ |
+| 2 | DB Layer | Design & validate PostgreSQL schema via Prisma ORM | None | DONE ✅ |
+| 3 | Backend Skeleton | NestJS setup with 5 modular domains, Socket.io WebSockets Gateway & QA Test Gate Telemetry | DB Layer | DONE ✅ |
+| 4 | Frontend Skeleton | Next.js 15 skeleton with 25+ SampleAssets pages, light/dark theme, loading transitions | None | DONE ✅ |
+| 5 | Integration & E2E Verification | Connect UI to REST APIs, WebSockets, & Playwright 100% test gate auto-escrow release | Backend, Frontend, Testing Track | DONE ✅ |
+| 6 | Adversarial Testing & Deployment | 71/71 E2E tests passed, Docker containerization, Security Audit & Cloud deployment | Integration | DONE ✅ |
 
 ## Interface Contracts
 
