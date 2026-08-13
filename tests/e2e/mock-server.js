@@ -79,6 +79,78 @@ const server = http.createServer(async (req, res) => {
     }
 
     // ----------------------------------------------------
+    // SANDBOX TESTING ENVIRONMENT MODULE
+    // ----------------------------------------------------
+    if (pathname === '/sandbox/state' && method === 'GET') {
+      return sendJson(res, 200, {
+        environment: 'GETIDONE_DEVELOPER_SANDBOX',
+        status: 'ACTIVE',
+        timestamp: new Date().toISOString(),
+        activeAlertsCount: state.securityAlerts.length,
+        recentAlerts: state.securityAlerts,
+        testGatesStatus: 'READY',
+        webSocketsEngine: 'ONLINE'
+      });
+    }
+
+    if (pathname === '/sandbox/payment' && method === 'POST') {
+      const body = await getJsonBody(req);
+      const amount = Number(body.amount) || 400;
+      const reference = body.reference || `SBOX-${Date.now()}`;
+      return sendJson(res, 201, {
+        status: 'SUCCESSFUL',
+        invoice: {
+          id: 'inv_sbox_101',
+          paidAmount: amount,
+          outstandingBalance: 1000 - amount,
+          status: amount >= 1000 ? 'PAID' : 'PARTIALLY_PAID'
+        },
+        payment: { id: 'pay_sbox_1', amount, reference }
+      });
+    }
+
+    if (pathname === '/sandbox/test-gate' && method === 'POST') {
+      const body = await getJsonBody(req);
+      const passRate = body.passRate !== undefined ? body.passRate : 100;
+      return sendJson(res, 201, {
+        sandboxTestRunId: `SBOX_RUN_${Date.now()}`,
+        commitSha: 'sha-sbox-1',
+        passRate: `${passRate}%`,
+        status: passRate === 100 ? 'PASSED_100_PERCENT' : 'FAILED_GATE',
+        escrowAction: passRate === 100 ? 'AUTO_RELEASED' : 'HELD_IN_ESCROW'
+      });
+    }
+
+    if (pathname === '/sandbox/attack' && method === 'POST') {
+      const body = await getJsonBody(req);
+      const alert = {
+        alertId: `SEC_ALERT_${Date.now()}`,
+        type: body.attackType || 'SQL_INJECTION',
+        severity: 'CRITICAL',
+        sourceIp: '127.0.0.1 (SANDBOX)',
+        userPath: '/sandbox/attack',
+        method: 'POST',
+        details: `Simulated Attack Payload: ${body.payload}`,
+        blockedAt: new Date().toISOString()
+      };
+      state.securityAlerts.push(alert);
+      return sendJson(res, 201, {
+        simulationResult: 'BLOCKED_BY_SECURITY_GUARD',
+        attackType: body.attackType,
+        payload: body.payload,
+        securityAlert: alert
+      });
+    }
+
+    if (pathname === '/sandbox/reset' && method === 'POST') {
+      return sendJson(res, 201, {
+        status: 'RESET_SUCCESSFUL',
+        message: 'Sandbox state re-initialized cleanly.',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // ----------------------------------------------------
     // INTRUSION DETECTION SECURITY ENGINE
     // ----------------------------------------------------
     const urlDecoded = decodeURIComponent(req.url || '');

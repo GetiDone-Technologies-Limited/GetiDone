@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Settings — GetiDone</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://z-cdn-media.chatglm.cn/files/ff6aace7-1d03-429f-8d3c-4a7e8d8aed5e.png" type="image/png">
+<style>
+  :root {
+    --bg: #F8FAF9;
+    --bg-alt: #EFF4F1;
+    --sidebar: #0A0F0D;
+    --sidebar-hover: #131A16;
+    --card: #FFFFFF;
+    --primary: #10B981;
+    --primary-dark: #059669;
+    --primary-light: #34D399;
+    --secondary: #14B8A6;
+    --accent: #84CC16;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --text: #0F1A14;
+    --muted: #5A6B62;
+    --soft: #94A39A;
+    --border: #E2EAE5;
+    --sidebar-text: #7A8A82;
+  }
+  
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.07) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+  }
+  
+  .font-display { font-family: 'Sora', sans-serif; }
+  .getidone-text { font-family: 'Sora', sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+  .getidone-text .geti { color: #FFFFFF; }
+  .getidone-text .done { color: #10B981; }
+  .getidone-text.dark .geti { color: #5A6B62; }
+  
+  .app-wrapper { display: flex; height: 100vh; width: 100%; position: relative; z-index: 1; }
+  
+  /* Sidebar */
+  .sidebar {
+    background: var(--sidebar); background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.14) 0%, transparent 50%), linear-gradient(180deg, #0A0F0D 0%, #060A08 100%);
+    position: relative; width: 250px; flex-shrink: 0; display: flex; flex-direction: column; height: 100vh;
+  }
+  .sidebar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent); }
+  
+  .nav-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+  .nav-item:hover { background: var(--sidebar-hover); color: #FFFFFF; transform: translateX(2px); }
+  .nav-item.active { background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%); color: #FFFFFF; }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; background: var(--primary); border-radius: 0 4px 4px 0; box-shadow: 0 0 12px var(--primary); }
+  .nav-item.active i { color: var(--primary); }
+  
+  .main-area { flex: 1; height: 100vh; display: flex; flex-direction: column; overflow-y: auto; padding: 24px 32px; }
+  
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; transition: all 0.3s; position: relative; overflow: hidden; }
+  .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); opacity: 0; transition: opacity 0.3s; }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.5); }
+  .btn-primary > * { position: relative; z-index: 1; }
+  
+  .btn-ghost { background: var(--card); border: 1px solid var(--border); transition: all 0.2s; color: var(--text); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+  
+  .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid transparent; transition: all 0.2s; }
+  .btn-danger:hover { background: var(--danger); color: white; }
+  
+  .lift { transition: transform 0.2s; }
+  .lift:hover { transform: translateY(-1px); }
+  .search-input { background: var(--bg-alt); border: 1px solid transparent; transition: all 0.2s; }
+  .search-input:focus { background: var(--card); border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+
+  /* Form Elements */
+  .form-input { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; font-size: 14px; transition: all 0.2s; width: 100%; color: var(--text); font-family: 'Manrope', sans-serif; }
+  .form-input:focus { background: var(--card); border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+  .form-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block; }
+  
+  /* Custom Toggle */
+  .toggle { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+  .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  .toggle.active { background: var(--primary); }
+  .toggle.active::after { transform: translateX(20px); }
+
+  /* Settings Layout */
+  .settings-nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; font-size: 14px; color: var(--muted); }
+  .settings-nav-item:hover { background: var(--bg-alt); color: var(--text); }
+  .settings-nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.4); }
+  .settings-nav-item.active i { color: white; }
+
+  .payment-method-card { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-alt); transition: all 0.2s; }
+  .payment-method-card:hover { border-color: var(--primary); }
+  
+  .status-pill { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px; }
+
+  .eye-toggle { background: transparent; border: none; cursor: pointer; color: var(--muted); transition: all 0.2s; display: flex; align-items: center; justify-content: center; padding: 4px; position: relative; z-index: 10; }
+  .eye-toggle:hover { color: var(--primary); transform: scale(1.1); }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(6, 10, 8, 0.6); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+  .modal-content { background: var(--card); border-radius: 24px; max-width: 540px; width: calc(100% - 32px); max-height: 88vh; overflow-y: auto; transform: scale(0.94) translateY(20px); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 30px 80px -20px rgba(15, 26, 20, 0.4); }
+  .modal-backdrop.active .modal-content { transform: scale(1) translateY(0); }
+  
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--sidebar); color: white; padding: 14px 20px; border-radius: 14px; box-shadow: 0 16px 40px -12px rgba(15, 26, 20, 0.4); z-index: 200; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; gap: 12px; max-width: 360px; border: 1px solid rgba(16, 185, 129, 0.2); }
+  .toast.show { transform: translateX(0); }
+  .toast-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--soft); }
+  
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both; }
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ============ SIDEBAR (FREELANCER VIEW) ============ -->
+  <aside class="sidebar py-6 px-4 z-20 hidden md:flex">
+    <div class="px-3 mb-8 flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #10B981, #34D399); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+        <i class="fa-solid fa-arrow-up text-white text-sm font-bold"></i>
+      </div>
+      <div>
+        <div class="getidone-text text-lg leading-none">
+          <span class="geti">Geti</span><span class="done">Done</span>
+        </div>
+        <div class="text-[10px] tracking-widest" style="color: var(--sidebar-text);">FREELANCER SPACE</div>
+      </div>
+    </div>
+
+    <button onclick="window.location.href='find-work.html'" class="btn-primary mx-2 mb-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+      <i class="fa-solid fa-magnifying-glass text-xs"></i>
+      <span>Find Work</span>
+    </button>
+
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2" style="color: var(--sidebar-text);">MAIN</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='dashboard.html'">
+        <i class="fa-solid fa-grip w-4 text-center"></i><span>Dashboard</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='find-work.html'">
+        <i class="fa-solid fa-briefcase w-4 text-center"></i><span>Find Work</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='proposals.html'">
+        <i class="fa-solid fa-paper-plane w-4 text-center"></i><span>My Proposals</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(16,185,129,0.15); color: var(--primary);">4</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='contracts.html'">
+        <i class="fa-solid fa-file-signature w-4 text-center"></i><span>My Contracts</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='messages.html'">
+        <i class="fa-solid fa-comment-dots w-4 text-center"></i><span>Messages</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(20,184,166,0.15); color: var(--secondary);">3</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='payments.html'">
+        <i class="fa-solid fa-sack-dollar w-4 text-center"></i><span>Payments</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='reports.html'">
+        <i class="fa-solid fa-chart-line w-4 text-center"></i><span>Reports</span>
+      </a>
+
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2 mt-6" style="color: var(--sidebar-text);">TOOLS</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='calendar.html'">
+        <i class="fa-solid fa-calendar-days w-4 text-center"></i><span>Calendar</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='files.html'">
+        <i class="fa-solid fa-folder w-4 text-center"></i><span>Files</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='portfolio.html'">
+        <i class="fa-solid fa-briefcase w-4 text-center"></i><span>My Portfolio</span>
+      </a>
+      <a class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);">
+        <i class="fa-solid fa-gear w-4 text-center"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 mx-2 p-4 rounded-2xl relative overflow-hidden" style="background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(132,204,22,0.08)); border: 1px solid rgba(16,185,129,0.2);">
+      <div class="flex items-center gap-2 mb-1.5">
+        <i class="fa-solid fa-crown text-xs" style="color: var(--accent);"></i>
+        <span class="text-[11px] font-bold tracking-wider text-white">UPGRADE TO PRO</span>
+      </div>
+      <p class="text-[11px] leading-relaxed mb-3" style="color: var(--sidebar-text);">Get 80 more connects monthly & priority bidding.</p>
+      <button onclick="showToast('Upgrade', 'Redirecting to upgrade page')" class="w-full py-2 rounded-lg text-[11px] font-bold text-white" style="background: var(--primary);">Upgrade Now</button>
+    </div>
+
+    <div class="mt-4 px-2 flex items-center gap-3 cursor-pointer hover:bg-white/5 p-2 rounded-lg transition" onclick="window.location.href='profile.html'">
+      <img src="https://picsum.photos/seed/danielbenson/100/100.jpg" class="w-9 h-9 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-white truncate">Daniel Benson</div>
+        <div class="text-[11px] truncate" style="color: var(--sidebar-text);">Senior Full Stack Dev</div>
+      </div>
+      <i class="fa-solid fa-chevron-right text-xs" style="color: var(--sidebar-text);"></i>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main-area">
+    
+    <!-- Top bar -->
+    <header class="flex items-center justify-between mb-8 fade-up">
+      <div class="relative flex-1 max-w-xl">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-sm" style="color: var(--soft);"></i>
+        <input type="text" placeholder="Search settings..." class="search-input w-full pl-11 pr-4 py-2.5 rounded-xl text-sm">
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] px-1.5 py-0.5 rounded border" style="border-color: var(--border); color: var(--muted);">⌘K</kbd>
+      </div>
+      <div class="flex items-center gap-3 ml-6">
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift" onclick="showToast('Help Center', 'Opening help resources')">
+          <i class="fa-regular fa-circle-question text-sm"></i>
+        </button>
+        <button class="btn-ghost w-10 h-10 rounded-xl flex items-center justify-center lift relative" onclick="showToast('Notifications', 'You have 3 new notifications')">
+          <i class="fa-regular fa-bell text-sm"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style="background: var(--primary); border: 2px solid var(--card);"></span>
+        </button>
+        <div class="w-px h-8" style="background: var(--border);"></div>
+        <button class="flex items-center gap-2 px-3 py-1.5 rounded-xl lift">
+          <img src="https://picsum.photos/seed/danielbenson/100/100.jpg" class="w-8 h-8 rounded-full object-cover">
+          <i class="fa-solid fa-chevron-down text-[10px]" style="color: var(--muted);"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="mb-8 fade-up" style="animation-delay: 0.05s;">
+      <div class="flex items-center gap-2 mb-2 text-xs" style="color: var(--muted);">
+        <a onclick="window.location.href='dashboard.html'" class="cursor-pointer hover:text-emerald-600 transition">Dashboard</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <span style="color: var(--text); font-weight: 600;">Account Settings</span>
+      </div>
+      <h1 class="font-display font-extrabold text-4xl tracking-tight">Account Settings<span style="color: var(--primary);">.</span></h1>
+      <p class="text-sm mt-1.5" style="color: var(--muted);">Manage your profile, security, and platform preferences.</p>
+    </section>
+
+    <!-- Settings Layout -->
+    <div class="flex gap-8 mb-12 fade-up" style="animation-delay: 0.1s;">
+      
+      <!-- Sticky Settings Nav -->
+      <aside class="w-64 flex-shrink-0 hidden lg:block">
+        <div class="sticky top-4 space-y-1">
+          <div class="settings-nav-item active" onclick="scrollToSection('general', this)">
+            <i class="fa-solid fa-user-circle w-4"></i> General Information
+          </div>
+          <div class="settings-nav-item" onclick="scrollToSection('security', this)">
+            <i class="fa-solid fa-shield-halved w-4"></i> Security Settings
+          </div>
+          <div class="settings-nav-item" onclick="scrollToSection('notifications', this)">
+            <i class="fa-solid fa-bell w-4"></i> Notification Preferences
+          </div>
+          <div class="settings-nav-item" onclick="scrollToSection('payout', this)">
+            <i class="fa-solid fa-money-check-dollar w-4"></i> Payout Settings
+          </div>
+          <div class="settings-nav-item" onclick="scrollToSection('platform', this)">
+            <i class="fa-solid fa-globe w-4"></i> Platform Preferences
+          </div>
+        </div>
+      </aside>
+
+      <!-- Settings Forms Container -->
+      <div class="flex-1 space-y-8">
+        
+        <!-- 1. General Information -->
+        <section id="general" class="card p-8 scroll-mt-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(16,185,129,0.12); color: var(--primary);">
+              <i class="fa-solid fa-user-circle"></i>
+            </div>
+            <div>
+              <h2 class="font-display font-bold text-xl">General Information</h2>
+              <p class="text-xs mt-0.5" style="color: var(--muted);">Update your personal details and contact info.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-6 mb-8 pb-8" style="border-bottom: 1px solid var(--border);">
+            <img src="https://picsum.photos/seed/danielbenson/200/200.jpg" class="w-24 h-24 rounded-full object-cover" style="border: 4px solid var(--card); box-shadow: 0 0 0 1px var(--border);">
+            <div>
+              <h3 class="font-display font-bold text-lg">Profile Photo</h3>
+              <p class="text-xs mb-3" style="color: var(--muted);">JPG, PNG, or GIF. Max size 2MB.</p>
+              <div class="flex gap-2">
+                <button class="btn-ghost px-4 py-2 rounded-lg text-xs font-bold">Upload New</button>
+                <button class="btn-danger px-4 py-2 rounded-lg text-xs font-bold">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <form onsubmit="event.preventDefault(); showToast('Saved', 'General information updated successfully');" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-input" value="Daniel" required>
+            </div>
+            <div>
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input" value="Benson" required>
+            </div>
+            <div class="md:col-span-2">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" value="daniel.benson@getidone.io" required>
+            </div>
+            <div class="md:col-span-2">
+              <label class="form-label">Timezone</label>
+              <select class="form-input cursor-pointer">
+                <option>GMT-08:00 Pacific Time (US & Canada)</option>
+                <option selected>GMT+01:00 West Africa Time (Lagos)</option>
+                <option>GMT+00:00 Greenwich Mean Time</option>
+                <option>GMT+01:00 Central European Time</option>
+              </select>
+            </div>
+            <div class="md:col-span-2 flex justify-end">
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-bold">Save Changes</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 2. Security Settings -->
+        <section id="security" class="card p-8 scroll-mt-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(239,68,68,0.12); color: var(--danger);">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h2 class="font-display font-bold text-xl">Security Settings</h2>
+              <p class="text-xs mt-0.5" style="color: var(--muted);">Keep your account secure with a strong password and 2FA.</p>
+            </div>
+          </div>
+
+          <form onsubmit="event.preventDefault(); showToast('Security Updated', 'Your security settings have been saved');" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="md:col-span-2">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" required>
+              </div>
+              <div>
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" required>
+              </div>
+              <div>
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-xl flex items-center justify-between gap-4" style="background: var(--bg-alt); border: 1px solid var(--border);">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--card); color: var(--primary);">
+                  <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-sm">Two-Factor Authentication (2FA)</h3>
+                  <p class="text-xs mt-1" style="color: var(--muted);">Add an extra layer of security to your account.</p>
+                </div>
+              </div>
+              <div class="toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+
+            <div class="flex justify-end">
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-bold">Update Security</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 3. Notification Preferences -->
+        <section id="notifications" class="card p-8 scroll-mt-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(245,158,11,0.12); color: var(--warning);">
+              <i class="fa-solid fa-bell"></i>
+            </div>
+            <div>
+              <h2 class="font-display font-bold text-xl">Notification Preferences</h2>
+              <p class="text-xs mt-0.5" style="color: var(--muted);">Choose how you want to be notified about activity.</p>
+            </div>
+          </div>
+
+          <form onsubmit="event.preventDefault(); showToast('Preferences Saved', 'Notification settings updated');" class="space-y-4">
+            <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition">
+              <div>
+                <h3 class="font-bold text-sm">New Job Recommendations</h3>
+                <p class="text-xs mt-1" style="color: var(--muted);">Get notified when new jobs matching your skills are posted.</p>
+              </div>
+              <div class="toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition">
+              <div>
+                <h3 class="font-bold text-sm">Proposal Updates</h3>
+                <p class="text-xs mt-1" style="color: var(--muted);">Notifications about proposal views, interview requests, and declines.</p>
+              </div>
+              <div class="toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition">
+              <div>
+                <h3 class="font-bold text-sm">Payment Alerts</h3>
+                <p class="text-xs mt-1" style="color: var(--muted);">Notifications about escrow releases, withdrawals, and invoices.</p>
+              </div>
+              <div class="toggle active" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition">
+              <div>
+                <h3 class="font-bold text-sm">Marketing Emails</h3>
+                <p class="text-xs mt-1" style="color: var(--muted);">Tips, newsletters, and promotional offers from GetiDone.</p>
+              </div>
+              <div class="toggle" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="flex justify-end pt-4">
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-bold">Save Preferences</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 4. Payout Settings -->
+        <section id="payout" class="card p-8 scroll-mt-8">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(20,184,166,0.12); color: var(--secondary);">
+                <i class="fa-solid fa-money-check-dollar"></i>
+              </div>
+              <div>
+                <h2 class="font-display font-bold text-xl">Payout Settings</h2>
+                <p class="text-xs mt-0.5" style="color: var(--muted);">Manage how you receive your earnings.</p>
+              </div>
+            </div>
+            <button onclick="toggleBalances()" class="eye-toggle" id="balanceToggleBtn" title="Hide/Show Details">
+              <i class="fa-solid fa-eye" id="balanceToggleIcon"></i>
+            </button>
+          </div>
+
+          <form onsubmit="event.preventDefault(); showToast('Payout Updated', 'Your payout settings have been saved');" class="space-y-8">
+            <!-- Payout Methods -->
+            <div>
+              <h3 class="font-display font-bold text-sm mb-4">Active Payout Methods</h3>
+              <div class="space-y-3">
+                <div class="payment-method-card">
+                  <div class="w-12 h-8 rounded-md flex items-center justify-center text-white text-xs font-bold" style="background: linear-gradient(135deg, #1a1a1a, #333);"><i class="fa-solid fa-building-columns"></i></div>
+                  <div class="flex-1">
+                    <div class="font-bold text-sm">Bank Account (USD)</div>
+                    <div class="text-xs" data-amount="Chase ****4242">Chase ****4242</div>
+                  </div>
+                  <span class="status-pill" style="background: rgba(16,185,129,0.12); color: var(--primary);">Primary</span>
+                  <button type="button" class="btn-danger px-3 py-1.5 rounded-md text-[11px] font-bold ml-2">Remove</button>
+                </div>
+                <div class="payment-method-card">
+                  <div class="w-12 h-8 rounded-md flex items-center justify-center text-white text-xs font-bold" style="background: var(--primary);"><i class="fa-brands fa-paypal"></i></div>
+                  <div class="flex-1">
+                    <div class="font-bold text-sm">PayPal</div>
+                    <div class="text-xs" data-amount="d.benson@email.com">d.benson@email.com</div>
+                  </div>
+                  <button type="button" class="btn-danger px-3 py-1.5 rounded-md text-[11px] font-bold">Remove</button>
+                </div>
+                <div class="payment-method-card">
+                  <div class="w-12 h-8 rounded-md flex items-center justify-center text-white text-xs font-bold" style="background: var(--secondary);"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                  <div class="flex-1">
+                    <div class="font-bold text-sm">Mobile Money (NGN)</div>
+                    <div class="text-xs" data-amount="GTBank ****1234">GTBank ****1234</div>
+                  </div>
+                  <button type="button" class="btn-danger px-3 py-1.5 rounded-md text-[11px] font-bold">Remove</button>
+                </div>
+              </div>
+              <button type="button" class="mt-4 btn-ghost px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2" onclick="openModal('payoutModal')">
+                <i class="fa-solid fa-plus text-[10px]"></i> Add new payout method
+              </button>
+            </div>
+
+            <!-- Payout Schedule -->
+            <div class="pt-6" style="border-top: 1px solid var(--border);">
+              <h3 class="font-display font-bold text-sm mb-4">Payout Schedule</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="form-label">Minimum Payout Threshold</label>
+                  <select class="form-input cursor-pointer">
+                    <option>$100.00</option>
+                    <option selected>$500.00</option>
+                    <option>$1,000.00</option>
+                    <option>No minimum (Instant)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Automatic Payout Schedule</label>
+                  <select class="form-input cursor-pointer">
+                    <option>Weekly (Every Monday)</option>
+                    <option selected>Monthly (1st of every month)</option>
+                    <option>Manual (I will request payouts)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-6" style="border-top: 1px solid var(--border);">
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-bold">Save Payout Settings</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 5. Platform Preferences -->
+        <section id="platform" class="card p-8 scroll-mt-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(132,204,22,0.12); color: var(--accent);">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+            <div>
+              <h2 class="font-display font-bold text-xl">Platform Preferences</h2>
+              <p class="text-xs mt-0.5" style="color: var(--muted);">Customize your regional and language settings.</p>
+            </div>
+          </div>
+
+          <form onsubmit="event.preventDefault(); showToast('Preferences Saved', 'Platform settings updated');" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="form-label">Language</label>
+              <select class="form-input cursor-pointer">
+                <option>English (US)</option>
+                <option>English (UK)</option>
+                <option>French (France)</option>
+                <option>Spanish (Spain)</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Default Currency</label>
+              <select class="form-input cursor-pointer">
+                <option>USD - US Dollar ($)</option>
+                <option>EUR - Euro (€)</option>
+                <option>GBP - British Pound (£)</option>
+                <option>NGN - Nigerian Naira (₦)</option>
+              </select>
+              <p class="text-[11px] mt-2" style="color: var(--muted);">All project budgets and earnings will be displayed in this currency.</p>
+            </div>
+            <div class="md:col-span-2 flex justify-end">
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl text-sm font-bold">Save Preferences</button>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Add Payout Method Modal -->
+<div class="modal-backdrop" id="payoutModal" onclick="if(event.target===this)closeModal('payoutModal')">
+  <div class="modal-content p-7">
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #10B981, #34D399);">
+            <i class="fa-solid fa-arrow-up text-white text-xs font-bold"></i>
+          </div>
+          <div class="getidone-text text-sm dark"><span class="geti">Geti</span><span class="done">Done</span></div>
+        </div>
+        <div class="text-[11px] font-bold tracking-widest mb-1" style="color: var(--primary);">NEW METHOD</div>
+        <h2 class="font-display font-extrabold text-2xl">Add Payout Method</h2>
+      </div>
+      <button onclick="closeModal('payoutModal')" class="btn-ghost w-9 h-9 rounded-lg flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form onsubmit="event.preventDefault(); closeModal('payoutModal'); showToast('Method Added', 'Your new payout method is pending verification');" class="space-y-4">
+      <div>
+        <label class="form-label">PAYOUT TYPE</label>
+        <div class="grid grid-cols-3 gap-3">
+          <button type="button" class="payment-method-card flex-col justify-center text-center" style="border-color: var(--primary); background: rgba(16,185,129,0.05);">
+            <i class="fa-solid fa-building-columns text-lg" style="color: var(--primary);"></i>
+            <span class="font-bold text-xs mt-2">Bank</span>
+          </button>
+          <button type="button" class="payment-method-card flex-col justify-center text-center">
+            <i class="fa-brands fa-paypal text-lg" style="color: var(--primary);"></i>
+            <span class="font-bold text-xs mt-2">PayPal</span>
+          </button>
+          <button type="button" class="payment-method-card flex-col justify-center text-center">
+            <i class="fa-solid fa-mobile-screen-button text-lg" style="color: var(--primary);"></i>
+            <span class="font-bold text-xs mt-2">Mobile</span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">ACCOUNT HOLDER NAME</label>
+        <input type="text" class="form-input" placeholder="Daniel Benson" required>
+      </div>
+      <div>
+        <label class="form-label">ACCOUNT NUMBER</label>
+        <input type="text" class="form-input" placeholder="0123456789" required>
+      </div>
+      <div>
+        <label class="form-label">ROUTING NUMBER / SWIFT CODE</label>
+        <input type="text" class="form-input" placeholder="987654321" required>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal('payoutModal')" class="flex-1 btn-ghost py-3 rounded-xl text-sm font-bold">Cancel</button>
+        <button type="submit" class="flex-1 btn-primary py-3 rounded-xl text-sm font-bold">Add Method</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="fa-solid fa-check text-white text-xs"></i></div>
+  <span id="toastMsg">Action completed</span>
+</div>
+
+<script>
+  let balancesVisible = true;
+
+  function toggleBalances() {
+    balancesVisible = !balancesVisible;
+    const amounts = document.querySelectorAll('[data-amount]');
+    const icon = document.getElementById('balanceToggleIcon');
+    const btn = document.getElementById('balanceToggleBtn');
+
+    amounts.forEach(el => {
+      if (balancesVisible) {
+        el.textContent = el.dataset.amount;
+        el.style.letterSpacing = 'normal';
+      } else {
+        el.textContent = '••••••••';
+        el.style.letterSpacing = '2px';
+      }
+    });
+
+    if (balancesVisible) {
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+      btn.style.color = 'var(--muted)';
+    } else {
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+      btn.style.color = 'var(--primary)';
+    }
+  }
+
+  // Toggle Switch
+  function toggleSwitch(el) {
+    el.classList.toggle('active');
+  }
+
+  // Scroll Spy & Active Nav
+  function scrollToSection(id, el) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Auto-update active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.settings-nav-item');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navItems.forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('onclick').includes(current)) {
+        item.classList.add('active');
+      }
+    });
+  });
+
+  // Standard Functions
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  let toastTimer;
+  function showToast(title, msg) {
+    document.getElementById('toastMsg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>

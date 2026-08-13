@@ -46,6 +46,7 @@ const links: SidebarLink[] = [
   
   // TOOLS section
   { href: '/schedule', label: 'Calendar', icon: <Calendar className="w-5 h-5" />, section: 'TOOLS' },
+  { href: '/sandbox', label: 'Testing Sandbox', icon: <Terminal className="w-5 h-5" />, section: 'TOOLS' },
   { href: '/saved', label: 'Saved Talents', icon: <Star className="w-5 h-5" />, roles: ['CLIENT'], section: 'TOOLS' },
   { href: '/profile', label: 'My Profile', icon: <User className="w-5 h-5" />, roles: ['FREELANCER'], section: 'TOOLS' },
   { href: '/portfolio', label: 'Portfolio', icon: <ImageIcon className="w-5 h-5" />, roles: ['FREELANCER'], section: 'TOOLS' },

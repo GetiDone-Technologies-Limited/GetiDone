@@ -11,6 +11,7 @@ import { PaymentModule } from './payment/payment.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UploadModule } from './upload/upload.module';
 import { SecurityModule } from './security/security.module';
+import { SandboxModule } from './sandbox/sandbox.module';
 import { IntrusionDetectionInterceptor } from './security/intrusion-detection.interceptor';
 import { AppController } from './app.controller';
 
@@ -27,6 +28,7 @@ import { AppController } from './app.controller';
     DashboardModule,
     UploadModule,
     SecurityModule,
+    SandboxModule,
   ],
   controllers: [AppController],
   providers: [

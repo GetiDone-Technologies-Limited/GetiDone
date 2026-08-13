@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechNova Inc. — GetiDone</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://z-cdn-media.chatglm.cn/files/ff6aace7-1d03-429f-8d3c-4a7e8d8aed5e.png" type="image/png">
+<style>
+  :root {
+    /* GetiDone Brand Colors */
+    --bg: #F0F2F5; /* Facebook style light gray background */
+    --bg-alt: #EFF4F1;
+    --sidebar: #0A0F0D;
+    --sidebar-hover: #131A16;
+    --card: #FFFFFF;
+    --primary: #10B981;
+    --primary-dark: #059669;
+    --primary-light: #34D399;
+    --secondary: #14B8A6;
+    --accent: #84CC16;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    
+    /* Facebook style text colors */
+    --text: #050505;
+    --muted: #65676B;
+    --soft: #8A8D91;
+    --border: #CED0D4;
+    --hover-bg: #E4E6E9; /* Facebook hover gray */
+    --sidebar-text: #7A8A82;
+  }
+  
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  
+  .font-display { font-family: 'Sora', sans-serif; }
+  .getidone-text { font-family: 'Sora', sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+  .getidone-text .geti { color: #FFFFFF; }
+  .getidone-text .done { color: #10B981; }
+  .getidone-text.dark .geti { color: #5A6B62; }
+  
+  .app-wrapper { display: flex; height: 100vh; width: 100%; position: relative; z-index: 1; }
+  
+  /* Sidebar (GetiDone Dark) */
+  .sidebar {
+    background: var(--sidebar); background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.14) 0%, transparent 50%), linear-gradient(180deg, #0A0F0D 0%, #060A08 100%);
+    position: relative; width: 250px; flex-shrink: 0; display: flex; flex-direction: column; height: 100vh;
+  }
+  .sidebar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent); }
+  
+  .nav-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+  .nav-item:hover { background: var(--sidebar-hover); color: #FFFFFF; transform: translateX(2px); }
+  .nav-item.active { background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%); color: #FFFFFF; }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; background: var(--primary); border-radius: 0 4px 4px 0; box-shadow: 0 0 12px var(--primary); }
+  .nav-item.active i { color: var(--primary); }
+  
+  .main-area { flex: 1; height: 100vh; display: flex; flex-direction: column; overflow-y: auto; }
+  
+  /* Top Bar (Facebook Style) */
+  .fb-header { background: var(--card); box-shadow: 0 1px 2px rgba(0,0,0,0.1); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+  .fb-search { background: var(--bg); border-radius: 20px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; flex: 1; max-width: 400px; }
+  .fb-search input { background: transparent; border: none; outline: none; font-size: 14px; width: 100%; color: var(--text); }
+  .fb-icon-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg); color: var(--text); cursor: pointer; transition: background 0.2s; position: relative; }
+  .fb-icon-btn:hover { background: var(--hover-bg); }
+  
+  /* Profile Header (Facebook Style) */
+  .profile-container { width: 100%; padding: 16px 24px; }
+  .profile-header-card { background: var(--card); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 16px; }
+  .profile-cover { height: 300px; background: #e4e6eb; position: relative; overflow: hidden; }
+  .profile-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 80%, rgba(0,0,0,0.2)); }
+  
+  .profile-avatar-wrap { display: flex; flex-direction: column; align-items: center; position: relative; margin-top: -60px; }
+  .profile-logo { width: 140px; height: 140px; border-radius: 50%; padding: 6px; background: var(--card); box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; }
+  .profile-logo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  
+  .profile-info { text-align: center; padding: 12px 16px 20px; }
+  .profile-name { font-size: 32px; font-weight: 800; font-family: 'Sora', sans-serif; color: var(--text); display: inline-flex; align-items: center; gap: 8px; }
+  .verification-badge { color: var(--primary); font-size: 22px; }
+  .profile-bio { font-size: 16px; color: var(--muted); margin-top: 4px; max-width: 800px; margin-left: auto; margin-right: auto; }
+  .profile-meta { display: flex; justify-content: center; gap: 16px; color: var(--muted); font-size: 15px; margin-top: 8px; font-weight: 500; flex-wrap: wrap; }
+  .profile-meta span { display: flex; align-items: center; gap: 6px; }
+  .profile-meta i { color: var(--soft); }
+  
+  .profile-actions { display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 0 16px 20px; flex-wrap: wrap; }
+  
+  /* Facebook Buttons */
+  .btn-fb-primary { background: var(--primary); color: white; font-weight: 600; padding: 10px 20px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; transition: background 0.2s; cursor: pointer; border: none; }
+  .btn-fb-primary:hover { background: var(--primary-dark); }
+  
+  .btn-fb-secondary { background: var(--hover-bg); color: var(--text); font-weight: 600; padding: 10px 20px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; transition: background 0.2s; cursor: pointer; border: none; }
+  .btn-fb-secondary:hover { background: #D8DADF; }
+  
+  /* Tabs Bar */
+  .profile-tabs { border-top: 1px solid var(--border); display: flex; justify-content: center; padding: 0 16px; flex-wrap: wrap; }
+  .tab-item { padding: 16px 20px; font-size: 16px; font-weight: 600; color: var(--muted); border-bottom: 4px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .tab-item:hover { background: var(--hover-bg); border-radius: 8px 8px 0 0; }
+  .tab-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+  
+  /* Main Content Grid - Fluid Full Width */
+  .profile-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; width: 100%; }
+  @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } }
+  
+  /* Intro Card (Facebook Style) */
+  .fb-card { background: var(--card); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
+  .fb-card-title { font-size: 20px; font-weight: 800; font-family: 'Sora', sans-serif; margin-bottom: 16px; color: var(--text); }
+  
+  .intro-list { display: flex; flex-direction: column; gap: 14px; }
+  .intro-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text); font-weight: 500; }
+  .intro-item i { width: 20px; text-align: center; color: var(--muted); font-size: 16px; }
+  
+  .stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .stat-row:first-child { padding-top: 0; }
+  .stat-label { color: var(--muted); font-size: 15px; font-weight: 500; }
+  .stat-value { color: var(--text); font-size: 15px; font-weight: 700; }
+  
+  .verification-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text); font-weight: 500; margin-bottom: 14px; }
+  .verification-item:last-child { margin-bottom: 0; }
+  .ver-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(16,185,129,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+  .ver-check { color: var(--success); margin-left: auto; }
+  
+  /* Feed Posts */
+  .post-card { background: var(--card); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin-bottom: 16px; overflow: hidden; }
+  .post-header { display: flex; align-items: center; padding: 16px 20px; gap: 10px; }
+  .post-header img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+  .post-header-info { flex: 1; }
+  .post-header-name { font-weight: 700; font-size: 16px; color: var(--text); display: flex; align-items: center; gap: 4px; }
+  .post-header-time { font-size: 14px; color: var(--muted); }
+  .post-content { padding: 0 20px 16px; font-size: 15px; line-height: 1.5; color: var(--text); }
+  .post-actions { display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border); margin-top: 8px; }
+  .post-action { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; cursor: pointer; color: var(--muted); font-weight: 600; font-size: 15px; transition: background 0.2s; flex: 1; justify-content: center; }
+  .post-action:hover { background: var(--hover-bg); }
+  
+  /* Job Posting Card */
+  .job-card-inner { border-left: 4px solid var(--primary); padding: 16px 20px; background: var(--bg-alt); border-radius: 8px; margin: 12px 0; }
+  .job-tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--primary); background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 6px; margin-bottom: 8px; }
+  
+  /* Modal */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+  .modal-content { background: var(--card); border-radius: 12px; max-width: 500px; width: calc(100% - 32px); max-height: 88vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.3s; box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+  .modal-backdrop.active .modal-content { transform: scale(1); }
+  
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200; transform: translateY(120%); transition: transform 0.3s; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
+  .toast.show { transform: translateY(0); }
+  .toast-icon { width: 28px; height: 28px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #BCC0C4; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8A8D91; }
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ============ SIDEBAR (GetiDone Dark) ============ -->
+  <aside class="sidebar py-6 px-4 z-20 hidden md:flex">
+    <div class="px-3 mb-8 flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #10B981, #34D399); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+        <i class="fa-solid fa-arrow-up text-white text-sm font-bold"></i>
+      </div>
+      <div>
+        <div class="getidone-text text-lg leading-none">
+          <span class="geti">Geti</span><span class="done">Done</span>
+        </div>
+        <div class="text-[10px] tracking-widest" style="color: var(--sidebar-text);">FREELANCER SPACE</div>
+      </div>
+    </div>
+
+    <button onclick="window.location.href='find-work.html'" class="btn-fb-primary mx-2 mb-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+      <i class="fa-solid fa-magnifying-glass text-xs"></i>
+      <span>Find Work</span>
+    </button>
+
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2" style="color: var(--sidebar-text);">MAIN</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='dashboard.html'">
+        <i class="fa-solid fa-grip w-4 text-center"></i><span>Dashboard</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='find-work.html'">
+        <i class="fa-solid fa-briefcase w-4 text-center"></i><span>Find Work</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='proposals.html'">
+        <i class="fa-solid fa-paper-plane w-4 text-center"></i><span>Proposals</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(16,185,129,0.15); color: var(--primary);">4</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='contracts.html'">
+        <i class="fa-solid fa-file-signature w-4 text-center"></i><span>My Contracts</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='messages.html'">
+        <i class="fa-solid fa-comment-dots w-4 text-center"></i><span>Messages</span>
+        <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-md" style="background: rgba(20,184,166,0.15); color: var(--secondary);">3</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='earnings.html'">
+        <i class="fa-solid fa-sack-dollar w-4 text-center"></i><span>Earnings</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='reports.html'">
+        <i class="fa-solid fa-chart-line w-4 text-center"></i><span>Reports</span>
+      </a>
+
+      <div class="text-[10px] tracking-widest font-bold px-3 mb-2 mt-6" style="color: var(--sidebar-text);">TOOLS</div>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='calendar.html'">
+        <i class="fa-solid fa-calendar-days w-4 text-center"></i><span>Calendar</span>
+      </a>
+      <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer" style="color: var(--sidebar-text);" onclick="window.location.href='settings.html'">
+        <i class="fa-solid fa-gear w-4 text-center"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 mx-2 p-4 rounded-2xl relative overflow-hidden" style="background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(132,204,22,0.08)); border: 1px solid rgba(16,185,129,0.2);">
+      <div class="flex items-center gap-2 mb-1.5">
+        <i class="fa-solid fa-crown text-xs" style="color: var(--accent);"></i>
+        <span class="text-[11px] font-bold tracking-wider text-white">UPGRADE TO PRO</span>
+      </div>
+      <p class="text-[11px] leading-relaxed mb-3" style="color: var(--sidebar-text);">Get 80 more connects monthly & priority bidding.</p>
+      <button onclick="showToast('Upgrade', 'Redirecting to upgrade page')" class="w-full py-2 rounded-lg text-[11px] font-bold text-white" style="background: var(--primary);">Upgrade Now</button>
+    </div>
+
+    <div class="mt-4 px-2 flex items-center gap-3 cursor-pointer hover:bg-white/5 p-2 rounded-lg transition" onclick="window.location.href='profile.html'">
+      <img src="https://picsum.photos/seed/sarah/100/100.jpg" class="w-9 h-9 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-white truncate">Sarah Kim</div>
+        <div class="text-[11px] truncate" style="color: var(--sidebar-text);">Brand Designer</div>
+      </div>
+      <i class="fa-solid fa-chevron-right text-xs" style="color: var(--sidebar-text);"></i>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN AREA (Facebook Style) ============ -->
+  <main class="main-area">
+    
+    <!-- Top Header -->
+    <header class="fb-header">
+      <div class="flex items-center gap-4 flex-1">
+        <div class="getidone-text text-lg hidden md:block" style="color: var(--text);">
+          <span class="geti dark">Geti</span><span class="done">Done</span>
+        </div>
+        <div class="fb-search">
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--muted);"></i>
+          <input type="text" placeholder="Search clients, jobs, contracts...">
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="fb-icon-btn" onclick="showToast('Messages', 'Opening messages')">
+          <i class="fa-brands fa-facebook-messenger"></i>
+        </div>
+        <div class="fb-icon-btn" onclick="showToast('Notifications', 'You have 5 new notifications')">
+          <i class="fa-solid fa-bell"></i>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full" style="background: var(--danger); border: 2px solid var(--card);"></span>
+        </div>
+        <img src="https://picsum.photos/seed/sarah/100/100.jpg" class="w-10 h-10 rounded-full cursor-pointer object-cover">
+      </div>
+    </header>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+      
+      <!-- Profile Header Card -->
+      <div class="profile-header-card">
+        <div class="profile-cover" style="background: url('https://picsum.photos/seed/technovacover/1600/500') center/cover;">
+          <div class="absolute inset-0" style="background: linear-gradient(to bottom, transparent 80%, rgba(0,0,0,0.2));"></div>
+        </div>
+        
+        <div class="profile-avatar-wrap">
+          <div class="profile-logo">
+            <img src="https://picsum.photos/seed/technovalogo/200/200.jpg" alt="TechNova Inc.">
+          </div>
+        </div>
+
+        <div class="profile-info">
+          <h1 class="profile-name">
+            TechNova Inc. 
+            <i class="fa-solid fa-circle-check verification-badge" title="Verified Client"></i>
+          </h1>
+          <p class="profile-bio">We're building digital products to empower businesses and create exceptional user experiences.</p>
+          
+          <div class="profile-meta">
+            <span><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</span>
+            <span><i class="fa-solid fa-link"></i> technova.io</span>
+            <span><i class="fa-solid fa-clock"></i> Avg Response: 1hr</span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn-fb-primary" onclick="openModal('applyModal')">
+            <i class="fa-solid fa-paper-plane"></i> Submit Proposal
+          </button>
+          <button class="btn-fb-secondary" onclick="showToast('Message', 'Opening chat with TechNova Inc.')">
+            <i class="fa-solid fa-comment-dots"></i> Message
+          </button>
+          <button class="btn-fb-secondary" onclick="showToast('Saved', 'Client added to your saved list')">
+            <i class="fa-solid fa-bookmark"></i> Save
+          </button>
+          <button class="btn-fb-secondary" style="width: 40px; padding: 0; justify-content: center;" onclick="showToast('More', 'More options')">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="profile-tabs">
+          <div class="tab-item active">Overview</div>
+          <div class="tab-item">Active Jobs</div>
+          <div class="tab-item">Reviews</div>
+          <div class="tab-item">Activity</div>
+        </div>
+      </div>
+
+      <!-- Profile Grid Content -->
+      <div class="profile-grid">
+        
+        <!-- Left Column -->
+        <div class="left-col">
+          
+          <!-- Intro Card -->
+          <div class="fb-card">
+            <h2 class="fb-card-title">Intro</h2>
+            <div class="intro-list">
+              <div class="intro-item">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Tech Company at TechNova Inc.</span>
+              </div>
+              <div class="intro-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Based in Lagos, Nigeria</span>
+              </div>
+              <div class="intro-item">
+                <i class="fa-solid fa-calendar"></i>
+                <span>Client since January 2022</span>
+              </div>
+              <div class="intro-item">
+                <i class="fa-solid fa-clock"></i>
+                <span>Avg Response Time: Under 1 hour</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Card -->
+          <div class="fb-card">
+            <h2 class="fb-card-title">Client Stats</h2>
+            <div class="stat-row">
+              <span class="stat-label">Total Spent</span>
+              <span class="stat-value">$48,250</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Projects Posted</span>
+              <span class="stat-value">18</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Hire Rate</span>
+              <span class="stat-value">92%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Avg Rating Given</span>
+              <span class="stat-value">4.8 <i class="fa-solid fa-star" style="color: var(--warning); font-size: 12px;"></i></span>
+            </div>
+          </div>
+
+          <!-- Verification Card -->
+          <div class="fb-card">
+            <h2 class="fb-card-title">Verification</h2>
+            <div class="verification-item">
+              <div class="ver-icon"><i class="fa-solid fa-credit-card"></i></div>
+              <span>Payment Method</span>
+              <i class="fa-solid fa-check ver-check"></i>
+            </div>
+            <div class="verification-item">
+              <div class="ver-icon"><i class="fa-solid fa-envelope"></i></div>
+              <span>Email Address</span>
+              <i class="fa-solid fa-check ver-check"></i>
+            </div>
+            <div class="verification-item">
+              <div class="ver-icon"><i class="fa-solid fa-phone"></i></div>
+              <span>Phone Number</span>
+              <i class="fa-solid fa-check ver-check"></i>
+            </div>
+            <div class="verification-item">
+              <div class="ver-icon"><i class="fa-solid fa-id-card"></i></div>
+              <span>Company ID</span>
+              <i class="fa-solid fa-check ver-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column (Feed) -->
+        <div class="right-col">
+          
+          <!-- Post 1: New Job -->
+          <div class="post-card">
+            <div class="post-header">
+              <img src="https://picsum.photos/seed/technovalogo/100/100.jpg" alt="TechNova">
+              <div class="post-header-info">
+                <div class="post-header-name">
+                  TechNova Inc. <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 14px;"></i>
+                  <span style="font-weight: 400; color: var(--muted);">posted a new job</span>
+                </div>
+                <div class="post-header-time">2 hours ago · <i class="fa-solid fa-globe"></i></div>
+              </div>
+              <button class="btn-fb-secondary" style="margin-left: auto; padding: 6px 12px; font-size: 14px;">Save Job</button>
+            </div>
+            <div class="post-content">
+              <p style="margin-bottom: 12px;">We are looking for an experienced Frontend Developer to redesign our e-commerce platform. Must be proficient in React and Tailwind CSS.</p>
+              
+              <div class="job-card-inner">
+                <span class="job-tag">Fixed Price</span>
+                <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 4px; color: var(--text);">E-commerce Platform Redesign</h3>
+                <p style="font-size: 14px; color: var(--muted); margin-bottom: 12px;">Budget: $12,000 · Duration: 45 days · Expert Level</p>
+                <button class="btn-fb-primary" style="font-size: 14px; padding: 8px 16px;" onclick="openModal('applyModal')">
+                  <i class="fa-solid fa-paper-plane"></i> Submit Proposal
+                </button>
+              </div>
+            </div>
+            <div class="post-actions">
+              <div class="post-action"><i class="fa-regular fa-thumbs-up"></i> Like</div>
+              <div class="post-action"><i class="fa-regular fa-comment"></i> Comment</div>
+              <div class="post-action"><i class="fa-solid fa-share"></i> Share</div>
+            </div>
+          </div>
+
+          <!-- Post 2: Payment Released (Activity) -->
+          <div class="post-card">
+            <div class="post-header">
+              <img src="https://picsum.photos/seed/technovalogo/100/100.jpg" alt="TechNova">
+              <div class="post-header-info">
+                <div class="post-header-name">
+                  TechNova Inc. <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 14px;"></i>
+                  <span style="font-weight: 400; color: var(--muted);">released a milestone payment</span>
+                </div>
+                <div class="post-header-time">Yesterday · <i class="fa-solid fa-globe"></i></div>
+              </div>
+            </div>
+            <div class="post-content">
+              <p style="margin-bottom: 0;">Released <strong style="color: var(--primary);">$4,500</strong> to Marcus Lee for the completion of "API Integration & Backend Setup". Great work!</p>
+            </div>
+            <div class="post-actions">
+              <div class="post-action"><i class="fa-regular fa-thumbs-up"></i> Like</div>
+              <div class="post-action"><i class="fa-regular fa-comment"></i> Comment</div>
+              <div class="post-action"><i class="fa-solid fa-share"></i> Share</div>
+            </div>
+          </div>
+
+          <!-- Post 3: Review Left -->
+          <div class="post-card">
+            <div class="post-header">
+              <img src="https://picsum.photos/seed/technovalogo/100/100.jpg" alt="TechNova">
+              <div class="post-header-info">
+                <div class="post-header-name">
+                  TechNova Inc. <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 14px;"></i>
+                  <span style="font-weight: 400; color: var(--muted);">left a review for Sarah Kim</span>
+                </div>
+                <div class="post-header-time">2 days ago · <i class="fa-solid fa-globe"></i></div>
+              </div>
+            </div>
+            <div class="post-content">
+              <div style="display: flex; gap: 4px; color: var(--warning); margin-bottom: 8px;">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p style="margin-bottom: 0;">"Sarah was incredible to work with. She delivered the brand identity concepts ahead of schedule and was very receptive to feedback. Will definitely hire again!"</p>
+            </div>
+            <div class="post-actions">
+              <div class="post-action"><i class="fa-regular fa-thumbs-up"></i> Like</div>
+              <div class="post-action"><i class="fa-regular fa-comment"></i> Comment</div>
+              <div class="post-action"><i class="fa-solid fa-share"></i> Share</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Apply Modal -->
+<div class="modal-backdrop" id="applyModal" onclick="if(event.target===this)closeModal('applyModal')">
+  <div class="modal-content p-6">
+    <div class="flex items-start justify-between mb-5 pb-4" style="border-bottom: 1px solid var(--border);">
+      <div>
+        <h2 class="font-display font-extrabold text-2xl" style="color: var(--text);">Submit Proposal</h2>
+        <p class="text-sm mt-1" style="color: var(--muted);">Applying to <span class="font-bold">TechNova Inc.</span></p>
+      </div>
+      <button onclick="closeModal('applyModal')" class="fb-icon-btn" style="width: 36px; height: 36px;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <form onsubmit="event.preventDefault(); closeModal('applyModal'); showToast('Proposal Sent!', 'TechNova Inc. will review your application');" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">YOUR RATE ($)</label>
+          <input type="number" class="w-full px-4 py-2.5 rounded-lg text-sm border focus:outline-none focus:border-emerald-400" style="border-color: var(--border); background: var(--bg);" placeholder="75" required>
+        </div>
+        <div>
+          <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">EST. DURATION (DAYS)</label>
+          <input type="number" class="w-full px-4 py-2.5 rounded-lg text-sm border focus:outline-none focus:border-emerald-400" style="border-color: var(--border); background: var(--bg);" placeholder="30" required>
+        </div>
+      </div>
+      <div>
+        <label class="text-xs font-bold tracking-wider mb-1.5 block" style="color: var(--muted);">COVER LETTER</label>
+        <textarea rows="4" class="w-full px-4 py-2.5 rounded-lg text-sm border focus:outline-none resize-none" style="border-color: var(--border); background: var(--bg);" placeholder="Hi TechNova team, I reviewed your e-commerce redesign requirements and I believe my 8 years of experience in React and Tailwind CSS make me a great fit..." required></textarea>
+      </div>
+      <div class="p-4 rounded-xl flex items-center gap-3" style="background: var(--bg);">
+        <i class="fa-solid fa-circle-info text-sm" style="color: var(--primary);"></i>
+        <p class="text-xs" style="color: var(--muted);">Submitting this proposal will cost <span class="font-bold">16 Connects</span>. You have 80 connects remaining this month.</p>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal('applyModal')" class="btn-fb-secondary flex-1 py-3 rounded-lg text-sm font-bold">Cancel</button>
+        <button type="submit" class="btn-fb-primary flex-1 py-3 rounded-lg text-sm font-bold">Submit Proposal</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="fa-solid fa-check text-white text-xs"></i></div>
+  <span id="toastMsg">Action completed</span>
+</div>
+
+<script>
+  // Standard Functions
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  let toastTimer;
+  function showToast(title, msg) {
+    document.getElementById('toastMsg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

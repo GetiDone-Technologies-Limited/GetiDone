@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GetiDone — Hire Top Talent in 60 Seconds.</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://z-cdn-media.chatglm.cn/files/ff6aace7-1d03-429f-8d3c-4a7e8d8aed5e.png" type="image/png">
+
+<!-- Anti-FOUC Script: Applies theme before page renders -->
+<script>
+  (function() {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  })();
+</script>
+
+<style>
+  :root {
+    /* Light Theme (Default) */
+    --bg: #F8FAF9;
+    --bg-alt: #EFF4F1;
+    --card: #FFFFFF;
+    --card-hover: #F8FAF9;
+    --text: #0F1A14;
+    --muted: #5A6B62;
+    --soft: #94A39A;
+    --border: #E2EAE5;
+    --navbar-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --overlay: rgba(255, 255, 255, 0.9);
+    --hero-blob-1: rgba(16, 185, 129, 0.15);
+    --hero-blob-2: rgba(132, 204, 22, 0.1);
+    --section-alt: rgba(0, 0, 0, 0.02);
+    --cta-bg: linear-gradient(135deg, #F8FAF9 0%, #EFF4F1 100%);
+    --footer-bg: #121815;
+    --footer-text: #94A39A;
+    --footer-heading: #FFFFFF;
+    --footer-border: rgba(255,255,255,0.1);
+    
+    /* Shared Brand Colors */
+    --primary: #10B981;
+    --primary-dark: #059669;
+    --primary-light: #34D399;
+    --secondary: #14B8A6;
+    --accent: #84CC16;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+  }
+
+  html.dark {
+    /* Dark Theme */
+    --bg: #0A0F0D;
+    --bg-alt: #121815;
+    --card: #181F1B;
+    --card-hover: #1F2622;
+    --text: #FFFFFF;
+    --muted: #94A39A;
+    --soft: #6A7A71;
+    --border: rgba(255,255,255,0.08);
+    --navbar-bg: rgba(10, 15, 13, 0.7);
+    --glass-bg: rgba(255,255,255,0.03);
+    --glass-border: rgba(255,255,255,0.1);
+    --overlay: rgba(10, 15, 13, 0.95);
+    --hero-blob-1: rgba(16, 185, 129, 0.15);
+    --hero-blob-2: rgba(132, 204, 22, 0.1);
+    --section-alt: rgba(255,255,255,0.02);
+    --cta-bg: linear-gradient(135deg, #050807 0%, #0A0F0D 100%);
+    --footer-bg: #050807;
+    --footer-text: #6A7A71;
+    --footer-heading: #FFFFFF;
+    --footer-border: rgba(255,255,255,0.08);
+  }
+  
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { 
+    font-family: 'Manrope', sans-serif; 
+    color: var(--text); 
+    margin: 0; 
+    overflow-x: hidden;
+    background-color: var(--bg);
+    background-image: 
+      radial-gradient(circle at 15% 10%, var(--hero-blob-1) 0%, transparent 40%),
+      radial-gradient(circle at 85% 90%, var(--hero-blob-2) 0%, transparent 40%);
+    background-attachment: fixed;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /* Global Smooth Transitions for Theme Switch */
+  .navbar, .btn-primary, .btn-outline, .bento-card, .cat-card, .testimonial-card, .footer, .cta-section, .workflow-card, .wf-step, .theme-toggle-label, .toggle-ball {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+  }
+  
+  .font-display { font-family: 'Sora', sans-serif; }
+  
+  /* Navbar */
+  .navbar { background: var(--navbar-bg); backdrop-filter: blur(16px); border-bottom: 1px solid transparent; }
+  .navbar.scrolled { background: var(--navbar-bg); border-bottom-color: var(--border); box-shadow: 0 4px 20px -10px rgba(0,0,0,0.1); }
+  
+  .getidone-text { font-family: 'Sora', sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 1.5rem; }
+  .getidone-text .geti { color: var(--text); }
+  .getidone-text .done { color: var(--primary); }
+  
+  .btn-primary { background: var(--primary); color: white; font-weight: 600; padding: 12px 28px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.5); }
+  
+  .btn-outline { background: var(--glass-bg); color: var(--text); font-weight: 600; padding: 12px 28px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; backdrop-filter: blur(4px); }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.1); }
+
+  /* Premium Theme Toggle Switch */
+  .theme-switch-wrapper { display: flex; align-items: center; }
+  .theme-checkbox { display: none; }
+  .theme-toggle-label {
+    width: 56px;
+    height: 30px;
+    background-color: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    position: relative;
+    cursor: pointer;
+  }
+  .theme-toggle-label .sun-icon, .theme-toggle-label .moon-icon {
+    font-size: 12px;
+    z-index: 1;
+  }
+  .theme-toggle-label .sun-icon { color: #F59E0B; }
+  .theme-toggle-label .moon-icon { color: #94A39A; }
+  .toggle-ball {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  html.dark .toggle-ball {
+    transform: translateX(26px);
+  }
+  
+  /* Hero Section */
+  .hero-gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-blob { position: absolute; border-radius: 50%; filter: blur(120px); z-index: 0; animation: blob-move 12s infinite alternate; }
+  @keyframes blob-move { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -40px) scale(1.15); } }
+
+  /* Floating Animation */
+  @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+  .float-anim { animation: float 5s ease-in-out infinite; }
+  
+  /* Workflow Card (Hero Visual) */
+  .workflow-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px; box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2); position: relative; overflow: hidden; }
+  .workflow-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 150px; background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.2) 0%, transparent 70%); pointer-events: none; }
+  
+  .wf-step { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+  .wf-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  
+  .match-badge { position: absolute; top: 20px; right: -30px; background: var(--primary); color: white; padding: 12px 20px; border-radius: 16px; box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.6); font-weight: 700; font-family: 'Sora', sans-serif; animation: float 3.5s ease-in-out infinite; z-index: 20; }
+  
+  /* Scroll Reveal */
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  
+  /* Bento Grid Features */
+  .bento-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; position: relative; }
+  .bento-card:hover { transform: translateY(-5px); border-color: rgba(16,185,129,0.3); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); }
+  .bento-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .bento-card:hover .bento-img { transform: scale(1.05); }
+  .bento-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--overlay) 0%, transparent 100%); }
+
+  /* Category Cards */
+  .cat-card { position: relative; border-radius: 20px; overflow: hidden; height: 240px; cursor: pointer; border: 1px solid transparent; }
+  .cat-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 15px 30px -10px rgba(16,185,129,0.2); }
+  .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .cat-card:hover img { transform: scale(1.08); }
+  .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--overlay) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 24px; }
+
+  /* Testimonial */
+  .testimonial-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
+  .testimonial-card:hover { border-color: var(--primary); background: var(--card-hover); box-shadow: 0 12px 30px -12px rgba(0,0,0,0.05); }
+
+  /* CTA Section */
+  .cta-section { background: var(--cta-bg); position: relative; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .cta-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('https://picsum.photos/seed/ctabg/1600/800') center/cover; opacity: 0.05; mix-blend-mode: luminosity; }
+  .cta-section::after { content: ''; position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%); }
+
+  /* Footer */
+  .footer { background: var(--footer-bg); color: var(--footer-text); border-top: 1px solid var(--footer-border); }
+  .footer-link { transition: color 0.2s; }
+  .footer-link:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <div class="getidone-text">
+      <span class="geti">Geti</span><span class="done">Done</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold" style="color: var(--muted);">
+      <a href="#features" class="hover:text-emerald-500 transition">Features</a>
+      <a href="#categories" class="hover:text-emerald-500 transition">Categories</a>
+      <a href="#testimonials" class="hover:text-emerald-500 transition">Reviews</a>
+      <a href="#" class="hover:text-emerald-500 transition">Pricing</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <!-- Premium Toggle Switch -->
+      <div class="theme-switch-wrapper">
+        <input type="checkbox" id="theme-checkbox" class="theme-checkbox">
+        <label for="theme-checkbox" class="theme-toggle-label">
+          <i class="fa-solid fa-sun sun-icon"></i>
+          <i class="fa-solid fa-moon moon-icon"></i>
+          <span class="toggle-ball"></span>
+        </label>
+      </div>
+      <button class="btn-outline text-sm hidden sm:block">Log in</button>
+      <button class="btn-primary text-sm">Start Hiring <i class="fa-solid fa-arrow-right text-xs"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative pt-32 pb-24 px-6 overflow-hidden">
+  <div class="hero-blob" style="top: 10%; left: -5%; width: 500px; height: 500px; background: var(--hero-blob-1);"></div>
+  <div class="hero-blob" style="bottom: 10%; right: -5%; width: 400px; height: 400px; background: var(--hero-blob-2); animation-delay: 3s;"></div>
+  
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
+    <!-- Left Text -->
+    <div class="reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: var(--primary);">
+        <i class="fa-solid fa-bolt text-xs"></i>
+        <span class="text-xs font-bold tracking-wider">AI-POWERED HIRING MARKETPLACE</span>
+      </div>
+      <h1 class="font-display font-extrabold text-5xl md:text-6xl leading-[1.1] mb-6" style="color: var(--text);">
+        Hire the Top 3% of Global Talent. <span class="hero-gradient-text">In 60 Seconds.</span>
+      </h1>
+      <p class="text-lg mb-8 max-w-lg" style="color: var(--muted);">
+        Stop sifting through endless proposals. GetiDone’s AI matches you with the perfect verified freelancer instantly. Post a job, get matched, and scale your team effortlessly.
+      </p>
+      <div class="flex flex-wrap gap-4 mb-12">
+        <button class="btn-primary text-base px-8 py-4">
+          <i class="fa-solid fa-plus"></i> Post a Job - It's Free
+        </button>
+        <button class="btn-outline text-base px-8 py-4">
+          <i class="fa-solid fa-circle-play"></i> See How It Works
+        </button>
+      </div>
+      
+      <div class="flex items-center gap-6">
+        <div class="flex -space-x-4">
+          <img src="https://picsum.photos/seed/user1/100/100.jpg" class="w-12 h-12 rounded-full border-4 border-white dark:border-gray-800 object-cover">
+          <img src="https://picsum.photos/seed/user2/100/100.jpg" class="w-12 h-12 rounded-full border-4 border-white dark:border-gray-800 object-cover">
+          <img src="https://picsum.photos/seed/user3/100/100.jpg" class="w-12 h-12 rounded-full border-4 border-white dark:border-gray-800 object-cover">
+          <img src="https://picsum.photos/seed/user4/100/100.jpg" class="w-12 h-12 rounded-full border-4 border-white dark:border-gray-800 object-cover">
+        </div>
+        <div>
+          <div class="flex text-amber-400 text-sm">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <div class="text-xs font-semibold mt-1" style="color: var(--soft);">Trusted by 10,000+ founders</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Visual -->
+    <div class="relative reveal" style="transition-delay: 0.2s;">
+      <!-- Main Image -->
+      <div class="absolute inset-0 rounded-3xl overflow-hidden hidden md:block" style="z-index: 1;">
+        <img src="https://picsum.photos/seed/herofreelancer/800/800.jpg" class="w-full h-full object-cover" alt="Freelancer working">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(10, 15, 13, 0.4));"></div>
+      </div>
+
+      <!-- Floating UI Card -->
+      <div class="workflow-card float-anim relative mt-32 md:mt-16 md:ml-12" style="z-index: 2;">
+        <div class="flex items-center justify-between mb-6 relative z-10">
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+          </div>
+          <div class="text-xs font-bold" style="color: var(--muted);">GetiDone AI Match</div>
+        </div>
+
+        <div class="space-y-4 relative z-10">
+          <div class="wf-step">
+            <div class="wf-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--primary);">
+              <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-xs font-bold" style="color: var(--soft);">REQUIREMENTS</div>
+              <div class="font-semibold text-sm" style="color: var(--text);">React Developer Needed</div>
+            </div>
+            <i class="fa-solid fa-circle-check text-green-500"></i>
+          </div>
+
+          <div class="wf-step" style="background: rgba(16, 185, 129, 0.15); border-color: var(--primary);">
+            <div class="wf-icon" style="background: var(--primary); color: white;">
+              <i class="fa-solid fa-user-check"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-xs text-green-400 font-bold">INSTANT MATCH</div>
+              <div class="font-semibold text-sm" style="color: var(--text);">Daniel Benson (98%)</div>
+            </div>
+            <div class="text-2xl font-bold text-green-400">98%</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="match-badge">
+        <div class="text-xs opacity-80">Hired in</div>
+        <div class="text-xl">60 Secs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="max-w-7xl mx-auto mt-24 reveal">
+    <p class="text-center text-xs font-bold tracking-widest mb-8" style="color: var(--soft);">TRUSTED BY LEADING COMPANIES & STARTUPS</p>
+    <div class="flex flex-wrap items-center justify-center gap-12 md:gap-16 opacity-50">
+      <div class="text-2xl font-bold font-display" style="color: var(--muted);"><i class="fa-brands fa-stripe"></i> Paystack</div>
+      <div class="text-2xl font-bold font-display" style="color: var(--muted);"><i class="fa-brands fa-google"></i> Flutterwave</div>
+      <div class="text-2xl font-bold font-display" style="color: var(--muted);"><i class="fa-solid fa-cube"></i> TechNova</div>
+      <div class="text-2xl font-bold font-display" style="color: var(--muted);"><i class="fa-brands fa-figma"></i> Frame.io</div>
+      <div class="text-2xl font-bold font-display" style="color: var(--muted);"><i class="fa-solid fa-bolt"></i> Innovatech</div>
+    </div>
+  </div>
+</section>
+
+<!-- Bento Grid Features -->
+<section id="features" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <div class="inline-block px-4 py-1 rounded-full mb-4" style="background: rgba(16, 185, 129, 0.1); color: var(--primary); font-size: 12px; font-weight: 700; border: 1px solid rgba(16,185,129,0.2);">WHY GETIDONE</div>
+      <h2 class="font-display font-extrabold text-4xl mb-4" style="color: var(--text);">Everything You Need to Scale Your Team</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">From AI matching to secure payments, we've built the ultimate platform for modern work.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[250px]">
+      <!-- Large AI Card -->
+      <div class="bento-card lg:col-span-2 lg:row-span-2 relative group">
+        <img src="https://picsum.photos/seed/aitech/800/600.jpg" class="bento-img absolute inset-0" alt="AI Tech">
+        <div class="bento-overlay"></div>
+        <div class="relative z-10 h-full flex flex-col justify-end p-8 text-white">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style="background: var(--primary); box-shadow: 0 0 20px rgba(16,185,129,0.4);">
+            <i class="fa-solid fa-brain text-2xl"></i>
+          </div>
+          <h3 class="font-display font-bold text-2xl mb-2">AI-Powered Matching</h3>
+          <p class="text-sm opacity-80 max-w-md">Stop wasting time on bad hires. Our algorithm analyzes your job description and instantly matches you with the top 3% of vetted professionals tailored to your exact needs.</p>
+        </div>
+      </div>
+
+      <!-- Escrow Card -->
+      <div class="bento-card p-8 flex flex-col justify-between" style="background: var(--bg-alt);">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-emerald-500" style="background: var(--card); border: 1px solid var(--border);">
+          <i class="fa-solid fa-shield-halved text-xl"></i>
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Secure Escrow</h3>
+          <p class="text-sm" style="color: var(--muted);">Funds are held safely until you approve the work. Zero risk, 100% protection.</p>
+        </div>
+      </div>
+
+      <!-- Talent Image Card -->
+      <div class="bento-card relative group overflow-hidden">
+        <img src="https://picsum.photos/seed/talent1/400/400.jpg" class="bento-img absolute inset-0" alt="Talent">
+        <div class="absolute top-4 left-4 px-3 py-1 bg-emerald-500 rounded-full text-xs font-bold text-white z-10">VETTED</div>
+        <div class="absolute bottom-4 left-4 right-4 z-10 text-white">
+          <div class="font-bold">Top 3% Global Talent</div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+      </div>
+
+      <!-- Analytics Card -->
+      <div class="bento-card p-8 flex flex-col justify-between" style="background: var(--bg-alt);">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-lime-500" style="background: var(--card); border: 1px solid var(--border);">
+          <i class="fa-solid fa-chart-line text-xl"></i>
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Smart Analytics</h3>
+          <p class="text-sm" style="color: var(--muted);">Track project velocity, spending, and team performance in real-time.</p>
+        </div>
+      </div>
+
+      <!-- Support Image Card -->
+      <div class="bento-card relative group overflow-hidden lg:col-span-2">
+        <img src="https://picsum.photos/seed/support/800/400.jpg" class="bento-img absolute inset-0" alt="Support">
+        <div class="bento-overlay"></div>
+        <div class="relative z-10 h-full flex flex-col justify-end p-8 text-white">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: var(--accent); box-shadow: 0 0 20px rgba(132,204,22,0.4);">
+            <i class="fa-solid fa-headset text-xl"></i>
+          </div>
+          <h3 class="font-display font-bold text-xl mb-1">24/7 VIP Support</h3>
+          <p class="text-sm opacity-80">A dedicated account manager for enterprise clients. We're always here to help.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section id="process" class="py-24 px-6" style="background: var(--section-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <div class="inline-block px-4 py-1 rounded-full mb-4" style="background: var(--card); color: var(--primary); font-size: 12px; font-weight: 700; border: 1px solid var(--border);">HOW IT WORKS</div>
+      <h2 class="font-display font-extrabold text-4xl mb-4" style="color: var(--text);">Work Made Simple in 4 Steps</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">From concept to completion, we've streamlined the entire process.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="reveal text-center">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+          <div class="absolute inset-0 rounded-full" style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2);"></div>
+          <div class="relative w-full h-full flex items-center justify-center text-3xl text-emerald-500"><i class="fa-solid fa-pen-to-square"></i></div>
+          <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold font-display">1</div>
+        </div>
+        <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Post a Job</h3>
+        <p class="text-sm" style="color: var(--muted);">Tell us what you need. Outline your scope, budget, and timeline in minutes.</p>
+      </div>
+
+      <div class="reveal text-center" style="transition-delay: 0.1s;">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+          <div class="absolute inset-0 rounded-full" style="background: rgba(132,204,22,0.1); border: 1px solid rgba(132,204,22,0.2);"></div>
+          <div class="relative w-full h-full flex items-center justify-center text-3xl text-lime-500"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-lime-500 text-white flex items-center justify-center text-sm font-bold font-display">2</div>
+        </div>
+        <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Get Matched</h3>
+        <p class="text-sm" style="color: var(--muted);">Our AI instantly analyzes your needs and matches you with the best talent.</p>
+      </div>
+
+      <div class="reveal text-center" style="transition-delay: 0.2s;">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+          <div class="absolute inset-0 rounded-full" style="background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.2);"></div>
+          <div class="relative w-full h-full flex items-center justify-center text-3xl text-teal-500"><i class="fa-solid fa-handshake"></i></div>
+          <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center text-sm font-bold font-display">3</div>
+        </div>
+        <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Collaborate</h3>
+        <p class="text-sm" style="color: var(--muted);">Chat, share files, and track progress securely. Stay in the loop, always.</p>
+      </div>
+
+      <div class="reveal text-center" style="transition-delay: 0.3s;">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+          <div class="absolute inset-0 rounded-full" style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2);"></div>
+          <div class="relative w-full h-full flex items-center justify-center text-3xl text-amber-500"><i class="fa-solid fa-check-double"></i></div>
+          <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-sm font-bold font-display">4</div>
+        </div>
+        <h3 class="font-display font-bold text-xl mb-2" style="color: var(--text);">Get It Done</h3>
+        <p class="text-sm" style="color: var(--muted);">Approve milestones, release payments, and launch your project confidently.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section id="categories" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row items-end justify-between mb-12 reveal">
+      <div>
+        <div class="inline-block px-4 py-1 rounded-full mb-4" style="background: var(--card); color: var(--primary); font-size: 12px; font-weight: 700; border: 1px solid var(--border);">EXPERT CATEGORIES</div>
+        <h2 class="font-display font-extrabold text-4xl" style="color: var(--text);">Find Top Talent in Any Field</h2>
+      </div>
+      <a href="#" class="text-sm font-bold text-emerald-500 hover:underline mt-4 md:mt-0">Browse All Categories <i class="fa-solid fa-arrow-right ml-1"></i></a>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="cat-card reveal">
+        <img src="https://picsum.photos/seed/developer/600/400.jpg" alt="Development">
+        <div class="cat-overlay">
+          <div>
+            <h3 class="text-white font-display font-bold text-xl">Development & IT</h3>
+            <p class="text-gray-200 text-sm">React, Node, AWS, Mobile</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-card reveal" style="transition-delay: 0.05s;">
+        <img src="https://picsum.photos/seed/designer/600/400.jpg" alt="Design">
+        <div class="cat-overlay">
+          <div>
+            <h3 class="text-white font-display font-bold text-xl">UI/UX Designers</h3>
+            <p class="text-gray-200 text-sm">Web, Mobile, Figma, Prototyping</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-card reveal" style="transition-delay: 0.1s;">
+        <img src="https://picsum.photos/seed/marketing/600/400.jpg" alt="Marketing">
+        <div class="cat-overlay">
+          <div>
+            <h3 class="text-white font-display font-bold text-xl">Digital Marketing</h3>
+            <p class="text-gray-200 text-sm">SEO, Social Media, Ads</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-card reveal" style="transition-delay: 0.15s;">
+        <img src="https://picsum.photos/seed/writer/600/400.jpg" alt="Writing">
+        <div class="cat-overlay">
+          <div>
+            <h3 class="text-white font-display font-bold text-xl">Writing & Content</h3>
+            <p class="text-gray-200 text-sm">Copywriting, Blogs, Strategy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="py-24 px-6" style="background: var(--section-alt); border-top: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <div class="inline-block px-4 py-1 rounded-full mb-4" style="background: var(--card); color: var(--primary); font-size: 12px; font-weight: 700; border: 1px solid var(--border);">CLIENT SUCCESS STORIES</div>
+      <h2 class="font-display font-extrabold text-4xl mb-4" style="color: var(--text);">Loved by Founders & Teams</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">Don't just take our word for it. Here's what our community has to say.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="testimonial-card reveal">
+        <div class="flex text-amber-400 mb-4">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p class="text-sm mb-6" style="color: var(--text);">"GetiDone completely changed how we scale. We posted a job for a Senior React dev and had a perfect match in under two minutes. The escrow system gave us total peace of mind."</p>
+        <div class="flex items-center gap-3 pt-4 border-t" style="border-color: var(--border);">
+          <img src="https://picsum.photos/seed/johnavatar/100/100.jpg" class="w-12 h-12 rounded-full object-cover" alt="John Carter">
+          <div>
+            <div class="font-bold text-sm" style="color: var(--text);">John Carter</div>
+            <div class="text-xs" style="color: var(--muted);">CEO, TechNova Inc.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal" style="transition-delay: 0.1s;">
+        <div class="flex text-amber-400 mb-4">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p class="text-sm mb-6" style="color: var(--text);">"As a freelancer, GetiDone's AI matching means I spend less time searching and more time doing what I love. The instant payment release is the best I've seen in the industry."</p>
+        <div class="flex items-center gap-3 pt-4 border-t" style="border-color: var(--border);">
+          <img src="https://picsum.photos/seed/sarah/100/100.jpg" class="w-12 h-12 rounded-full object-cover" alt="Sarah Kim">
+          <div>
+            <div class="font-bold text-sm" style="color: var(--text);">Sarah Kim</div>
+            <div class="text-xs" style="color: var(--muted);">Senior UI/UX Designer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal" style="transition-delay: 0.2s;">
+        <div class="flex text-amber-400 mb-4">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p class="text-sm mb-6" style="color: var(--text);">"The POD Teams feature is brilliant. We hired a full development squad (Dev, QA, PM) in one click. They integrated seamlessly with our workflow. Highly recommended."</p>
+        <div class="flex items-center gap-3 pt-4 border-t" style="border-color: var(--border);">
+          <img src="https://picsum.photos/seed/marcus/100/100.jpg" class="w-12 h-12 rounded-full object-cover" alt="Marcus Lee">
+          <div>
+            <div class="font-bold text-sm" style="color: var(--text);">Marcus Lee</div>
+            <div class="text-xs" style="color: var(--muted);">CTO, Innovatech</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-24 px-6 cta-section">
+  <div class="max-w-5xl mx-auto rounded-3xl p-12 text-center relative z-10 reveal">
+    <h2 class="font-display font-extrabold text-4xl md:text-5xl text-white mb-4">Ready to Get Work Done?</h2>
+    <p class="text-lg mb-8 max-w-xl mx-auto text-gray-300">Join thousands of companies and freelancers building the future on GetiDone. Post your first job for free today.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <button class="btn-primary text-base px-8 py-4">Get Started for Free <i class="fa-solid fa-arrow-right text-xs"></i></button>
+      <button class="btn-outline text-base px-8 py-4" style="color: white; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05);">Contact Sales</button>
+    </div>
+    <div class="mt-8 flex items-center justify-center gap-2 text-xs text-gray-400">
+      <i class="fa-solid fa-shield-halved"></i> No credit card required · 100% secure escrow
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer py-16 px-6">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-5 gap-12">
+    <div class="md:col-span-2">
+      <div class="getidone-text mb-4">
+        <span class="geti" style="color: var(--footer-heading);">Geti</span><span class="done">Done</span>
+      </div>
+      <p class="text-sm max-w-xs">The smartest way to hire and get hired. Powered by AI, secured by escrow.</p>
+      <div class="flex gap-4 mt-6">
+        <a href="#" class="footer-link text-2xl"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" class="footer-link text-2xl"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" class="footer-link text-2xl"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-4 text-sm">For Clients</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="footer-link">How to Hire</a></li>
+        <li><a href="#" class="footer-link">Project Catalog</a></li>
+        <li><a href="#" class="footer-link">Enterprise</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-4 text-sm">For Freelancers</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="footer-link">How to Find Work</a></li>
+        <li><a href="#" class="footer-link">GetiDone Pro</a></li>
+        <li><a href="#" class="footer-link">Community</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold text-white mb-4 text-sm">Resources</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="footer-link">Help & Support</a></li>
+        <li><a href="#" class="footer-link">Trust & Safety</a></li>
+        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4" style="border-color: var(--footer-border);">
+    <p class="text-xs">© 2024 GetiDone Inc. All rights reserved.</p>
+    <div class="flex gap-4 text-xs">
+      <a href="#" class="footer-link">Terms</a>
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Theme Toggle Logic
+  const themeCheckbox = document.getElementById('theme-checkbox');
+  const html = document.documentElement;
+
+  // Set initial state of checkbox based on loaded HTML class
+  themeCheckbox.checked = html.classList.contains('dark');
+
+  themeCheckbox.addEventListener('change', () => {
+    if (themeCheckbox.checked) {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  // Navbar Scroll Effect
+  const navbar = document.querySelector('.navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // Scroll Reveal Animation
+  const revealElements = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealElements.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
