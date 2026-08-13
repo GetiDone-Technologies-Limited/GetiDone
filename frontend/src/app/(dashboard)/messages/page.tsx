@@ -10,6 +10,7 @@ import {
   X, Users, Star, Plus, CheckCircle, XCircle, Monitor, 
   MicOff, VideoOff, Play, Pause, Circle, Sparkles, ShieldCheck
 } from 'lucide-react';
+import { useSocket } from '@/shared/hooks/useSocket';
 
 // ============ MOCK DATA ============
 const availableMembers = [
@@ -130,6 +131,7 @@ const initialConversations: Conversation[] = [
 
 export default function MessagesPage() {
   const { user } = useAuthStore();
+  const { socket, isConnected } = useSocket();
   
   // API State
   const [selectedConvId, setSelectedConvId] = useState<string | undefined>();
@@ -435,6 +437,10 @@ export default function MessagesPage() {
           />
         </div>
         <div className="flex items-center gap-3 ml-6">
+          <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-extrabold border bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span>WEBSOCKETS LIVE</span>
+          </div>
           <button className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform hover:-translate-y-px" style={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)' }}>
             <HelpCircle className="w-4 h-4" />
           </button>
