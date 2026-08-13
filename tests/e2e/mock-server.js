@@ -9,7 +9,8 @@ let state = {
   messages: [],
   escrows: [],
   invoices: [],
-  processedPayments: []
+  processedPayments: [],
+  securityAlerts: []
 };
 
 // Helper to parse JSON body
@@ -58,13 +59,52 @@ const server = http.createServer(async (req, res) => {
         messages: [],
         escrows: [],
         invoices: [],
-        processedPayments: []
+        processedPayments: [],
+        securityAlerts: []
       };
       return sendJson(res, 200, { success: true, message: 'State cleared' });
     }
 
     if (pathname === '/debug/state' && method === 'GET') {
       return sendJson(res, 200, state);
+    }
+
+    // GET /security/alerts
+    if (pathname === '/security/alerts' && method === 'GET') {
+      return sendJson(res, 200, {
+        status: 'VERIFIED_SECURE',
+        totalActiveAlerts: state.securityAlerts.length,
+        alerts: state.securityAlerts.slice().reverse()
+      });
+    }
+
+    // ----------------------------------------------------
+    // INTRUSION DETECTION SECURITY ENGINE
+    // ----------------------------------------------------
+    const urlDecoded = decodeURIComponent(req.url || '');
+    const isSqlInjection = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|ALTER|UNION)\b)|('|\"|;)\s*(OR|AND)|(\bOR\b|\bAND\b)\s+1\s*=\s*1/i.test(urlDecoded);
+    const isXss = /<script|javascript:|onerror\s*=|onload\s*=/i.test(urlDecoded);
+    const isPathTraversal = /\.\.[\/\\]|%2e%2e/i.test(urlDecoded);
+
+    if (isSqlInjection || isXss || isPathTraversal) {
+      const alertType = isSqlInjection ? 'SQL_INJECTION' : (isXss ? 'XSS_ATTACK' : 'PATH_TRAVERSAL');
+      const alert = {
+        alertId: `SEC_ALERT_${Date.now()}`,
+        type: alertType,
+        severity: isSqlInjection ? 'CRITICAL' : 'HIGH',
+        sourceIp: req.socket.remoteAddress || '127.0.0.1',
+        userPath: req.url,
+        method: req.method,
+        details: `Potential cyber threat [${alertType}] detected and blocked by Intrusion Detection System.`,
+        blockedAt: new Date().toISOString()
+      };
+      state.securityAlerts.push(alert);
+
+      return sendJson(res, 403, {
+        error: 'Security Vulnerability Blocked',
+        message: `Potential ${alertType} attack detected and blocked.`,
+        alertId: alert.alertId
+      });
     }
 
     // ----------------------------------------------------

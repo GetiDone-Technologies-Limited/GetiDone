@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -9,6 +10,8 @@ import { MessagingModule } from './messaging/messaging.module';
 import { PaymentModule } from './payment/payment.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UploadModule } from './upload/upload.module';
+import { SecurityModule } from './security/security.module';
+import { IntrusionDetectionInterceptor } from './security/intrusion-detection.interceptor';
 import { AppController } from './app.controller';
 
 @Module({
@@ -23,7 +26,14 @@ import { AppController } from './app.controller';
     PaymentModule,
     DashboardModule,
     UploadModule,
+    SecurityModule,
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: IntrusionDetectionInterceptor,
+    },
+  ],
 })
 export class AppModule {}
