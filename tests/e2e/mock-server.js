@@ -7,7 +7,9 @@ let state = {
   applications: [],
   conversations: [],
   messages: [],
-  escrows: []
+  escrows: [],
+  invoices: [],
+  processedPayments: []
 };
 
 // Helper to parse JSON body
@@ -54,7 +56,9 @@ const server = http.createServer(async (req, res) => {
         applications: [],
         conversations: [],
         messages: [],
-        escrows: []
+        escrows: [],
+        invoices: [],
+        processedPayments: []
       };
       return sendJson(res, 200, { success: true, message: 'State cleared' });
     }
@@ -420,6 +424,115 @@ const server = http.createServer(async (req, res) => {
       escrow.releasedAt = new Date().toISOString();
 
       return sendJson(res, 200, escrow);
+    }
+
+    // POST /payment/invoice
+    if (pathname === '/payment/invoice' && method === 'POST') {
+      const body = await getJsonBody(req);
+      const { userId, serviceId, totalAmount } = body;
+
+      if (!userId || !serviceId) {
+        return sendJson(res, 400, { error: 'userId and serviceId are required' });
+      }
+
+      const numTotal = Number(totalAmount);
+      if (isNaN(numTotal) || numTotal <= 0) {
+        return sendJson(res, 400, { error: 'totalAmount must be greater than zero' });
+      }
+
+      const invoice = {
+        id: `inv_${state.invoices.length + 1}`,
+        userId,
+        serviceId,
+        totalAmount: Math.round(numTotal * 100) / 100,
+        paidAmount: 0,
+        outstandingBalance: Math.round(numTotal * 100) / 100,
+        status: 'UNPAID',
+        createdAt: new Date().toISOString()
+      };
+      state.invoices.push(invoice);
+      return sendJson(res, 201, invoice);
+    }
+
+    // GET /payment/invoice/:id
+    if (pathname.startsWith('/payment/invoice/') && method === 'GET') {
+      const parts = pathname.split('/');
+      const invId = parts[parts.length - 1];
+      const invoice = state.invoices.find(i => i.id === invId);
+      if (!invoice) return sendJson(res, 404, { error: 'Invoice not found' });
+      return sendJson(res, 200, invoice);
+    }
+
+    // POST /payment/process - Foundational Financial Business Rules Processor
+    if (pathname === '/payment/process' && method === 'POST') {
+      const body = await getJsonBody(req);
+      const { invoiceId, userId, serviceId, amount, reference } = body;
+
+      // Rule 1: Belongs to user/customer and service
+      if (!userId || !serviceId) {
+        return sendJson(res, 400, { error: 'A payment must belong to a valid user or customer and service.' });
+      }
+
+      if (!reference || typeof reference !== 'string' || !reference.trim()) {
+        return sendJson(res, 400, { error: 'A valid unique payment reference is required.' });
+      }
+
+      // Rule 2: Amount > 0
+      const numAmount = Math.round(Number(amount) * 100) / 100;
+      if (isNaN(numAmount) || numAmount <= 0) {
+        return sendJson(res, 400, { error: 'Payment amount must be greater than zero.' });
+      }
+
+      // Rule 3: Duplicate reference rejection
+      const duplicate = state.processedPayments.find(p => p.reference === reference.trim());
+      if (duplicate) {
+        return sendJson(res, 400, { error: 'Duplicate payment reference rejected.' });
+      }
+
+      // Find Invoice
+      const invoice = state.invoices.find(i => i.id === invoiceId);
+      if (!invoice) {
+        return sendJson(res, 404, { error: `Invoice ${invoiceId} not found.` });
+      }
+
+      // Rule 4: Overpayment prevention (amount cannot exceed outstanding balance)
+      if (numAmount > invoice.outstandingBalance) {
+        return sendJson(res, 400, { error: `Payment amount ($${numAmount}) exceeds outstanding balance ($${invoice.outstandingBalance}).` });
+      }
+
+      // Calculate new balances
+      const newPaid = Math.round((invoice.paidAmount + numAmount) * 100) / 100;
+      const newOutstanding = Math.round((invoice.outstandingBalance - numAmount) * 100) / 100;
+
+      // Rule 5: Mark invoice as PAID when outstanding reaches 0
+      invoice.paidAmount = newPaid;
+      invoice.outstandingBalance = newOutstanding;
+      invoice.status = newOutstanding === 0 ? 'PAID' : 'PARTIALLY_PAID';
+
+      const paymentRecord = {
+        id: `pay_${state.processedPayments.length + 1}`,
+        invoiceId,
+        userId,
+        serviceId,
+        amount: numAmount,
+        reference: reference.trim(),
+        status: 'SUCCESSFUL',
+        createdAt: new Date().toISOString()
+      };
+      state.processedPayments.push(paymentRecord);
+
+      return sendJson(res, 201, {
+        payment: paymentRecord,
+        invoice: {
+          id: invoice.id,
+          userId: invoice.userId,
+          serviceId: invoice.serviceId,
+          totalAmount: invoice.totalAmount,
+          paidAmount: invoice.paidAmount,
+          outstandingBalance: invoice.outstandingBalance,
+          status: invoice.status
+        }
+      });
     }
 
     // Fallback: Not Found

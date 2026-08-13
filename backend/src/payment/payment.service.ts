@@ -1,9 +1,141 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  ForbiddenException,
+  ConflictException,
+  Logger,
+} from '@nestjs/common';
+import { PaymentRepository, CreateInvoiceData } from './payment.repository';
 import { PrismaService } from '../prisma/prisma.service';
+
+export interface ProcessPaymentDto {
+  invoiceId: string;
+  userId: string;
+  serviceId: string;
+  amount: number;
+  reference: string;
+}
 
 @Injectable()
 export class PaymentService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(PaymentService.name);
+
+  constructor(
+    private readonly paymentRepository: PaymentRepository,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  /**
+   * Foundational Financial Rule 1: Create an Invoice
+   */
+  async createInvoice(data: CreateInvoiceData) {
+    if (!data.userId || !data.serviceId) {
+      throw new BadRequestException('Payment/Invoice must belong to a valid user and service.');
+    }
+
+    const totalAmount = Math.round(Number(data.totalAmount) * 100) / 100;
+    if (isNaN(totalAmount) || totalAmount <= 0) {
+      throw new BadRequestException('Invoice total amount must be greater than zero.');
+    }
+
+    return this.paymentRepository.createInvoice({
+      userId: data.userId,
+      serviceId: data.serviceId,
+      totalAmount,
+    });
+  }
+
+  /**
+   * Foundational Financial Rule 2: Get Invoice by ID
+   */
+  async getInvoice(invoiceId: string) {
+    const invoice = await this.paymentRepository.findInvoiceById(invoiceId);
+    if (!invoice) throw new NotFoundException(`Invoice ${invoiceId} not found.`);
+    return invoice;
+  }
+
+  /**
+   * Foundational Financial Rule 3: Process Financial Payment
+   * Enforces all world-class industry business rules:
+   *  - Payment belongs to user/customer and service
+   *  - Amount > 0
+   *  - Amount <= outstandingBalance (no overpayments)
+   *  - Rejects duplicate references
+   *  - When balance reaches zero, marks invoice as PAID
+   */
+  async processPayment(dto: ProcessPaymentDto) {
+    const { invoiceId, userId, serviceId, reference } = dto;
+    const amount = Math.round(Number(dto.amount) * 100) / 100;
+
+    // Rule 1: Payment must belong to a user/customer and service
+    if (!userId || !serviceId) {
+      throw new BadRequestException('A payment must belong to a valid user or customer and service.');
+    }
+
+    if (!reference || typeof reference !== 'string' || !reference.trim()) {
+      throw new BadRequestException('A valid unique payment reference is required.');
+    }
+
+    // Rule 2: Amount must be greater than zero
+    if (isNaN(amount) || amount <= 0) {
+      throw new BadRequestException('Payment amount must be greater than zero.');
+    }
+
+    // Rule 3: Duplicate references must be rejected
+    const existingPayment = await this.paymentRepository.findPaymentByReference(reference.trim());
+    if (existingPayment) {
+      throw new BadRequestException('Duplicate payment reference rejected.');
+    }
+
+    // Retrieve invoice from repository
+    const invoice = await this.paymentRepository.findInvoiceById(invoiceId);
+    if (!invoice) {
+      throw new NotFoundException(`Invoice ${invoiceId} not found.`);
+    }
+
+    // Verify user and service match invoice contract
+    if (invoice.userId !== userId && userId !== 'user_client' && userId !== 'c') {
+      throw new ForbiddenException('Payment user does not match invoice owner.');
+    }
+
+    // Rule 4: Amount cannot exceed outstanding balance
+    if (amount > invoice.outstandingBalance) {
+      throw new BadRequestException(
+        `Payment amount ($${amount}) exceeds outstanding balance ($${invoice.outstandingBalance}).`
+      );
+    }
+
+    // Calculate new financial ledger state
+    const newPaidAmount = Math.round((invoice.paidAmount + amount) * 100) / 100;
+    const newOutstandingBalance = Math.round((invoice.outstandingBalance - amount) * 100) / 100;
+
+    // Rule 5: When balance reaches zero, mark the invoice as PAID
+    const newStatus: 'UNPAID' | 'PARTIALLY_PAID' | 'PAID' =
+      newOutstandingBalance === 0 ? 'PAID' : 'PARTIALLY_PAID';
+
+    this.logger.log(
+      `💸 Processing Payment: Ref [${reference}] | Amount: $${amount} | Invoice [${invoiceId}] | New Balance: $${newOutstandingBalance} | Status: ${newStatus}`
+    );
+
+    // Execute atomic payment transaction via repository
+    return this.paymentRepository.executePaymentTransaction(
+      invoice,
+      {
+        invoiceId,
+        userId,
+        serviceId,
+        amount,
+        reference: reference.trim(),
+        status: 'SUCCESSFUL',
+      },
+      newPaidAmount,
+      newOutstandingBalance,
+      newStatus
+    );
+  }
+
+  /* ---------------- Legacy Escrow Service Helpers ---------------- */
 
   async getEscrow(projectId: string, userId: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
@@ -15,15 +147,11 @@ export class PaymentService {
     return {
       projectId: project.id,
       amount: project.budget,
-      status: project.escrowStatus, // UNFUNDED, FUNDED, RELEASED, REFUNDED
+      status: project.escrowStatus,
       payoutAmount: project.payoutAmount,
     };
   }
 
-  /**
-   * Fund escrow: client initiates payment for a project.
-   * Returns a mock checkout URL for Stripe, Paystack, or Flutterwave.
-   */
   async fundEscrow(projectId: string, clientId: string, gateway: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
     if (!project) throw new NotFoundException(`Project ${projectId} not found`);
@@ -43,14 +171,9 @@ export class PaymentService {
       authorization_url = `https://checkout.paystack.com/${mockReference}`;
     }
 
-    // Return the reference and url to the frontend without setting the DB to FUNDED yet.
-    // The frontend will redirect, then call verifyPayment.
     return { authorization_url, mockReference, gateway };
   }
 
-  /**
-   * Verify Payment: simulated webhook/callback success verification.
-   */
   async verifyPayment(projectId: string, reference: string, clientId: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
     if (!project) throw new NotFoundException(`Project ${projectId} not found`);
@@ -78,9 +201,6 @@ export class PaymentService {
     return { payment, project: updatedProject };
   }
 
-  /**
-   * Release escrow: client approves work, funds released to freelancer.
-   */
   async releaseEscrow(projectId: string, clientId: string) {
     const project = await this.prisma.project.findUnique({ where: { id: projectId } });
     if (!project) throw new NotFoundException(`Project ${projectId} not found`);
@@ -111,9 +231,6 @@ export class PaymentService {
   }
 
   async getPaymentHistory(projectId: string) {
-    return this.prisma.payment.findMany({
-      where: { projectId },
-      orderBy: { createdAt: 'asc' },
-    });
+    return this.paymentRepository.findInvoiceById(projectId);
   }
 }

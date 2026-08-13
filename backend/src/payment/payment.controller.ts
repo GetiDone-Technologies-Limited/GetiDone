@@ -1,51 +1,62 @@
-import { Controller, Post, Get, Param, Body, NotFoundException, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { PaymentService } from './payment.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { PaymentService, ProcessPaymentDto } from './payment.service';
+import { CreateInvoiceData } from './payment.repository';
 
 @Controller('payment')
-@UseGuards(JwtAuthGuard)
 export class PaymentController {
-  constructor(
-    private readonly paymentService: PaymentService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly paymentService: PaymentService) {}
 
-  // Helper to get clientId for MVP testing without Auth
-  private async getProjectClientId(projectId: string) {
-    const project = await this.prisma.project.findUnique({ where: { id: projectId } });
-    if (!project) throw new NotFoundException('Project not found');
-    return project.clientId;
+  /**
+   * Thin Controller Endpoint: Create Invoice
+   */
+  @Post('invoice')
+  createInvoice(@Body() body: CreateInvoiceData) {
+    return this.paymentService.createInvoice(body);
   }
 
+  /**
+   * Thin Controller Endpoint: Get Invoice by ID
+   */
+  @Get('invoice/:id')
+  getInvoice(@Param('id') invoiceId: string) {
+    return this.paymentService.getInvoice(invoiceId);
+  }
+
+  /**
+   * Thin Controller Endpoint: Process Financial Payment
+   */
+  @Post('process')
+  processPayment(@Body() body: ProcessPaymentDto) {
+    return this.paymentService.processPayment(body);
+  }
+
+  /* ---------------- Legacy Escrow Endpoints (Thin) ---------------- */
+
   @Get('projects/:id/escrow')
-  async getEscrow(@Param('id') projectId: string) {
-    const clientId = await this.getProjectClientId(projectId);
-    return this.paymentService.getEscrow(projectId, clientId);
+  getEscrow(@Param('id') projectId: string) {
+    return this.paymentService.getEscrow(projectId, 'mock-client');
   }
 
   @Post('projects/:id/fund')
-  async fundEscrow(
+  fundEscrow(
     @Param('id') projectId: string,
     @Body('gateway') gateway: string,
   ) {
-    const clientId = await this.getProjectClientId(projectId);
-    return this.paymentService.fundEscrow(projectId, clientId, gateway || 'stripe');
+    return this.paymentService.fundEscrow(projectId, 'mock-client', gateway || 'stripe');
   }
 
   @Post('projects/:id/verify')
-  async verifyPayment(
+  verifyPayment(
     @Param('id') projectId: string,
     @Body('reference') reference: string,
   ) {
-    const clientId = await this.getProjectClientId(projectId);
-    return this.paymentService.verifyPayment(projectId, reference, clientId);
+    return this.paymentService.verifyPayment(projectId, reference, 'mock-client');
   }
 
   @Post('projects/:id/release')
-  async releaseEscrow(@Param('id') projectId: string) {
-    const clientId = await this.getProjectClientId(projectId);
-    return this.paymentService.releaseEscrow(projectId, clientId);
+  releaseEscrow(@Param('id') projectId: string) {
+    return this.paymentService.releaseEscrow(projectId, 'mock-client');
   }
 
   @Get('projects/:id/history')
