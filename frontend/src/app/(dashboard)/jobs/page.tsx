@@ -334,7 +334,9 @@ export default function JobsBrowsePage() {
                       <div className="text-xs font-bold flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
                         {j.client}
                         {j.verified && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/20" title="Verified Client" />
+                          <span title="Verified Client">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/20" />
+                          </span>
                         )}
                         <span>·</span>
                         <MapPin className="w-3 h-3 text-[var(--soft)]" /> {j.location}

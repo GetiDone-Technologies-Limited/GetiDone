@@ -3,17 +3,14 @@ import { DashboardStats, DashboardProject, DashboardProposal } from '../types/da
 
 export const dashboardApi = {
   getStats: async (): Promise<DashboardStats> => {
-    const { data } = await apiClient.get<DashboardStats>('/dashboard/stats');
-    return data;
+    return apiClient.get<DashboardStats>('/dashboard/stats');
   },
 
   getProjects: async (): Promise<DashboardProject[]> => {
-    const { data } = await apiClient.get<DashboardProject[]>('/dashboard/projects');
-    return data;
+    return apiClient.get<DashboardProject[]>('/dashboard/projects');
   },
 
   getProposals: async (): Promise<DashboardProposal[]> => {
-    const { data } = await apiClient.get<DashboardProposal[]>('/dashboard/proposals');
-    return data;
+    return apiClient.get<DashboardProposal[]>('/dashboard/proposals');
   },
 };

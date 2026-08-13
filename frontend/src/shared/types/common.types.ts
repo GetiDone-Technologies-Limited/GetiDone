@@ -1,5 +1,5 @@
 export type UserRole = 'CLIENT' | 'FREELANCER' | 'ADMIN';
-export type KycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
+export type KycStatus = 'PENDING' | 'VERIFIED' | 'APPROVED' | 'REJECTED';
 export type JobStatus = 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
 export type ProjectStatus = 'ACTIVE' | 'COMPLETED' | 'DISPUTED' | 'CANCELLED';

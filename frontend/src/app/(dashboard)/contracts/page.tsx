@@ -297,7 +297,9 @@ export default function ContractsPage() {
                       <div className="text-[11px] truncate flex items-center gap-1.5" style={{ color: 'var(--muted)' }}>
                         {c.client}
                         {c.verified && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/20" title="Verified Client" />
+                          <span title="Verified Client">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/20" />
+                          </span>
                         )}
                       </div>
                     </div>

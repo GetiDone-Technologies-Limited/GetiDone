@@ -357,7 +357,9 @@ export default function CalendarPage() {
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: cfg.dotColor }}></span>
                           <span className="truncate">{e.time} {e.title}</span>
                           {e.googleSynced && (
-                            <Sparkles className="w-2.5 h-2.5 ml-auto text-emerald-500 flex-shrink-0" title="Synced with Google Calendar" />
+                            <span title="Synced with Google Calendar" className="ml-auto flex-shrink-0">
+                              <Sparkles className="w-2.5 h-2.5 text-emerald-500" />
+                            </span>
                           )}
                         </div>
                       );
@@ -471,7 +473,11 @@ export default function CalendarPage() {
                           <div className="flex-1 min-w-0">
                             <div className="text-sm font-bold truncate flex items-center gap-1.5">
                               <span>{e.title}</span>
-                              {e.googleSynced && <Sparkles className="w-3 h-3 text-emerald-500 flex-shrink-0" title="Google Synced" />}
+                              {e.googleSynced && (
+                                <span title="Google Synced" className="flex-shrink-0">
+                                  <Sparkles className="w-3 h-3 text-emerald-500" />
+                                </span>
+                              )}
                             </div>
                             <div className="text-[11px] mt-0.5 flex items-center gap-2" style={{ color: 'var(--muted)' }}>
                               <span className="flex items-center gap-1">

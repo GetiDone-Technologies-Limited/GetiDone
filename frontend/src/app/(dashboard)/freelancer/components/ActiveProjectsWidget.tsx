@@ -28,10 +28,10 @@ export function ActiveProjectsWidget() {
             <div className="flex items-center gap-2 mb-1.5">
               <img src={(project as any).avatar || 'https://picsum.photos/seed/technovalogo/100/100.jpg'} className="w-6 h-6 rounded-full object-cover" alt="Client" />
               <span className="text-xs font-bold" style={{ color: 'var(--text)' }}>
-                {(project as any).client || project.client?.name || 'TechNova Inc.'}
+                {typeof (project as any).client === 'string' ? (project as any).client : (project as any).client?.name || 'TechNova Inc.'}
               </span>
             </div>
-            <h3 className="font-bold text-sm mb-2">{(project as any).title || project.job?.title || 'Active Project'}</h3>
+            <h3 className="font-bold text-sm mb-2">{(project as any).title || (project as any).job?.title || 'Active Project'}</h3>
 
             <div className="mb-2">
               <div className="flex justify-between text-xs mb-1">
