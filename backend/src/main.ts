@@ -16,6 +16,9 @@ async function bootstrap() {
   // Enable CORS for frontend integration
   app.enableCors();
 
+  // Align backend routes with top-level Vercel rewrite /api/(.*)
+  app.setGlobalPrefix('api');
+
   // Register the custom HTTP Exception Filter globally to format responses correctly
   app.useGlobalFilters(new HttpExceptionFilter());
 
