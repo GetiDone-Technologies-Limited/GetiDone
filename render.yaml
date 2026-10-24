@@ -23,7 +23,7 @@ services:
     plan: free
     region: oregon
     buildCommand: npm install --include=dev && npx prisma generate && npm run build
-    startCommand: npx prisma db push --accept-data-loss && node dist/main.js
+    startCommand: (npx prisma db push --accept-data-loss || true) && node dist/main.js
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
@@ -53,7 +53,7 @@ services:
     plan: free
     region: oregon
     buildCommand: npm install --include=dev && npm run build
-    startCommand: npm run start -- -p 10000
+    startCommand: npm run start
     envVars:
       - key: NODE_ENV
         value: production
