@@ -72,6 +72,17 @@ body {
   font-family: var(--font-sans), 'Manrope', sans-serif;
 }
 
+/* Ensure form controls preserve high contrast readable text across light and dark modes */
+input, textarea, select {
+  color: #0F172A;
+}
+
+html.dark input:not([class*="bg-white"]):not([class*="bg-slate"]):not([class*="bg-neutral-50"]),
+html.dark textarea:not([class*="bg-white"]):not([class*="bg-slate"]):not([class*="bg-neutral-50"]),
+html.dark select:not([class*="bg-white"]):not([class*="bg-slate"]):not([class*="bg-neutral-50"]) {
+  color: var(--text);
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display), 'Sora', sans-serif;
 }

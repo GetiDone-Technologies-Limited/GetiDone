@@ -46,7 +46,7 @@ export function RegisterForm() {
               type="text"
               placeholder="Jane Smith"
               required
-              className="block w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3 text-sm placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-1 focus:ring-[#00b259]"
+              className="block w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-2 focus:ring-[#00b259]/20 focus:bg-white transition-all"
               value={form.name}
               onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
             />
@@ -65,7 +65,7 @@ export function RegisterForm() {
               type="email"
               placeholder="you@example.com"
               required
-              className="block w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3 text-sm placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-1 focus:ring-[#00b259]"
+              className="block w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-2 focus:ring-[#00b259]/20 focus:bg-white transition-all"
               value={form.email}
               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
             />
@@ -85,7 +85,7 @@ export function RegisterForm() {
               placeholder="At least 8 characters"
               required
               minLength={8}
-              className="block w-full rounded-xl border border-slate-200 py-3 pl-10 pr-10 text-sm placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-1 focus:ring-[#00b259]"
+              className="block w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-10 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00b259] focus:outline-none focus:ring-2 focus:ring-[#00b259]/20 focus:bg-white transition-all"
               value={form.password}
               onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
             />
