@@ -1,0 +1,63 @@
+databases:
+  - name: getidone-db
+    databaseName: getidone
+    user: getidone
+    plan: free
+    region: oregon
+
+services:
+  # ----------------------------------------------------
+  # 1. BACKEND SERVICE (NestJS + Prisma + Socket.io)
+  # ----------------------------------------------------
+  - type: web
+    name: getidone-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx prisma db push --accept-data-loss && node dist/main.js
+    healthCheckPath: /api/sandbox/state
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: getidone-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateCrypto: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: ZHIPU_API_KEY
+        sync: false
+
+  # ----------------------------------------------------
+  # 2. FRONTEND SERVICE (Next.js 15)
+  # ----------------------------------------------------
+  - type: web
+    name: getidone-frontend
+    runtime: node
+    rootDir: frontend
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: BACKEND_INTERNAL_URL
+        fromService:
+          type: web
+          name: getidone-backend
+          property: host
+      - key: NEXT_PUBLIC_API_URL
+        value: https://getidone-backend.onrender.com/api
+      - key: NEXT_PUBLIC_SOCKET_URL
+        value: https://getidone-backend.onrender.com

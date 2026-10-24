@@ -1,11 +1,16 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
+const RAW_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
+const BASE_URL = RAW_BASE.replace(/\/+$/, '').endsWith('/api')
+  ? RAW_BASE.replace(/\/+$/, '')
+  : `${RAW_BASE.replace(/\/+$/, '')}/api`;
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
 }
 
 function buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>): string {
-  const url = new URL(path, BASE_URL);
+  const normalizedBase = BASE_URL.replace(/\/+$/, '');
+  const cleanPath = path.replace(/^\/+/, '').replace(/^api\//, '');
+  const url = new URL(`${normalizedBase}/${cleanPath}`);
   if (params) {
     Object.entries(params).forEach(([key, val]) => {
       if (val !== undefined) url.searchParams.set(key, String(val));
