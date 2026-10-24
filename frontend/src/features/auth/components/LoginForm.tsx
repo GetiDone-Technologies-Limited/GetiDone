@@ -27,6 +27,18 @@ export function LoginForm() {
     }
   };
 
+  const handleQuickDemoLogin = async (email: string) => {
+    setForm({ email, password: 'password123' });
+    try {
+      const result = await login({ email, password: 'password123' });
+      if (result.user.role === 'CLIENT') router.push('/client');
+      else if (result.user.role === 'FREELANCER') router.push('/freelancer');
+      else router.push('/');
+    } catch {
+      // error shown via loginError
+    }
+  };
+
   return (
     <div className="w-full">
       {/* SSO Buttons */}
@@ -121,27 +133,35 @@ export function LoginForm() {
         </div>
 
         {/* Quick Demo Credentials */}
-        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-3">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-3.5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Demo Accounts</span>
-            <span className="text-[11px] text-slate-400">Click to fill</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Demo Accounts</span>
+            <span className="text-[11px] font-medium text-emerald-600">1-click instant login</span>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
-              onClick={() => setForm({ email: 'client@getidone.com', password: 'password123' })}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 text-xs font-semibold text-slate-700 hover:text-emerald-700 transition-all text-left flex items-center justify-between group shadow-sm"
+              disabled={isLoggingIn}
+              onClick={() => handleQuickDemoLogin('client@getidone.com')}
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 text-xs font-semibold text-slate-800 hover:text-emerald-700 transition-all text-left flex items-center justify-between group shadow-sm disabled:opacity-50"
             >
-              <span>🏢 Client</span>
-              <span className="text-[10px] text-slate-400 group-hover:text-emerald-600 font-normal">Acme</span>
+              <div>
+                <span className="block font-bold">🏢 Client</span>
+                <span className="text-[10px] text-slate-400 group-hover:text-emerald-600">Acme Corp</span>
+              </div>
+              <span className="text-xs text-slate-300 group-hover:text-emerald-600 transition-colors font-bold">→</span>
             </button>
             <button
               type="button"
-              onClick={() => setForm({ email: 'freelancer@getidone.com', password: 'password123' })}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 text-xs font-semibold text-slate-700 hover:text-emerald-700 transition-all text-left flex items-center justify-between group shadow-sm"
+              disabled={isLoggingIn}
+              onClick={() => handleQuickDemoLogin('freelancer@getidone.com')}
+              className="px-3 py-2 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 text-xs font-semibold text-slate-800 hover:text-emerald-700 transition-all text-left flex items-center justify-between group shadow-sm disabled:opacity-50"
             >
-              <span>💼 Freelancer</span>
-              <span className="text-[10px] text-slate-400 group-hover:text-emerald-600 font-normal">Alice</span>
+              <div>
+                <span className="block font-bold">💼 Freelancer</span>
+                <span className="text-[10px] text-slate-400 group-hover:text-emerald-600">Alice Developer</span>
+              </div>
+              <span className="text-xs text-slate-300 group-hover:text-emerald-600 transition-colors font-bold">→</span>
             </button>
           </div>
         </div>
