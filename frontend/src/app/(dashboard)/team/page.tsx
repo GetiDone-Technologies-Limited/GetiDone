@@ -10,17 +10,17 @@ import {
 import { InviteMemberModal } from '@/features/team/components/InviteMemberModal';
 
 const mockPODs = [
-  { id: 'pod1', name: 'Design POD Alpha', project: 'E-commerce Redesign', status: 'Active', type: 'design', progress: 75, members: [{ name: 'Sarah Kim', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg' }, { name: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg' }, { name: 'Alex Chen', avatar: 'https://picsum.photos/seed/alex/100/100.jpg' }], capacity: 5 },
-  { id: 'pod2', name: 'Dev POD Beta', project: 'Mobile App Development', status: 'Active', type: 'dev', progress: 45, members: [{ name: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg' }, { name: 'Tunde A.', avatar: 'https://picsum.photos/seed/tunde/100/100.jpg' }], capacity: 4 },
-  { id: 'pod3', name: 'Marketing POD', project: 'SEO Campaign', status: 'On Hold', type: 'marketing', progress: 30, members: [{ name: 'Jenny Diaz', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg' }, { name: 'Praise U.', avatar: 'https://picsum.photos/seed/praise/100/100.jpg' }], capacity: 3 },
+  { id: 'pod1', name: 'Design POD Alpha', project: 'E-commerce Redesign', status: 'Active', type: 'design', progress: 75, members: [{ name: 'Sarah Kim', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80' }, { name: 'Marcus Lee', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' }, { name: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80' }], capacity: 5 },
+  { id: 'pod2', name: 'Dev POD Beta', project: 'Mobile App Development', status: 'Active', type: 'dev', progress: 45, members: [{ name: 'Marcus Lee', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' }, { name: 'Tunde A.', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80' }], capacity: 4 },
+  { id: 'pod3', name: 'Marketing POD', project: 'SEO Campaign', status: 'On Hold', type: 'marketing', progress: 30, members: [{ name: 'Jenny Diaz', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80' }, { name: 'Praise U.', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80' }], capacity: 3 },
 ];
 
 const mockMembers = [
-  { id: 'm1', name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', rating: 4.9, status: 'online', project: 'E-commerce Redesign' },
-  { id: 'm2', name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', rating: 4.8, status: 'online', project: 'Mobile App' },
-  { id: 'm3', name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', rating: 4.7, status: 'away', project: 'SEO Campaign' },
-  { id: 'm4', name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', rating: 4.6, status: 'offline', project: 'Marketing Campaign' },
-  { id: 'm5', name: 'Tunde A.', role: 'Full-Stack Developer', avatar: 'https://picsum.photos/seed/tunde/100/100.jpg', rating: 4.9, status: 'online', project: 'Shopify Store' },
+  { id: 'm1', name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80', rating: 4.9, status: 'online', project: 'E-commerce Redesign' },
+  { id: 'm2', name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80', rating: 4.8, status: 'online', project: 'Mobile App' },
+  { id: 'm3', name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80', rating: 4.7, status: 'away', project: 'SEO Campaign' },
+  { id: 'm4', name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80', rating: 4.6, status: 'offline', project: 'Marketing Campaign' },
+  { id: 'm5', name: 'Tunde A.', role: 'Full-Stack Developer', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80', rating: 4.9, status: 'online', project: 'Shopify Store' },
 ];
 
 export default function TeamPage() {

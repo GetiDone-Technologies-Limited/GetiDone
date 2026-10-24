@@ -232,7 +232,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center gap-6 mb-8 pb-8" style={{ borderBottom: '1px solid var(--border)' }}>
               <img
-                src={user?.avatarUrl || `https://picsum.photos/seed/danielbenson/200/200.jpg`}
+                src={user?.avatarUrl || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80`}
                 className="w-24 h-24 rounded-full object-cover flex-shrink-0"
                 style={{ border: '4px solid var(--card)', boxShadow: '0 0 0 1px var(--border)' }}
                 alt="Profile"

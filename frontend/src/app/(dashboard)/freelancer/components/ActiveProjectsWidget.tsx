@@ -15,7 +15,7 @@ export function ActiveProjectsWidget() {
           client: 'TechNova Inc.',
           progress: 65,
           escrow: '$2,800',
-          avatar: 'https://picsum.photos/seed/technovalogo/100/100.jpg',
+          avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669',
         },
       ];
 
@@ -26,7 +26,7 @@ export function ActiveProjectsWidget() {
         {activeProjects.map((project) => (
           <div key={project.id} className="p-4 rounded-xl" style={{ background: 'var(--bg-alt)' }}>
             <div className="flex items-center gap-2 mb-1.5">
-              <img src={(project as any).avatar || 'https://picsum.photos/seed/technovalogo/100/100.jpg'} className="w-6 h-6 rounded-full object-cover" alt="Client" />
+              <img src={(project as any).avatar || 'https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669'} className="w-6 h-6 rounded-full object-cover" alt="Client" />
               <span className="text-xs font-bold" style={{ color: 'var(--text)' }}>
                 {typeof (project as any).client === 'string' ? (project as any).client : (project as any).client?.name || 'TechNova Inc.'}
               </span>

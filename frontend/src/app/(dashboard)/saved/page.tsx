@@ -31,12 +31,12 @@ interface ToastState {
 
 /* ==================== MOCK DATA ==================== */
 const initialSavedTalent: SavedTalentItem[] = [
-  { id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', status: 'online', rate: 75, skills: ['Branding', 'Figma', 'Logo Design'], savedDate: 'Dec 10, 2024', hired: true },
-  { id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', status: 'online', rate: 95, skills: ['React', 'Node.js', 'AWS'], savedDate: 'Dec 08, 2024', hired: true },
-  { id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', status: 'away', rate: 60, skills: ['SEO', 'Content', 'Analytics'], savedDate: 'Nov 28, 2024', hired: false },
-  { id: 4, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', status: 'offline', rate: 55, skills: ['Copywriting', 'Blogging'], savedDate: 'Nov 15, 2024', hired: false },
-  { id: 5, name: 'David Wilson', role: 'QA Tester', avatar: 'https://picsum.photos/seed/david/100/100.jpg', status: 'online', rate: 45, skills: ['Cypress', 'Jira', 'QA'], savedDate: 'Oct 30, 2024', hired: false },
-  { id: 6, name: 'Emma Watson', role: 'UI/UX Designer', avatar: 'https://picsum.photos/seed/emma/100/100.jpg', status: 'online', rate: 85, skills: ['Figma', 'Webflow', 'User Research'], savedDate: 'Oct 12, 2024', hired: true }
+  { id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80', status: 'online', rate: 75, skills: ['Branding', 'Figma', 'Logo Design'], savedDate: 'Dec 10, 2024', hired: true },
+  { id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80', status: 'online', rate: 95, skills: ['React', 'Node.js', 'AWS'], savedDate: 'Dec 08, 2024', hired: true },
+  { id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80', status: 'away', rate: 60, skills: ['SEO', 'Content', 'Analytics'], savedDate: 'Nov 28, 2024', hired: false },
+  { id: 4, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80', status: 'offline', rate: 55, skills: ['Copywriting', 'Blogging'], savedDate: 'Nov 15, 2024', hired: false },
+  { id: 5, name: 'David Wilson', role: 'QA Tester', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80', status: 'online', rate: 45, skills: ['Cypress', 'Jira', 'QA'], savedDate: 'Oct 30, 2024', hired: false },
+  { id: 6, name: 'Emma Watson', role: 'UI/UX Designer', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80', status: 'online', rate: 85, skills: ['Figma', 'Webflow', 'User Research'], savedDate: 'Oct 12, 2024', hired: true }
 ];
 
 /* ==================== MAIN COMPONENT ==================== */

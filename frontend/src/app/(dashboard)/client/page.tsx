@@ -19,10 +19,10 @@ import {
 } from 'recharts';
 
 const mockProjects = [
-  { id: 'p1', title: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', status: 'In Progress', progress: 72, budget: 2500, due: 'Dec 20, 2025', category: 'Web Design', isReal: false },
-  { id: 'p2', title: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', status: 'In Review', progress: 90, budget: 3200, due: 'Dec 18, 2025', category: 'Mobile', isReal: false },
-  { id: 'p3', title: 'Brand Identity Package', freelancer: 'Alex Chen', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', status: 'In Progress', progress: 45, budget: 1800, due: 'Jan 5, 2026', category: 'Branding', isReal: false },
-  { id: 'p4', title: 'SEO Optimization Campaign', freelancer: 'Jenny Diaz', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', status: 'On Hold', progress: 30, budget: 1200, due: 'Jan 15, 2026', category: 'Marketing', isReal: false },
+  { id: 'p1', title: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80', status: 'In Progress', progress: 72, budget: 2500, due: 'Dec 20, 2025', category: 'Web Design', isReal: false },
+  { id: 'p2', title: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80', status: 'In Review', progress: 90, budget: 3200, due: 'Dec 18, 2025', category: 'Mobile', isReal: false },
+  { id: 'p3', title: 'Brand Identity Package', freelancer: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80', status: 'In Progress', progress: 45, budget: 1800, due: 'Jan 5, 2026', category: 'Branding', isReal: false },
+  { id: 'p4', title: 'SEO Optimization Campaign', freelancer: 'Jenny Diaz', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80', status: 'On Hold', progress: 30, budget: 1200, due: 'Jan 15, 2026', category: 'Marketing', isReal: false },
 ];
 
 const mockSpendingData = [
@@ -103,7 +103,7 @@ export default function ClientDashboardPage() {
       id: p.id,
       title: p.job?.title || 'Untitled Project',
       freelancer: p.freelancer?.name || 'Unassigned',
-      avatar: 'https://picsum.photos/seed/' + p.id + '/100/100.jpg',
+      avatar: p.freelancer?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
       status: p.status === 'IN_PROGRESS' ? 'In Progress' : p.status === 'COMPLETED' ? 'Completed' : 'In Review',
       progress: p.status === 'COMPLETED' ? 100 : p.status === 'IN_PROGRESS' ? 60 : 85,
       budget: p.budget || 0,
@@ -691,8 +691,8 @@ export default function ClientDashboardPage() {
             <p className="text-xs mb-4" style={{ color: 'var(--sidebar-text)' }}>Average response time: under 2 minutes</p>
             <div className="flex items-center justify-between">
               <div className="flex -space-x-2">
-                <img src="https://picsum.photos/seed/support1/100/100.jpg" className="w-7 h-7 rounded-full border-2 border-[#131A16]" />
-                <img src="https://picsum.photos/seed/support2/100/100.jpg" className="w-7 h-7 rounded-full border-2 border-[#131A16]" />
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80" className="w-7 h-7 rounded-full border-2 border-[#131A16] object-cover" alt="Support Agent 1" />
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" className="w-7 h-7 rounded-full border-2 border-[#131A16] object-cover" alt="Support Agent 2" />
                 <div className="w-7 h-7 rounded-full border-2 border-[#131A16] flex items-center justify-center text-[10px] font-bold text-white z-10" style={{ background: 'var(--primary)' }}>+5</div>
               </div>
               <div className="bg-white/10 backdrop-blur px-3 py-1.5 rounded-lg flex items-center gap-1.5">

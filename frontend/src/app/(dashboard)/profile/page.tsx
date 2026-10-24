@@ -36,7 +36,7 @@ export default function ProfilePage() {
         {/* Cover Photo Banner */}
         <div className="h-64 sm:h-72 bg-slate-900 relative overflow-hidden">
           <img
-            src="https://picsum.photos/seed/profilecover/1600/500"
+            src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1600&auto=format&fit=crop&q=80"
             className="w-full h-full object-cover opacity-80"
             alt="Cover"
           />
@@ -47,7 +47,7 @@ export default function ProfilePage() {
         <div className="flex flex-col items-center -mt-16 sm:-mt-20 relative z-10 px-6">
           <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1.5 bg-white shadow-xl relative">
             <img
-              src={user?.avatarUrl || 'https://picsum.photos/seed/danielbenson/200/200.jpg'}
+              src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'}
               className="w-full h-full rounded-full object-cover"
               alt={user?.name || 'Daniel Benson'}
             />
@@ -229,7 +229,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img
-                  src={user?.avatarUrl || 'https://picsum.photos/seed/danielbenson/200/200.jpg'}
+                  src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'}
                   className="w-11 h-11 rounded-full object-cover"
                   alt="Avatar"
                 />
@@ -248,7 +248,7 @@ export default function ProfilePage() {
             </p>
 
             <img
-              src="https://picsum.photos/seed/projectdemo/800/400"
+              src="https://images.unsplash.com/photo-1557821552-17105176677c?w=800&auto=format&fit=crop&q=80"
               className="w-full h-64 object-cover rounded-xl border border-[var(--border)]"
               alt="Project Demo"
             />
@@ -268,7 +268,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img
-                  src={user?.avatarUrl || 'https://picsum.photos/seed/danielbenson/200/200.jpg'}
+                  src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'}
                   className="w-11 h-11 rounded-full object-cover"
                   alt="Avatar"
                 />

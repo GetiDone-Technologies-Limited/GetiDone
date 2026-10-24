@@ -34,12 +34,12 @@ interface TransactionItem {
 }
 
 const initialTransactions: TransactionItem[] = [
-  { id: 1, project: 'E-commerce Platform Redesign', client: 'TechNova Inc.', avatar: 'https://picsum.photos/seed/technovalogo/100/100.jpg', date: 'Dec 12, 2024', status: 'deposit', amount: 1500 },
-  { id: 2, project: 'Stripe Instant Withdrawal', client: 'Stripe Payout', avatar: 'https://picsum.photos/seed/stripe/100/100.jpg', date: 'Dec 10, 2024', status: 'withdrawal', amount: 2000 },
-  { id: 3, project: 'Real-Time Analytics Dashboard', client: 'Frame.io', avatar: 'https://picsum.photos/seed/frameio/100/100.jpg', date: 'Dec 05, 2024', status: 'deposit', amount: 3000 },
-  { id: 4, project: 'Backend API Developer', client: 'Innovatech', avatar: 'https://picsum.photos/seed/innovatech/100/100.jpg', date: 'Dec 01, 2024', status: 'deposit', amount: 2800 },
-  { id: 5, project: 'PayPal Withdrawal', client: 'd.benson@email.com', avatar: 'https://picsum.photos/seed/paypal/100/100.jpg', date: 'Nov 28, 2024', status: 'withdrawal', amount: 1500 },
-  { id: 6, project: 'SEO Specialist for SaaS', client: 'Flutterwave', avatar: 'https://picsum.photos/seed/flutterwave/100/100.jpg', date: 'Nov 20, 2024', status: 'deposit', amount: 1100 }
+  { id: 1, project: 'E-commerce Platform Redesign', client: 'TechNova Inc.', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669', date: 'Dec 12, 2024', status: 'deposit', amount: 1500 },
+  { id: 2, project: 'Stripe Instant Withdrawal', client: 'Stripe Payout', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Stripe&backgroundColor=6366f1', date: 'Dec 10, 2024', status: 'withdrawal', amount: 2000 },
+  { id: 3, project: 'Real-Time Analytics Dashboard', client: 'Frame.io', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Frameio&backgroundColor=7c3aed', date: 'Dec 05, 2024', status: 'deposit', amount: 3000 },
+  { id: 4, project: 'Backend API Developer', client: 'Innovatech', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Innovatech&backgroundColor=2563eb', date: 'Dec 01, 2024', status: 'deposit', amount: 2800 },
+  { id: 5, project: 'PayPal Withdrawal', client: 'd.benson@email.com', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=PayPal&backgroundColor=0284c7', date: 'Nov 28, 2024', status: 'withdrawal', amount: 1500 },
+  { id: 6, project: 'SEO Specialist for SaaS', client: 'Flutterwave', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Flutterwave&backgroundColor=ea580c', date: 'Nov 20, 2024', status: 'deposit', amount: 1100 }
 ];
 
 const initialPayoutMethods: PayoutMethodItem[] = [

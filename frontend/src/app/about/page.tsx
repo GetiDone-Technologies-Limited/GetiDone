@@ -45,22 +45,25 @@ const stats = [
 
 const team = [
   {
-    name: 'Alexander Wright',
-    role: 'Co-Founder & CEO',
-    avatar: 'https://picsum.photos/seed/alexwright/200/200.jpg',
-    bio: 'Former VP of Engineering at Stripe & Founder of 2 Tech SaaS startups.'
+    name: 'Wada Oluwapelumi',
+    role: 'Chief Executive Officer (CEO)',
+    initials: 'WO',
+    gradient: 'from-emerald-500 to-teal-700',
+    bio: 'Visionary founder directing executive strategy, ecosystem scaling, and the next-generation AI freelance execution engine.'
   },
   {
-    name: 'Elena Rostova',
-    role: 'Chief Product Architect',
-    avatar: 'https://picsum.photos/seed/elena/200/200.jpg',
-    bio: 'Pioneer in AI matching algorithms and automated QA execution engines.'
+    name: 'Oghenemudiakevwe Okpako',
+    role: 'Chief Technology Officer (CTO)',
+    initials: 'OO',
+    gradient: 'from-cyan-500 to-blue-700',
+    bio: 'Pioneering technology architecture, automated QA test gates, distributed microservices, and autonomous matching infrastructure.'
   },
   {
-    name: 'Marcus Vance',
-    role: 'Head of Developer Ecosystem',
-    avatar: 'https://picsum.photos/seed/marcusvance/200/200.jpg',
-    bio: 'Passionate about empowering remote engineering talent and Micro-POD squads globally.'
+    name: 'Wada Boluwatife',
+    role: 'Chief Marketing Officer (CMO)',
+    initials: 'WB',
+    gradient: 'from-violet-500 to-indigo-700',
+    bio: 'Leading global brand presence, developer community adoption, client growth strategies, and strategic partnerships worldwide.'
   }
 ];
 
@@ -182,12 +185,14 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((m, idx) => (
-              <div key={idx} className="gd-card p-6 text-center space-y-4">
-                <img src={m.avatar} className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-emerald-500/40" alt={m.name} />
+              <div key={idx} className="gd-card p-8 text-center space-y-5 hover:-translate-y-1 transition-all duration-300">
+                <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center text-2xl font-black text-white bg-gradient-to-br ${m.gradient} shadow-lg ring-4 ring-emerald-500/20`}>
+                  {m.initials}
+                </div>
                 <div>
-                  <h3 className="font-extrabold text-lg" style={{ fontFamily: "'Sora', sans-serif" }}>{m.name}</h3>
-                  <div className="text-xs font-bold text-emerald-600 mb-2">{m.role}</div>
-                  <p className="text-xs" style={{ color: 'var(--muted)' }}>{m.bio}</p>
+                  <h3 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>{m.name}</h3>
+                  <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mt-1 mb-3">{m.role}</div>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{m.bio}</p>
                 </div>
               </div>
             ))}

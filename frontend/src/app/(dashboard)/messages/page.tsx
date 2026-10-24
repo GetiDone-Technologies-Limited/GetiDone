@@ -14,10 +14,10 @@ import { useSocket } from '@/shared/hooks/useSocket';
 
 // ============ MOCK DATA ============
 const availableMembers = [
-  { id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg', selected: false },
-  { id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg', selected: false },
-  { id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://picsum.photos/seed/alex/100/100.jpg', selected: false },
-  { id: 4, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg', selected: false },
+  { id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80', selected: false },
+  { id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80', selected: false },
+  { id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80', selected: false },
+  { id: 4, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80', selected: false },
 ];
 
 type CustomOfferData = {
@@ -57,7 +57,7 @@ type Conversation = {
 
 const initialConversations: Conversation[] = [
   {
-    id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg',
+    id: 1, name: 'Sarah Kim', role: 'Brand Designer', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
     status: 'online', lastMsg: 'Custom Offer: Brand Identity Package ($1,200)', time: '12m',
     unread: 2, starred: true, isGroup: false,
     messages: [
@@ -80,7 +80,7 @@ const initialConversations: Conversation[] = [
     ]
   },
   {
-    id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg',
+    id: 2, name: 'Marcus Lee', role: 'Lead Developer', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
     status: 'online', lastMsg: 'The API integration is complete. Moving to QA.', time: '1h',
     unread: 0, starred: false, isGroup: false,
     messages: [
@@ -91,7 +91,7 @@ const initialConversations: Conversation[] = [
     ]
   },
   {
-    id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://picsum.photos/seed/alex/100/100.jpg',
+    id: 3, name: 'Alex Chen', role: 'SEO Specialist', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80',
     status: 'away', lastMsg: 'Can we schedule a call to discuss keywords?', time: '3h',
     unread: 1, starred: false, isGroup: false,
     messages: [
@@ -102,14 +102,14 @@ const initialConversations: Conversation[] = [
     ]
   },
   {
-    id: 4, name: 'POD Team Alpha', role: '4 Members · E-commerce Redesign', avatar: 'https://picsum.photos/seed/team/100/100.jpg',
+    id: 4, name: 'POD Team Alpha', role: '4 Members · E-commerce Redesign', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=POD&backgroundColor=10b981',
     status: 'online', lastMsg: 'Jenny: Meeting notes are in the shared folder.', time: '1d',
     unread: 0, starred: true, isGroup: true,
     groupMembers: [
-      { name: 'John Carter', avatar: 'https://picsum.photos/seed/johnavatar/100/100.jpg' },
-      { name: 'Marcus Lee', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg' },
-      { name: 'Sarah Kim', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg' },
-      { name: 'Alex Chen', avatar: 'https://picsum.photos/seed/alex/100/100.jpg' },
+      { name: 'John Carter', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80' },
+      { name: 'Marcus Lee', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' },
+      { name: 'Sarah Kim', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80' },
+      { name: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80' },
     ],
     messages: [
       { type: 'received', text: 'Standup meeting starting in 5 minutes.', time: 'Yesterday, 9:55 AM', sender: 'Marcus' },
@@ -118,7 +118,7 @@ const initialConversations: Conversation[] = [
     ]
   },
   {
-    id: 5, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg',
+    id: 5, name: 'Jenny Diaz', role: 'Content Strategist', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
     status: 'offline', lastMsg: 'The first batch of blog posts is ready for review.', time: '2d',
     unread: 0, starred: false, isGroup: false,
     messages: [

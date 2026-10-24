@@ -24,7 +24,7 @@ const initialProjects: PortfolioProject[] = [
     id: 1,
     title: 'E-commerce Platform Redesign',
     category: 'Web Development',
-    image: 'https://picsum.photos/seed/ecommerceapp/600/400.jpg',
+    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&auto=format&fit=crop&q=80',
     desc: 'Complete frontend architecture redesign for a high-traffic e-commerce platform handling 50k+ daily users.',
     skills: ['React', 'Next.js', 'Tailwind CSS'],
     demoUrl: 'https://demo.getidone.io/ecommerce',
@@ -34,7 +34,7 @@ const initialProjects: PortfolioProject[] = [
     id: 2,
     title: 'Real-Time Analytics Dashboard',
     category: 'Web Development',
-    image: 'https://picsum.photos/seed/saasdashboard/600/400.jpg',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
     desc: 'Built a real-time analytics dashboard for a B2B SaaS company to track user engagement and revenue metrics.',
     skills: ['React', 'Node.js', 'WebSocket', 'Recharts'],
     demoUrl: 'https://demo.getidone.io/analytics',
@@ -44,7 +44,7 @@ const initialProjects: PortfolioProject[] = [
     id: 3,
     title: 'Mobile Banking App UI',
     category: 'UI/UX Design',
-    image: 'https://picsum.photos/seed/bankingapp/600/400.jpg',
+    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80',
     desc: 'Designed a seamless and secure mobile banking interface including user flow for transfers and bill payments.',
     skills: ['Figma', 'Prototyping', 'UI/UX', 'Design System'],
     demoUrl: 'https://figma.com/@getidone/banking',
@@ -53,7 +53,7 @@ const initialProjects: PortfolioProject[] = [
     id: 4,
     title: 'Cross-Platform Mobile App',
     category: 'Mobile App',
-    image: 'https://picsum.photos/seed/mobileapp/600/400.jpg',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
     desc: 'Built a cross-platform mobile app from scratch using React Native. Integrated biometric auth and push notifications.',
     skills: ['React Native', 'Firebase', 'TypeScript'],
     demoUrl: 'https://demo.getidone.io/mobile',
@@ -97,7 +97,7 @@ export default function PortfolioPage() {
     setEditingProject(null);
     setTitle('');
     setCategory('Web Development');
-    setImageUrl('https://picsum.photos/seed/newproject/600/400.jpg');
+    setImageUrl('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80');
     setDesc('');
     setSkillsStr('React, Tailwind CSS');
     setDemoUrl('');
@@ -148,7 +148,7 @@ export default function PortfolioPage() {
         id: Date.now(),
         title,
         category,
-        image: imageUrl || 'https://picsum.photos/seed/project/600/400.jpg',
+        image: imageUrl || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
         desc,
         skills: skillsArr.length ? skillsArr : ['React'],
         demoUrl,

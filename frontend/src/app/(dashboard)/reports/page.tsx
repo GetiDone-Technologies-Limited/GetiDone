@@ -46,10 +46,10 @@ const categoryEarningsData = [
 ];
 
 const topClientsData = [
-  { id: 1, name: 'TechNova Inc.', role: 'E-commerce Platform', avatar: 'https://picsum.photos/seed/technovalogo/100/100.jpg', earnings: 12000, progress: 92 },
-  { id: 2, name: 'Innovatech', role: 'Backend API Dev', avatar: 'https://picsum.photos/seed/innovatech/100/100.jpg', earnings: 8500, progress: 85 },
-  { id: 3, name: 'Frame.io', role: 'Analytics Dashboard', avatar: 'https://picsum.photos/seed/frameio/100/100.jpg', earnings: 6000, progress: 74 },
-  { id: 4, name: 'Paystack', role: 'Mobile App UI', avatar: 'https://picsum.photos/seed/paystack/100/100.jpg', earnings: 4500, progress: 55 },
+  { id: 1, name: 'TechNova Inc.', role: 'E-commerce Platform', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669', earnings: 12000, progress: 92 },
+  { id: 2, name: 'Innovatech', role: 'Backend API Dev', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Innovatech&backgroundColor=2563eb', earnings: 8500, progress: 85 },
+  { id: 3, name: 'Frame.io', role: 'Analytics Dashboard', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Frameio&backgroundColor=7c3aed', earnings: 6000, progress: 74 },
+  { id: 4, name: 'Paystack', role: 'Mobile App UI', avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=Paystack&backgroundColor=0284c7', earnings: 4500, progress: 55 },
 ];
 
 export default function ReportsPage() {

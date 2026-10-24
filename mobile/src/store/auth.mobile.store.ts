@@ -24,7 +24,7 @@ export const useMobileAuthStore = create<MobileAuthState>((set) => ({
     email: 'sarah@getidone.com',
     role: 'FREELANCER',
     doneScore: 98.4,
-    avatarUrl: 'https://picsum.photos/seed/sarah/100/100.jpg',
+    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
   },
   token: 'mock-mobile-jwt-token-2026',
   setUser: (user) => set({ user }),

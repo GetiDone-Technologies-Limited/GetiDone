@@ -11,12 +11,12 @@ import { useGlobalPaymentHistory } from '@/features/payment/hooks/useGlobalPayme
 import { useUIStore } from '@/store/ui.store';
 
 const mockTransactions = [
-  { id: 't1', project: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', role: 'Brand Designer', amount: 1250, date: 'Dec 8, 2025', status: 'Released', avatar: 'https://picsum.photos/seed/sarah/100/100.jpg' },
-  { id: 't2', project: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', role: 'Lead Developer', amount: 1600, date: 'Dec 7, 2025', status: 'Pending', avatar: 'https://picsum.photos/seed/marcus/100/100.jpg' },
-  { id: 't3', project: 'Brand Identity Package', freelancer: 'Alex Chen', role: 'SEO Specialist', amount: 900, date: 'Dec 5, 2025', status: 'Escrow', avatar: 'https://picsum.photos/seed/alex/100/100.jpg' },
-  { id: 't4', project: 'SEO Optimization', freelancer: 'Jenny Diaz', role: 'Content Strategist', amount: 600, date: 'Dec 3, 2025', status: 'Released', avatar: 'https://picsum.photos/seed/jenny/100/100.jpg' },
-  { id: 't5', project: 'Shopify Store Development', freelancer: 'Tunde A.', role: 'Full-Stack Developer', amount: 2250, date: 'Nov 30, 2025', status: 'Released', avatar: 'https://picsum.photos/seed/tunde/100/100.jpg' },
-  { id: 't6', project: 'Digital Marketing Campaign', freelancer: 'Praise U.', role: 'Marketing Strategist', amount: 1400, date: 'Nov 28, 2025', status: 'Escrow', avatar: 'https://picsum.photos/seed/praise/100/100.jpg' },
+  { id: 't1', project: 'E-commerce Website Redesign', freelancer: 'Sarah Kim', role: 'Brand Designer', amount: 1250, date: 'Dec 8, 2025', status: 'Released', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80' },
+  { id: 't2', project: 'Mobile App UI/UX Design', freelancer: 'Marcus Lee', role: 'Lead Developer', amount: 1600, date: 'Dec 7, 2025', status: 'Pending', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80' },
+  { id: 't3', project: 'Brand Identity Package', freelancer: 'Alex Chen', role: 'SEO Specialist', amount: 900, date: 'Dec 5, 2025', status: 'Escrow', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80' },
+  { id: 't4', project: 'SEO Optimization', freelancer: 'Jenny Diaz', role: 'Content Strategist', amount: 600, date: 'Dec 3, 2025', status: 'Released', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80' },
+  { id: 't5', project: 'Shopify Store Development', freelancer: 'Tunde A.', role: 'Full-Stack Developer', amount: 2250, date: 'Nov 30, 2025', status: 'Released', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80' },
+  { id: 't6', project: 'Digital Marketing Campaign', freelancer: 'Praise U.', role: 'Marketing Strategist', amount: 1400, date: 'Nov 28, 2025', status: 'Escrow', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80' },
 ];
 
 export default function PaymentsPage() {

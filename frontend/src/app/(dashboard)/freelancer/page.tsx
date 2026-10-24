@@ -411,7 +411,7 @@ export default function FreelancerDashboardPage() {
             <div className="space-y-4">
               <div className="p-4 rounded-xl" style={{ background: 'var(--bg-alt)' }}>
                 <div className="flex items-center gap-2 mb-1.5">
-                  <img src="https://picsum.photos/seed/technovalogo/100/100.jpg" className="w-6 h-6 rounded-full object-cover" alt="Client" />
+                  <img src="https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669" className="w-6 h-6 rounded-full object-cover" alt="Client" />
                   <span className="text-xs font-bold" style={{ color: 'var(--text)' }}>TechNova Inc.</span>
                 </div>
                 <h3 className="font-bold text-sm mb-2">Real-Time Analytics Dashboard</h3>

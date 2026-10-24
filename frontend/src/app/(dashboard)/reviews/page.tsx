@@ -24,7 +24,7 @@ const initialReviews: ReviewItem[] = [
   {
     id: 1,
     client: 'John Carter',
-    clientAvatar: 'https://picsum.photos/seed/johnavatar/100/100.jpg',
+    clientAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80',
     project: 'E-commerce Platform Redesign',
     rating: 5,
     date: 'Dec 12, 2024',
@@ -35,7 +35,7 @@ const initialReviews: ReviewItem[] = [
   {
     id: 2,
     client: 'Sarah Kim',
-    clientAvatar: 'https://picsum.photos/seed/sarah/100/100.jpg',
+    clientAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
     project: 'Real-Time Analytics Dashboard',
     rating: 5,
     date: 'Dec 05, 2024',
@@ -45,7 +45,7 @@ const initialReviews: ReviewItem[] = [
   {
     id: 3,
     client: 'Marcus Lee',
-    clientAvatar: 'https://picsum.photos/seed/marcus/100/100.jpg',
+    clientAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
     project: 'Mobile Banking App UI',
     rating: 4,
     date: 'Nov 28, 2024',
@@ -56,7 +56,7 @@ const initialReviews: ReviewItem[] = [
   {
     id: 4,
     client: 'TechNova Inc.',
-    clientAvatar: 'https://picsum.photos/seed/technovalogo/100/100.jpg',
+    clientAvatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TechNova&backgroundColor=059669',
     project: 'API Integration & Backend',
     rating: 5,
     date: 'Nov 15, 2024',

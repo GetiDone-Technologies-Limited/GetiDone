@@ -23,7 +23,7 @@ const featuredCategories = [
     color: 'from-emerald-500/20 to-teal-500/20 text-emerald-500',
     count: '2,450+ Experts',
     subskills: ['Next.js 15', 'React', 'Node.js', 'PostgreSQL', 'TypeScript'],
-    img: 'https://picsum.photos/seed/developer/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'ai',
@@ -32,7 +32,7 @@ const featuredCategories = [
     color: 'from-purple-500/20 to-indigo-500/20 text-purple-500',
     count: '1,820+ Experts',
     subskills: ['AI Agents', 'LLM Fine-tuning', 'Python', 'PyTorch', 'BigQuery'],
-    img: 'https://picsum.photos/seed/aitech/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'design',
@@ -41,7 +41,7 @@ const featuredCategories = [
     color: 'from-pink-500/20 to-rose-500/20 text-pink-500',
     count: '3,100+ Experts',
     subskills: ['Figma Design System', 'Mobile App UI', 'Branding', 'Prototyping'],
-    img: 'https://picsum.photos/seed/designer/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1581291518655-9523c932deb4?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'mobile',
@@ -50,7 +50,7 @@ const featuredCategories = [
     color: 'from-cyan-500/20 to-blue-500/20 text-cyan-500',
     count: '1,290+ Experts',
     subskills: ['React Native', 'Flutter', 'iOS Swift', 'Android Kotlin'],
-    img: 'https://picsum.photos/seed/mobileapp/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'devops',
@@ -59,7 +59,7 @@ const featuredCategories = [
     color: 'from-amber-500/20 to-orange-500/20 text-amber-500',
     count: '950+ Experts',
     subskills: ['AWS Cloud', 'Docker', 'Kubernetes', 'CI/CD Pipelines'],
-    img: 'https://picsum.photos/seed/devops/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'marketing',
@@ -68,7 +68,7 @@ const featuredCategories = [
     color: 'from-lime-500/20 to-green-500/20 text-lime-500',
     count: '1,640+ Experts',
     subskills: ['Technical SEO', 'PPC Campaigns', 'Content Strategy', 'Analytics'],
-    img: 'https://picsum.photos/seed/marketing/600/400.jpg'
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80'
   }
 ];
 
@@ -77,10 +77,10 @@ const featuredPackages = [
     id: 'sp1',
     title: 'Full-Stack Next.js 15 & Tailwind E-Commerce SaaS Build',
     freelancerName: 'Daniel Benson',
-    freelancerAvatar: 'https://picsum.photos/seed/danielbenson/100/100.jpg',
+    freelancerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
     doneScore: 98,
     badge: 'VERIFIED EXECUTIONER',
-    coverImage: 'https://picsum.photos/seed/ecommerceapp/600/400.jpg',
+    coverImage: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&auto=format&fit=crop&q=80',
     rating: 4.9,
     startingPrice: 450,
     days: 3
@@ -89,10 +89,10 @@ const featuredPackages = [
     id: 'sp2',
     title: 'High-Converting Mobile App UI/UX & Figma Design System',
     freelancerName: 'Sarah Kim',
-    freelancerAvatar: 'https://picsum.photos/seed/sarah/100/100.jpg',
+    freelancerAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
     doneScore: 96,
     badge: 'TOP RATED',
-    coverImage: 'https://picsum.photos/seed/saasdashboard/600/400.jpg',
+    coverImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
     rating: 5.0,
     startingPrice: 350,
     days: 2
@@ -101,10 +101,10 @@ const featuredPackages = [
     id: 'sp3',
     title: 'AWS Cloud Infrastructure, Docker Containerization & CI/CD',
     freelancerName: 'Tunde A.',
-    freelancerAvatar: 'https://picsum.photos/seed/tunde/100/100.jpg',
+    freelancerAvatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=80',
     doneScore: 94,
     badge: 'RISING TALENT',
-    coverImage: 'https://picsum.photos/seed/devops/600/400.jpg',
+    coverImage: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&auto=format&fit=crop&q=80',
     rating: 4.9,
     startingPrice: 300,
     days: 2
@@ -116,7 +116,7 @@ const featuredExecutioners = [
     id: 1,
     name: 'Sarah Kim',
     role: 'Lead UI/UX Architect',
-    avatar: 'https://picsum.photos/seed/sarah/100/100.jpg',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80',
     doneScore: 98,
     badge: 'VERIFIED EXECUTIONER',
     rating: 4.9,
@@ -127,7 +127,7 @@ const featuredExecutioners = [
     id: 2,
     name: 'Marcus Lee',
     role: 'Full Stack & Mobile Architect',
-    avatar: 'https://picsum.photos/seed/marcus/100/100.jpg',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
     doneScore: 99,
     badge: 'TOP RATED',
     rating: 4.8,
@@ -138,7 +138,7 @@ const featuredExecutioners = [
     id: 3,
     name: 'Alex Chen',
     role: 'AI Agent & Data Specialist',
-    avatar: 'https://picsum.photos/seed/alex/100/100.jpg',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80',
     doneScore: 97,
     badge: 'VERIFIED EXECUTIONER',
     rating: 4.9,
