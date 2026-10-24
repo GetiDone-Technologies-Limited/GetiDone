@@ -11,7 +11,8 @@ import { AddFundsModal } from '@/features/payment/components/AddFundsModal';
 import { 
   Home, Folder, MessageSquare, CreditCard, Users, Star, 
   FileText, BarChart2, Users2, Settings, Plus, CheckCircle2, ChevronLeft,
-  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket, LogOut, User, Package, ShieldCheck
+  Search, Calendar, Image as ImageIcon, DollarSign, ChevronDown, Rocket, LogOut, User, Package, ShieldCheck,
+  Terminal
 } from 'lucide-react';
 
 interface SidebarLink {

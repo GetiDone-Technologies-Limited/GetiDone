@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Bell, Check, Circle } from 'lucide-react';
-import { useNotificationStore } from '@/store/notification.store';
+import { useNotificationStore, type AppNotification } from '@/store/notification.store';
 
 export function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,11 +10,11 @@ export function NotificationDropdown() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Mock notifications if empty
-  const displayNotifications = notifications.length > 0 ? notifications : [
-    { id: 'n1', title: 'Sarah Kim submitted work', description: 'E-commerce Website Redesign milestone delivered', time: '2 hours ago', read: false },
-    { id: 'n2', title: 'Payment released', description: '$1,250 released to Tunde A. for Shopify Store', time: '5 hours ago', read: false },
-    { id: 'n3', title: 'New proposal received', description: 'Marcus Lee sent a proposal for Mobile App Development', time: '1 day ago', read: true }
-  ] as any[]; // cast to any for mock compat
+  const displayNotifications: AppNotification[] = notifications.length > 0 ? notifications : [
+    { id: 'n1', title: 'Sarah Kim submitted work', description: 'E-commerce Website Redesign milestone delivered', time: '2 hours ago', read: false, type: 'project' },
+    { id: 'n2', title: 'Payment released', description: '$1,250 released to Tunde A. for Shopify Store', time: '5 hours ago', read: false, type: 'payment' },
+    { id: 'n3', title: 'New proposal received', description: 'Marcus Lee sent a proposal for Mobile App Development', time: '1 day ago', read: true, type: 'system' }
+  ];
 
   const unreadCount = displayNotifications.filter(n => !n.read).length;
 

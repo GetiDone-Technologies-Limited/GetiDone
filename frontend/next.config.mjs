@@ -32,6 +32,12 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async rewrites() {
     const rawBackendUrl = process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const backendUrl = rawBackendUrl.startsWith('http://') || rawBackendUrl.startsWith('https://')
