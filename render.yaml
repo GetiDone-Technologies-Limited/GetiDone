@@ -28,13 +28,13 @@ services:
       - key: PORT
         value: 10000
       - key: JWT_SECRET
-        generateCrypto: true
+        generateValue: true
       - key: OPENAI_API_KEY
-        sync: false
+        value: ""
       - key: OPENROUTER_API_KEY
-        sync: false
+        value: ""
       - key: ZHIPU_API_KEY
-        sync: false
+        value: ""
 
   # ----------------------------------------------------
   # 2. FRONTEND SERVICE (Next.js 15)
