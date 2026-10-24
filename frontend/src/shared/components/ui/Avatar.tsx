@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { getInitials } from '@/shared/lib/utils';
+import { getCloudinaryUrl } from '@/shared/lib/cloudinary';
 
 interface AvatarProps {
   src?: string;
@@ -38,8 +39,23 @@ export function Avatar({ src, name = '', gender, size = 'md', className = '', al
   const [imgError, setImgError] = React.useState(false);
 
   // If no src is provided, but we have a gender, use the avatar service.
-  // Otherwise, fallback to the colored initials.
-  const resolvedSrc = src || (gender ? `https://avatar.iran.liara.run/public/${gender === 'male' ? 'boy' : 'girl'}?username=${encodeURIComponent(name)}` : undefined);
+  // If src is a Cloudinary publicId, transform it through Cloudinary.
+  // Otherwise, fallback to colored initials.
+  const resolvedSrc = React.useMemo(() => {
+    if (!src) {
+      return gender
+        ? `https://avatar.iran.liara.run/public/${gender === 'male' ? 'boy' : 'girl'}?username=${encodeURIComponent(name)}`
+        : undefined;
+    }
+    if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/') || src.startsWith('data:')) {
+      return src;
+    }
+    try {
+      return getCloudinaryUrl(src, { width: 128, height: 128, gravity: 'auto' });
+    } catch {
+      return src;
+    }
+  }, [src, gender, name]);
   const showFallback = !resolvedSrc || imgError;
 
   return (
