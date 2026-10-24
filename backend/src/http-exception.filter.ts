@@ -16,19 +16,25 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
       const resBody: any = exception.getResponse();
 
-      if (status === 400) {
-        let message = resBody.message || resBody;
-        if (Array.isArray(message)) {
-          message = message.join(', ');
-        }
-        return response.status(400).json({ error: message });
+      let message = typeof resBody === 'object' && resBody ? resBody.message || resBody.error : resBody;
+      if (Array.isArray(message)) {
+        message = message.join(', ');
       }
+      const errorStr = typeof message === 'string' ? message : JSON.stringify(message);
 
-      return response.status(status).json(typeof resBody === 'object' ? resBody : { error: resBody });
+      return response.status(status).json({
+        statusCode: status,
+        message: errorStr,
+        error: errorStr,
+      });
     }
 
     const status = exception.status || 500;
     const msg = exception.message || 'Internal server error';
-    return response.status(status).json({ error: msg });
+    return response.status(status).json({
+      statusCode: status,
+      message: msg,
+      error: msg,
+    });
   }
 }

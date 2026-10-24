@@ -42,7 +42,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({ message: response.statusText }));
-    throw new Error(errorBody?.message ?? `Request failed: ${response.status}`);
+    const errorMsg = errorBody?.message || errorBody?.error || `Request failed: ${response.status}`;
+    throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
   }
 
   // Handle 204 No Content

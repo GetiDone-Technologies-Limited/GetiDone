@@ -12,14 +12,16 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginRequest) => authApi.login(data),
     onSuccess: (res) => {
-      login(res.user, res.accessToken);
+      const token = res.accessToken || (res as any).token;
+      login(res.user, token);
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterRequest) => authApi.register(data),
     onSuccess: (res) => {
-      login(res.user, res.accessToken);
+      const token = res.accessToken || (res as any).token;
+      login(res.user, token);
     },
   });
 

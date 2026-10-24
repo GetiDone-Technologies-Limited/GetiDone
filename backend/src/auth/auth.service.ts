@@ -8,18 +8,9 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { Role } from '@prisma/client';
+import { RegisterDto, LoginDto } from './dto/auth.dto';
 
-export interface RegisterDto {
-  email: string;
-  password: string;
-  name: string;
-  role: Role;
-}
-
-export interface LoginDto {
-  email: string;
-  password: string;
-}
+export { RegisterDto, LoginDto };
 
 @Injectable()
 export class AuthService {
@@ -30,7 +21,7 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     const existing = await this.prisma.user.findUnique({
-      where: { email: dto.email },
+      where: { email: dto.email.toLowerCase().trim() },
     });
 
     if (existing) {
@@ -41,9 +32,9 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
-        email: dto.email,
+        email: dto.email.toLowerCase().trim(),
         passwordHash,
-        name: dto.name,
+        name: dto.name.trim(),
         role: dto.role,
       },
       select: {
@@ -53,18 +44,20 @@ export class AuthService {
         role: true,
         kycStatus: true,
         doneScore: true,
+        avatarUrl: true,
+        bannerUrl: true,
         createdAt: true,
       },
     });
 
     const token = this.jwtService.sign({ sub: user.id, email: user.email, role: user.role });
 
-    return { user, token };
+    return { user, token, accessToken: token };
   }
 
   async login(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
+      where: { email: dto.email.toLowerCase().trim() },
     });
 
     if (!user) {
@@ -83,7 +76,7 @@ export class AuthService {
       role: user.role,
     });
 
-    return { user: userWithoutPassword, token };
+    return { user: userWithoutPassword, token, accessToken: token };
   }
 
   async me(userId: string) {
@@ -96,6 +89,8 @@ export class AuthService {
         role: true,
         kycStatus: true,
         doneScore: true,
+        avatarUrl: true,
+        bannerUrl: true,
         createdAt: true,
         skills: { select: { id: true, name: true } },
       },
