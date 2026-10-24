@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { LoginForm } from '@/features/auth/components/LoginForm';
+import { ThemeToggle } from '@/shared/components/common/ThemeToggle';
 import { CheckCircle2, ShieldCheck, UserCheck, Clock, Shield, Lock } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Sign in - GetiDone' };
@@ -145,6 +146,9 @@ export default function LoginPage() {
 
       {/* Right Column - White Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-slate-50 relative">
+        <div className="absolute top-6 right-6 z-20">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-md">
           <div className="bg-white rounded-3xl p-10 shadow-xl border border-slate-100 shadow-slate-200/50">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome back 👋</h2>

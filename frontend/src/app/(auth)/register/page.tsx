@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RegisterForm } from '@/features/auth/components/RegisterForm';
+import { ThemeToggle } from '@/shared/components/common/ThemeToggle';
 import { Briefcase, Star, Sparkles, TrendingUp, Zap } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Create account - GetiDone' };
@@ -12,6 +13,9 @@ export default function RegisterPage() {
       
       {/* Left Column - White Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-slate-50 relative">
+        <div className="absolute top-6 right-6 z-20">
+          <ThemeToggle />
+        </div>
         {/* Mobile Logo */}
         <Link href="/" className="lg:hidden absolute top-8 left-8">
           <Image src="/logo.png" alt="GetiDone" width={140} height={40} className="h-8 w-auto" />

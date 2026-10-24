@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
+import { ThemeToggle } from '../common/ThemeToggle';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -46,6 +47,7 @@ export function Navbar() {
 
         {/* Auth */}
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {isAuthenticated && user ? (
             <>
               <Link href="/profile">

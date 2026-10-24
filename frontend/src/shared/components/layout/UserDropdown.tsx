@@ -2,16 +2,23 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuthStore } from '@/store/auth.store';
-import { LogOut, User, Settings, ChevronDown, ShieldCheck } from 'lucide-react';
+import { LogOut, User, Settings, ChevronDown, ShieldCheck, Sun, Moon } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 
 export function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuthStore();
   const router = useRouter();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -73,6 +80,24 @@ export function UserDropdown() {
             >
               <Settings className="w-4 h-4" style={{ color: 'var(--muted)' }} /> Settings
             </Link>
+            <button 
+              type="button"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              className="flex w-full items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-colors hover:bg-[var(--bg-alt)] cursor-pointer"
+              style={{ color: 'var(--text)' }}
+            >
+              <div className="flex items-center gap-3">
+                {mounted && resolvedTheme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-slate-500" />
+                )}
+                <span>Appearance</span>
+              </div>
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[var(--bg)] border border-[var(--border)] text-emerald-600">
+                {mounted && resolvedTheme === 'dark' ? 'Dark' : 'Light'}
+              </span>
+            </button>
             <div className="w-full h-px my-1" style={{ background: 'var(--border)' }}></div>
             <button 
               onClick={handleLogout}

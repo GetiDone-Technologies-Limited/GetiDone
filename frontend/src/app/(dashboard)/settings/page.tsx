@@ -7,8 +7,9 @@ import { useUIStore } from '@/store/ui.store';
 import {
   User, Shield, Bell, DollarSign, Globe, Check, Plus, Trash2,
   Lock, Building2, ChevronRight, Upload, X, Eye, EyeOff,
-  Landmark, Smartphone, CreditCard
+  Landmark, Smartphone, CreditCard, Sun, Moon
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 interface ToastState { title: string; msg: string; visible: boolean }
 interface Toggle { [key: string]: boolean }
@@ -30,6 +31,12 @@ const initialPayoutMethods: PayoutMethod[] = [
 export default function SettingsPage() {
   const { user } = useAuthStore();
   const { balancesVisible, toggleBalancesVisible } = useUIStore();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [activeSection, setActiveSection] = useState('general');
   const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
   const [payoutMethods, setPayoutMethods] = useState<PayoutMethod[]>(initialPayoutMethods);
@@ -491,6 +498,70 @@ export default function SettingsPage() {
                   <option>NGN - Nigerian Naira (₦)</option>
                 </select>
                 <p className="text-[11px] mt-2" style={{ color: 'var(--muted)' }}>All project budgets and earnings will be displayed in this currency.</p>
+              </div>
+
+              {/* Theme Preference */}
+              <div className="md:col-span-2 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+                <label className="block text-[11px] font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--muted)' }}>
+                  Workspace Theme & Appearance
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTheme('light');
+                      showToast('Theme Updated', 'Light mode set as your workspace theme');
+                    }}
+                    className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left cursor-pointer ${
+                      mounted && resolvedTheme === 'light'
+                        ? 'border-emerald-500 bg-emerald-500/5'
+                        : 'border-[var(--border)] hover:border-slate-300 bg-[var(--bg)]'
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 flex-shrink-0">
+                      <Sun className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>Light Mode</p>
+                        {mounted && resolvedTheme === 'light' && (
+                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs" style={{ color: 'var(--muted)' }}>Default high-contrast light workspace</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTheme('dark');
+                      showToast('Theme Updated', 'Dark mode set as your workspace theme');
+                    }}
+                    className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left cursor-pointer ${
+                      mounted && resolvedTheme === 'dark'
+                        ? 'border-emerald-500 bg-emerald-500/5'
+                        : 'border-[var(--border)] hover:border-slate-300 bg-[var(--bg)]'
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 flex-shrink-0">
+                      <Moon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>Dark Mode</p>
+                        {mounted && resolvedTheme === 'dark' && (
+                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs" style={{ color: 'var(--muted)' }}>Deep charcoal styling for focused low-light work</p>
+                    </div>
+                  </button>
+                </div>
               </div>
               <div className="md:col-span-2 flex justify-end">
                 <button type="submit" className="btn-primary px-6 py-3 rounded-xl text-sm font-bold">
