@@ -4,6 +4,13 @@ databases:
     user: getidone
     plan: free
     region: oregon
+    ipAllowList:
+      - source: 74.220.48.0/24
+        description: Render Outbound Network 1
+      - source: 74.220.56.0/24
+        description: Render Outbound Network 2
+      - source: 0.0.0.0/0
+        description: Public connections
 
 services:
   # ----------------------------------------------------
