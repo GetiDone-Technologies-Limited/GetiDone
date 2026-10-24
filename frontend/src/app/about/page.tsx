@@ -43,30 +43,6 @@ const stats = [
   { label: 'Average Match Time', value: '60 Secs' }
 ];
 
-const team = [
-  {
-    name: 'Wada Oluwapelumi',
-    role: 'Chief Executive Officer (CEO)',
-    initials: 'WO',
-    gradient: 'from-emerald-500 to-teal-700',
-    bio: 'Visionary founder directing executive strategy, ecosystem scaling, and the next-generation AI freelance execution engine.'
-  },
-  {
-    name: 'Oghenemudiakevwe Okpako',
-    role: 'Chief Technology Officer (CTO)',
-    initials: 'OO',
-    gradient: 'from-cyan-500 to-blue-700',
-    bio: 'Pioneering technology architecture, automated QA test gates, distributed microservices, and autonomous matching infrastructure.'
-  },
-  {
-    name: 'Wada Boluwatife',
-    role: 'Chief Marketing Officer (CMO)',
-    initials: 'WB',
-    gradient: 'from-violet-500 to-indigo-700',
-    bio: 'Leading global brand presence, developer community adoption, client growth strategies, and strategic partnerships worldwide.'
-  }
-];
-
 export default function AboutPage() {
   const { user } = useAuthStore();
 
@@ -167,35 +143,6 @@ export default function AboutPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section className="py-24 px-6 border-t" style={{ borderColor: 'var(--border)', background: 'var(--bg-alt)' }}>
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="font-extrabold text-3xl sm:text-4xl mb-3" style={{ fontFamily: "'Sora', sans-serif" }}>
-              Meet Our Leadership
-            </h2>
-            <p className="text-sm" style={{ color: 'var(--muted)' }}>
-              Engineers, designers, and visionaries shaping the future of work.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((m, idx) => (
-              <div key={idx} className="gd-card p-8 text-center space-y-5 hover:-translate-y-1 transition-all duration-300">
-                <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center text-2xl font-black text-white bg-gradient-to-br ${m.gradient} shadow-lg ring-4 ring-emerald-500/20`}>
-                  {m.initials}
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-xl" style={{ fontFamily: "'Sora', sans-serif" }}>{m.name}</h3>
-                  <div className="text-xs font-bold text-emerald-500 uppercase tracking-wider mt-1 mb-3">{m.role}</div>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{m.bio}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
