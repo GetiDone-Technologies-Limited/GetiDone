@@ -17,6 +17,16 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @Get('seed-demo')
+  seedDemoGet() {
+    return this.authService.seedDemoAccounts();
+  }
+
+  @Post('seed-demo')
+  seedDemoPost() {
+    return this.authService.seedDemoAccounts();
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   me(@CurrentUser() user: { id: string }) {
