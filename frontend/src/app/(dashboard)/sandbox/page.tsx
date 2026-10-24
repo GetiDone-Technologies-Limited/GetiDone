@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Shield, CreditCard, Play, Bug, RefreshCw, CheckCircle2, AlertTriangle, Terminal, Code2 } from 'lucide-react';
+import { apiClient } from '@/shared/lib/api-client';
 
 export default function SandboxPage() {
   const [activeTab, setActiveTab] = useState<'financial' | 'qa' | 'security' | 'websockets'>('financial');
@@ -39,27 +40,22 @@ export default function SandboxPage() {
         status: 'PROCESSING...',
       });
 
-      // Call simulated endpoint
-      const response = await fetch('/api/v1/payment/process', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      // Call simulated endpoint via synchronized apiClient
+      try {
+        const json = await apiClient.post('/sandbox/payment', {
           invoiceId: 'inv_sandbox_101',
           userId: 'cust_sandbox_1',
           serviceId: 'serv_sandbox_1',
           amount,
           reference: ref,
-        }),
-      }).catch(() => null);
-
-      if (response && response.ok) {
-        const json = await response.json();
+        });
         logOutput(`SUCCESS: Financial Transaction Result`, json);
-      } else {
+      } catch (postErr: any) {
         logOutput(`RESULT: Financial Rule Applied (Expected State)`, {
           scenario,
           status: scenario === 'OVERPAYMENT' || scenario === 'DUPLICATE' ? 'REJECTED_BY_FINANCIAL_RULES' : 'PROCESSED',
           expectedResult: scenario === 'OVERPAYMENT' ? 'Payment exceeds outstanding balance' : (scenario === 'DUPLICATE' ? 'Duplicate payment reference rejected' : 'Invoice Updated'),
+          details: postErr.message,
         });
       }
     } catch (err: any) {

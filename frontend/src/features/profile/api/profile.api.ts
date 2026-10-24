@@ -35,13 +35,6 @@ export const profileApi = {
   uploadAvatar(file: File): Promise<{ avatarUrl: string }> {
     const formData = new FormData();
     formData.append('avatar', file);
-    // Use raw fetch for multipart
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/users/me/avatar`, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('geti_token') ?? '' : ''}`,
-      },
-    }).then((r) => r.json() as Promise<{ avatarUrl: string }>);
+    return apiClient.upload<{ avatarUrl: string }>('/users/me/avatar', formData);
   },
 };

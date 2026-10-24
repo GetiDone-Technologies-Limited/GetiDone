@@ -30,11 +30,15 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   async rewrites() {
-    const backendUrl = process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const rawBackendUrl = process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const backendUrl = rawBackendUrl.startsWith('http://') || rawBackendUrl.startsWith('https://')
+      ? rawBackendUrl
+      : `http://${rawBackendUrl}:10000`;
+    const cleanBase = backendUrl.replace(/\/+$/, '').replace(/\/api$/, '');
     return [
       {
         source: '/api/:path*',
-        destination: `${backendUrl.replace(/\/+$/, '')}/api/:path*`,
+        destination: `${cleanBase}/api/:path*`,
       },
     ];
   },

@@ -9,12 +9,19 @@ import { AuditInterceptor } from './shared/interceptors/audit.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
   app.useGlobalInterceptors(new AuditInterceptor());
 
   // Enable CORS for frontend integration
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    credentials: true,
+  });
 
   // Align backend routes with top-level Vercel rewrite /api/(.*)
   app.setGlobalPrefix('api');

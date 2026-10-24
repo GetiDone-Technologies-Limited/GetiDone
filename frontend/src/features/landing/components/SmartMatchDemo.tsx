@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, ShieldCheck, Zap, ExternalLink, Bot, Briefcase, ChevronRight, Loader2 } from 'lucide-react';
+import { apiClient } from '@/shared/lib/api-client';
 
 interface AI_Match {
   freelancer: {
@@ -16,6 +17,31 @@ interface AI_Match {
   aiReason: string;
 }
 
+const FALLBACK_MATCHES: AI_Match[] = [
+  {
+    freelancer: {
+      id: 'f1',
+      name: 'Alice Developer',
+      doneScore: 98,
+      skills: [{ id: 's1', name: 'React' }, { id: 's2', name: 'Next.js' }, { id: 's3', name: 'NestJS' }, { id: 's4', name: 'TypeScript' }]
+    },
+    matchPercentage: 96,
+    matchedSkills: ['Next.js', 'NestJS', 'TypeScript'],
+    aiReason: 'Verified full-stack engineer with 15+ delivered enterprise Next.js/NestJS milestones and a 98% Done Score.'
+  },
+  {
+    freelancer: {
+      id: 'f2',
+      name: 'Marcus Chen',
+      doneScore: 94,
+      skills: [{ id: 's1', name: 'React' }, { id: 's5', name: 'Node.js' }, { id: 's6', name: 'PostgreSQL' }]
+    },
+    matchPercentage: 88,
+    matchedSkills: ['React', 'Node.js'],
+    aiReason: 'Strong architectural experience in high-performance web applications and automated QA pipelines.'
+  }
+];
+
 export function SmartMatchDemo() {
   const [matches, setMatches] = useState<AI_Match[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,14 +51,15 @@ export function SmartMatchDemo() {
     setIsLoading(true);
     setHasRun(true);
     try {
-      // Wait for 1s to simulate realistic search if the backend is very fast, helps the "wow" factor
-      const response = await fetch('http://localhost:3001/matching/recommend/seed-job-1');
-      if (response.ok) {
-        const data = await response.json();
+      const data = await apiClient.get<AI_Match[]>('/matching/recommend/seed-job-1').catch(() => null);
+      if (data && data.length > 0) {
         setMatches(data);
+      } else {
+        setMatches(FALLBACK_MATCHES);
       }
     } catch (error) {
-      console.error('Failed to run matching demo', error);
+      console.warn('Using demo matching fallback', error);
+      setMatches(FALLBACK_MATCHES);
     } finally {
       setIsLoading(false);
     }
