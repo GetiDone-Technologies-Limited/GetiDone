@@ -267,7 +267,6 @@ interface ToastState {
 export default function LandingPage() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Search State
   const [searchMode, setSearchMode] = useState<'talent' | 'services'>('services');
@@ -316,21 +315,17 @@ export default function LandingPage() {
   const [toastState, setToastState] = useState<ToastState>({ title: '', msg: '', visible: false });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    }
+    setMounted(true);
   }, []);
 
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const isDark = mounted ? resolvedTheme === 'dark' : false;
 
   const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   const showToast = (title: string, msg: string) => {
@@ -394,7 +389,7 @@ export default function LandingPage() {
               <Moon className="w-3.5 h-3.5 text-slate-400 z-10" />
               <span
                 className="absolute top-1 left-1 w-6 h-6 rounded-full bg-[var(--primary)] transition-transform duration-300 shadow-md"
-                style={{ transform: isDarkMode ? 'translateX(24px)' : 'translateX(0)' }}
+                style={{ transform: isDark ? 'translateX(24px)' : 'translateX(0)' }}
               />
             </button>
 
